@@ -2,17 +2,18 @@
 @()
 @import views.html.main
 @main("TimeTable", webJarsUtil) {
-  <script src="@routes.Assets.versioned("javascripts/subject.js")"></script>
+  <script src="@routes.Assets.versioned("javascripts/subject.js")" type="text/javascript"></script>
   <div class="container">
-    <div class="col-md-8 offset-md-2">
+    <div class="col-md-8 text-center offset-md-2">
       <br><br><br><br><br>
-      <form action="" class="mt-5">
+      <form class="mt-5">
         <div class="form-group">
-          <input type="text" id="surname" class=form-control placeholder="type text..."/>
+          <input type="text" class=form-control placeholder="type text..." data-bind="value: vm.inputText1"/>
         </div>
         <div class="form-group">
-          <input type="text" id="surname" class=form-control placeholder="type text..."/>
+          <input type="text" class=form-control placeholder="type text..." data-bind="value: vm.inputText2"/>
         </div>
+          <button type="submit" class="btn btn-outline-success" data-bind="click: vm.onSubmit">Submit</button>
       </form>
     </div>
   </div>
