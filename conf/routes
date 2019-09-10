@@ -1,6 +1,5 @@
 
-GET     /                           controllers.HomeController.index
-GET     /subject                    controllers.HomeController.subject
+GET     /                           controllers.SubjectController.index
 
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)
 ->      /webjars             webjars.Routes
