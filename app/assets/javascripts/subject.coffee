@@ -7,8 +7,7 @@ $ ->
     send: '/send-subject'
 
   vm = ko.mapping.fromJS
-    inputText1: ''
-    inputText2: ''
+    name: ''
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -18,16 +17,15 @@ $ ->
 
   vm.onSubmit = ->
     toastr.clear()
-    if (!vm.inputText1())
-      toastr.error("Please input text first field")
+    if (!vm.name())
+      toastr.error("Please enter your name")
       return no
-    else if !vm.inputText2()
-      toastr.error("Please input text second field")
+    else if (vm.name().length < 3)
+      toastr.error("The login must consist of 3 letters")
       return no
 
     data =
-      text1: vm.inputText1()
-      text2: vm.inputText2()
+      name: vm.name()
     $.ajax
       url: apiUrl.send
       type: 'POST'
