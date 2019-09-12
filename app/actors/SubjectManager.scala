@@ -6,7 +6,7 @@ import akka.util.Timeout
 import dao.SubjectDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.SubjectProtocol.{AddSubject, Subject}
+import protocols.SubjectProtocol.{AddSubject, GetSubjectLink, Subject}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
@@ -23,6 +23,9 @@ class SubjectManager @Inject()(val environment: Environment,
     case AddSubject(subject) =>
       addSubject(subject).pipeTo(sender())
 
+    case GetSubjectLink =>
+      getSubjectLink.pipeTo(sender())
+
     case _ => log.info(s"received unknown message")
 
   }
@@ -32,5 +35,12 @@ class SubjectManager @Inject()(val environment: Environment,
       data
     }
   }
+
+  private def getSubjectLink = {
+    subjectDao.getSubjectList.map { subject =>
+      subject
+    }
+  }
+
 
 }

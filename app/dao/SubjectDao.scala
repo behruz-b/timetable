@@ -30,6 +30,8 @@ trait SubjectComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 @ImplementedBy(classOf[SubjectDaoImpl])
 trait SubjectDao {
   def addSubject(subjectData: Subject): Future[Int]
+
+  def getSubjectList: Future[Seq[Subject]]
 }
 
 @Singleton
@@ -47,5 +49,9 @@ class SubjectDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     db.run {
       (subjects returning subjects.map(_.id)) += subjectData
     }
+  }
+
+  override def getSubjectList: Future[Seq[Subject]] = {
+    db.run  (subjects.sortBy(_.id).result)
   }
 }

@@ -1,5 +1,6 @@
 
 GET     /                           controllers.SubjectController.index
+GET     /dashboard                  controllers.SubjectController.dashboard
 POST    /send-subject               controllers.SubjectController.subjectPost
 
 
