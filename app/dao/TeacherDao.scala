@@ -4,18 +4,19 @@ import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import protocols.TeacherProtocol.Teacher
 import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
-
 
 import scala.concurrent.Future
 
 
-trait SubjectComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
+trait TeacherComponent {
+  self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import utils.PostgresDriver.api._
 
-  class TeachersTable(tag: Tag) extends Table[Teachers](tag, "Teachers") with Date2SqlDate  {
+  class TeachersTable(tag: Tag) extends Table[Teacher](tag, "Teachers") with Date2SqlDate {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def firstName = column[String]("firstName")
@@ -28,6 +29,7 @@ trait SubjectComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 
     def * = (id.?, firstName, lastName, tSubject, department) <> (Teacher.tupled, Teacher.unapply _)
   }
+
 }
 
 @ImplementedBy(classOf[TeacherDaoImpl])
