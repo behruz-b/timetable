@@ -1,5 +1,6 @@
 package controllers
 
+import akka.actor.ActorRef
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
@@ -11,6 +12,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class TeacherController @Inject()(val controllerComponents: ControllerComponents,
+                                  @Named("teacher-manager") val teacherManager: ActorRef,
                                   teachersTemplate: teachers,
                                  )
                                  (implicit val ec: ExecutionContext)
