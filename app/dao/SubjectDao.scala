@@ -18,9 +18,12 @@ trait SubjectComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   class SubjectTable(tag: Tag) extends Table[Subject](tag, "Subject") with Date2SqlDate  {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+
     def name = column[String]("name")
 
-    def * = (id.?, name) <> (Subject.tupled, Subject.unapply _)
+    def numberClassRoom = column[Int]("numberClassRoom")
+
+    def * = (id.?, name, numberClassRoom) <> (Subject.tupled, Subject.unapply _)
   }
 }
 
