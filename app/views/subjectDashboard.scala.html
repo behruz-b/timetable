@@ -2,7 +2,7 @@
 @()
 @import views.html.main
 @main("TimeTable - Dashboard", webJarsUtil) {
-  @*<script src="@routes.Assets.versioned("javascripts/subject.js")" type="text/javascript"></script>*@
+<script src="@routes.Assets.versioned("javascripts/subjectDashboard.js")" type="text/javascript"></script>
   <div class="container">
     <div class="col-md-8 text-center offset-md-2">
       <br><br><br><br><br>
@@ -15,11 +15,11 @@
             <th>Number Class Room</th>
           </tr>
         </thead>
-        <tbody class="">
+        <tbody class="" data-bind="foreach: vm.subjectList">
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td data-bind="text: $data.id"></td>
+            <td data-bind="text: $data.name"></td>
+            <td data-bind="text: $data.numberClassRoom"></td>
           </tr>
         </tbody>
       </table>

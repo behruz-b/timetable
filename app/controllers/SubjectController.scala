@@ -45,7 +45,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   def getReportSubject = Action.async {
     (subjectManager ? GetSubjectLink).mapTo[Seq[Subject]].map {
       subject =>
-        Ok(Json.toJson(Seq(subject)))
+        Ok(Json.toJson(subject))
     }
   }
 
