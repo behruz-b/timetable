@@ -7,6 +7,18 @@
     <div class="col-md-8 text-center offset-md-2">
       <br><br><br><br><br>
       <h1>Teachers</h1>
+      <form class="mt-5">
+        <div class="form-group">
+          <input type="text" class=form-control placeholder="Full Name..." data-bind="value: vm.fullName"/>
+        </div>
+        <div class="form-group">
+          <input type="text" class=form-control placeholder="The subject of the teacher..." data-bind="value: vm.tSubject"/>
+        </div>
+        <div class="form-group">
+          <input type="text" class=form-control placeholder="Department..." data-bind="value: vm.department"/>
+        </div>
+        <button type="submit" class="btn btn-outline-success" data-bind="click: vm.onSubmit">Submit</button>
+      </form>
     </div>
   </div>
 }
