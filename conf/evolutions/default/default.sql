@@ -8,8 +8,7 @@ CREATE TABLE "Subject" (
 
 CREATE TABLE "Teachers" (
   "id" SERIAL NOT NULL PRIMARY KEY,
-  "firstName" VARCHAR NOT NULL,
-  "lastName" VARCHAR NOT NULL,
+  "FullName" VARCHAR NOT NULL,
   "tSubject" VARCHAR NOT NULL,
   "department" VARCHAR NOT NULL
 );
