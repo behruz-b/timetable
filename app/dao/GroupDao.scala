@@ -15,7 +15,7 @@ trait GroupComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import utils.PostgresDriver.api._
 
-  class GroupTable(tag: Tag) extends Table[Group](tag, "Group") with Date2SqlDate  {
+  class GroupTable(tag: Tag) extends Table[Group](tag, "GROUPS") with Date2SqlDate  {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def name = column[String]("name")
