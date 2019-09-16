@@ -10,6 +10,7 @@ GET     /teacher                    controllers.TeacherController.index
 
 
 GET     /group                     controllers.GroupsController.index
+POST    /send-group                controllers.GroupsController.getReportGroup
 
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)
 ->      /webjars             webjars.Routes
