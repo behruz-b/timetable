@@ -7,5 +7,9 @@ POST    /send-subject               controllers.SubjectController.subjectPost
 
 GET     /teacher                    controllers.TeacherController.index
 
+
+
+GET     /group                     controllers.GroupsController.index
+
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)
 ->      /webjars             webjars.Routes
