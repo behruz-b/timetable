@@ -28,6 +28,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
     Ok(subjectTemplate())
   }
 
+
   def subjectPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val name = (request.body \ "name").as[String]
     (subjectManager ? AddSubject(Subject(None, name))).mapTo[Int].map { pr =>
