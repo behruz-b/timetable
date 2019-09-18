@@ -19,15 +19,13 @@ trait TeacherComponent {
   class TeachersTable(tag: Tag) extends Table[Teacher](tag, "Teachers") with Date2SqlDate {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
-    def firstName = column[String]("firstName")
-
-    def lastName = column[String]("lastName")
+    def fullName = column[String]("fullName")
 
     def tSubject = column[String]("tSubject")
 
     def department = column[String]("department")
 
-    def * = (id.?, firstName, lastName, tSubject, department) <> (Teacher.tupled, Teacher.unapply _)
+    def * = (id.?, fullname, tSubject, department) <> (Teacher.tupled, Teacher.unapply _)
   }
 
 }
@@ -36,6 +34,7 @@ trait TeacherComponent {
 trait TeacherDao {
   def addTeacher(teacherData: Teacher): Future[Int]
 }
+
 
 @Singleton
 class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
