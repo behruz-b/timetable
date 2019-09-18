@@ -37,6 +37,7 @@ trait TeacherDao {
   def addTeacher(teacherData: Teacher): Future[Int]
 }
 
+
 @Singleton
 class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends TeacherDao
