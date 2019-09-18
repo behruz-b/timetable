@@ -41,7 +41,6 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
     }
   }
   }
-
   def getReportSubject = Action.async {
     (subjectManager ? GetSubjectLink).mapTo[Seq[Subject]].map {
       subject =>
