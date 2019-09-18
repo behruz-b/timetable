@@ -31,6 +31,7 @@ trait GroupDao {
 //  def getGroupList: Future[Seq[Group]]
 }
 
+
 @Singleton
 class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends GroupDao
