@@ -8,7 +8,7 @@ import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import protocols.SubjectProtocol.{AddSubject, Subject}
-import protocols.TeacherProtocol.AddTeacher
+import protocols.TeacherProtocol.{AddTeacher, Teacher}
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -30,9 +30,10 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
 
 
   def teacherPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
-    val name = (request.body \ "name").as[String]
-    val numberClassRoom = (request.body \ "numberClassRoom").as[String].toInt
-    (teacherManager ? AddTeacher(teacherManager(None, name, numberClassRoom))).mapTo[Int].map { pr =>
+    val fullname = (request.body \ "name").as[String]
+    val tSubject = (request.body \ "name").as[String]
+    val department = (request.body \ "numberClassRoom").as[String].toInt
+    (teacherManager ? AddTeacher(Teacher(None, fullname, tSubject , department))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
   }

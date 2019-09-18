@@ -9,7 +9,7 @@ object TeacherProtocol {
   case class Teacher(id: Option[Int] = None,
                      fullname:String,
                      tSubject: String,
-                     department: String
+                     department: Int
                     )
 
   implicit val subjectFormat: OFormat[Teacher] = Json.format[Teacher]
