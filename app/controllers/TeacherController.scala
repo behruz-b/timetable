@@ -2,9 +2,13 @@ package controllers
 
 import akka.actor.ActorRef
 import akka.util.Timeout
+import akka.pattern.ask
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import protocols.SubjectProtocol.{AddSubject, Subject}
+import protocols.TeacherProtocol.AddTeacher
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -24,13 +28,13 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     Ok(teachersTemplate())
   }
 
-  //  def subjectPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
-  //    val name = (request.body \ "name").as[String]
-  //    val numberClassRoom = (request.body \ "numberClassRoom").as[String].toInt
-  //    (subjectManager ? AddSubject(Subject(None, name, numberClassRoom))).mapTo[Int].map { pr =>
-  //      Ok(Json.toJson(s"you successful added: $pr"))
-  //    }
-  //  }
-  //  }
 
+  def teacherPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val name = (request.body \ "name").as[String]
+    val numberClassRoom = (request.body \ "numberClassRoom").as[String].toInt
+    (teacherManager ? AddTeacher(teacherManager(None, name, numberClassRoom))).mapTo[Int].map { pr =>
+      Ok(Json.toJson(s"you successful added: $pr"))
+    }
+  }
+  }
 }
