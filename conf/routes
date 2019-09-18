@@ -6,6 +6,7 @@ POST    /send-subject               controllers.SubjectController.subjectPost
 
 
 GET     /teacher                    controllers.TeacherController.index
+POST    /send-teacher               controllers.TeacherController.teacherPost
 
 
 

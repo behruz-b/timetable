@@ -7,7 +7,7 @@ object TeacherProtocol {
   case class AddTeacher(teacher: Teacher)
 
   case class Teacher(id: Option[Int] = None,
-                     fullName:String,
+                     fullName: String,
                      tSubject: String,
                      department: String
                     )
