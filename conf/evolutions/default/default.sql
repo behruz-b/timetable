@@ -1,5 +1,4 @@
 # --- !Ups
-firstName, lastName, tSubject, department
 CREATE TABLE "Subject" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "name" VARCHAR NOT NULL,
@@ -8,12 +7,17 @@ CREATE TABLE "Subject" (
 
 CREATE TABLE "Teachers" (
   "id" SERIAL NOT NULL PRIMARY KEY,
-  "firstName" VARCHAR NOT NULL,
-  "lastName" VARCHAR NOT NULL,
+  "FullName" VARCHAR NOT NULL,
   "tSubject" VARCHAR NOT NULL,
   "department" VARCHAR NOT NULL
+);
+
+CREATE TABLE "GROUPS" (
+  "id" SERIAL NOT NULL PRIMARY KEY,
+  "name" VARCHAR NOT NULL
 );
 
 # --- !Downs
 DROP TABLE "Subject";
 DROP TABLE "Teachers";
+DROP TABLE "GROUPS";
