@@ -2,6 +2,7 @@
 GET     /                           controllers.SubjectController.index
 GET     /dashboard                  controllers.SubjectController.dashboard
 GET     /get-subjects               controllers.SubjectController.getReportSubject
+GET     /get-rooms                  controllers.SubjectController.getRooms
 POST    /send-subject               controllers.SubjectController.subjectPost
 
 

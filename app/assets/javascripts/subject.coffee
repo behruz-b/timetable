@@ -5,10 +5,12 @@ $ ->
 
   apiUrl =
     send: '/send-subject'
+    getRooms: '/get-rooms'
 
   vm = ko.mapping.fromJS
     name: ''
     numberClassRoom: ''
+    listRooms: ''
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -46,5 +48,15 @@ $ ->
     .fail handleError
     .done (response) ->
       toastr.success(response)
+
+  getRooms = ->
+    $.ajax
+      url: apiUrl.getRooms
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.listRooms(response)
+
+  getRooms()
 
   ko.applyBindings {vm}

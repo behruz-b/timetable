@@ -47,7 +47,6 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
-      console.log(response)
       vm.listDirections(response)
 
   getDirectionList()

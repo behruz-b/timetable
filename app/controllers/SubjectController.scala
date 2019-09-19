@@ -8,7 +8,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContent, _}
-import protocols.SubjectProtocol.{AddSubject, GetSubjectLink, Subject}
+import protocols.SubjectProtocol._
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -35,17 +35,22 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
 
   def subjectPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val name = (request.body \ "name").as[String]
-    val numberClassRoom = (request.body \ "numberClassRoom").as[String].toInt
+    val numberClassRoom = (request.body \ "numberClassRoom").as[Int]
     (subjectManager ? AddSubject(Subject(None, name, numberClassRoom))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
   }
   }
-  def getReportSubject = Action.async {
+
+  def getReportSubject: Action[AnyContent] = Action.async {
     (subjectManager ? GetSubjectLink).mapTo[Seq[Subject]].map {
       subject =>
         Ok(Json.toJson(subject))
     }
   }
 
+  def getRooms = Action { implicit request => {
+    Ok(Json.toJson(roomList))
+  }
+  }
 }
