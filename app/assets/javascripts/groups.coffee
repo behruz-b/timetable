@@ -6,12 +6,14 @@ $ ->
   apiUrl =
     send: '/send-group'
     getDirections: '/get-directions'
+    getGroups: '/get-groups'
 
 
   vm = ko.mapping.fromJS
     name: ''
     listDirections: []
     selectedDirection: ''
+    listGroups: ''
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -27,10 +29,13 @@ $ ->
     else if (vm.name().length < 6)
       toastr.error("The subject name must consist of 6 letters")
       return no
+    else if (!vm.selectedDirection())
+      toastr.error("Please select group's direction")
+      return no
 
     data =
       name: vm.name()
-
+      direction: vm.selectedDirection()
     $.ajax
       url: apiUrl.send
       type: 'POST'
@@ -50,6 +55,17 @@ $ ->
       vm.listDirections(response)
 
   getDirectionList()
+
+  getGroupList = ->
+    $.ajax
+      url:apiUrl.getGroups
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.listGroups(response)
+
+  getGroupList()
+
 
 
   ko.applyBindings {vm}

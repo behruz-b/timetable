@@ -31,15 +31,11 @@ class SubjectManager @Inject()(val environment: Environment,
   }
 
   private def addSubject(subjectData: Subject) = {
-    subjectDao.addSubject(subjectData).map { data =>
-      data
-    }
+    subjectDao.addSubject(subjectData)
   }
 
   private def getSubjectLink = {
-    subjectDao.getSubjectList.map { subject =>
-      subject
-    }
+    subjectDao.getSubjectList
   }
 
 

@@ -17,6 +17,7 @@ import scala.concurrent.duration.DurationInt
 class GroupsController @Inject()(val controllerComponents: ControllerComponents,
                                  @Named("group-manager") val groupManager: ActorRef,
                                  groupTemplate: group,
+                                 dashboardTemplate: groupDashboard,
                                 )
                                 (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -27,9 +28,14 @@ class GroupsController @Inject()(val controllerComponents: ControllerComponents,
     Ok(groupTemplate())
   }
 
+  def dashboard: Action[AnyContent] = Action {
+    Ok(dashboardTemplate())
+  }
+
   def getReportGroup = Action.async(parse.json) { implicit request =>
     val name = (request.body \ "name").as[String]
-    (groupManager ? AddGroup(Group(None, name))).mapTo[Int].map {
+    val direction = (request.body \ "direction").as[String]
+    (groupManager ? AddGroup(Group(None, name, direction))).mapTo[Int].map {
       id =>
         Ok(Json.toJson(s"The Group number you entered is written by this  ID: $id"))
     }
@@ -39,6 +45,15 @@ class GroupsController @Inject()(val controllerComponents: ControllerComponents,
     Ok(Json.toJson(directionsList))
   }
   }
+
+  def getGroupsList = Action.async {
+    (groupManager ? GetGroupList).mapTo[Seq[Group]].map {
+      group =>
+        Ok(Json.toJson(group))
+    }
+  }
+
+
 
 
 }

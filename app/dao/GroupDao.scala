@@ -4,31 +4,35 @@ import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import slick.jdbc.JdbcProfile
 import protocols.GroupProtocol.Group
+import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
 
 import scala.concurrent.Future
 
 
-trait GroupComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
+trait GroupComponent {
+  self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import utils.PostgresDriver.api._
 
-  class GroupTable(tag: Tag) extends Table[Group](tag, "GROUPS") with Date2SqlDate  {
+  class GroupTable(tag: Tag) extends Table[Group](tag, "Groups") with Date2SqlDate {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def name = column[String]("name")
 
-    def * = (id.?, name) <> (Group.tupled, Group.unapply _)
+    def direction = column[String]("direction")
+
+    def * = (id.?, name, direction) <> (Group.tupled, Group.unapply _)
   }
+
 }
 
 @ImplementedBy(classOf[GroupDaoImpl])
 trait GroupDao {
   def addGroup(GroupData: Group): Future[Int]
 
-//  def getGroupList: Future[Seq[Group]]
+    def getGroupList: Future[Seq[Group]]
 }
 
 
@@ -49,7 +53,7 @@ class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
     }
   }
 
-//  override def getGroupList: Future[Seq[Group]] = {
-//    db.run  (groups.sortBy(_.id).result)
-//  }
+    override def getGroupList: Future[Seq[Group]] = {
+      db.run  (groups.sortBy(_.id).result)
+    }
 }

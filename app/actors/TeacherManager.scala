@@ -28,9 +28,7 @@ class TeacherManager @Inject()(val environment: Environment,
   }
 
   private def addTeacher(teacherData: Teacher) = {
-    teacherDao.addTeacher(teacherData).map { data =>
-      data
-    }
+    teacherDao.addTeacher(teacherData)
   }
 
 }

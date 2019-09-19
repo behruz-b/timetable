@@ -12,9 +12,10 @@ CREATE TABLE "Teachers" (
   "department" VARCHAR NOT NULL
 );
 
-CREATE TABLE "GROUPS" (
+CREATE TABLE "Groups" (
   "id" SERIAL NOT NULL PRIMARY KEY,
-  "name" VARCHAR NOT NULL
+  "name" VARCHAR NOT NULL,
+  "direction" VARCHAR NOT NULL
 );
 
 # --- !Downs

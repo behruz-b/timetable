@@ -12,7 +12,9 @@ POST    /send-teacher               controllers.TeacherController.teacherPost
 
 
 GET     /group                     controllers.GroupsController.index
+GET     /group/dashboard           controllers.GroupsController.dashboard
 GET     /get-directions            controllers.GroupsController.getDirections
+GET     /get-groups                controllers.GroupsController.getGroupsList
 POST    /send-group                controllers.GroupsController.getReportGroup
 
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)

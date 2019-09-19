@@ -6,7 +6,7 @@ import akka.util.Timeout
 import dao.GroupDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.GroupProtocol.{AddGroup, Group}
+import protocols.GroupProtocol.{AddGroup, GetGroupList, Group}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
@@ -23,12 +23,17 @@ class GroupManager @Inject()(val environment: Environment,
     case AddGroup(group) =>
       addGroup(group).pipeTo(sender())
 
+   case GetGroupList =>
+     getGroupList.pipeTo(sender())
+
     case _ => log.info(s"received unknown message")
   }
 
   private def addGroup(groupData: Group) = {
-    groupDao.addGroup(groupData).map { data =>
-      data
-    }
+    groupDao.addGroup(groupData)
+  }
+
+  private def getGroupList = {
+    groupDao.getGroupList
   }
 }
