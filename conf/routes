@@ -10,6 +10,9 @@ GET     /teacher                    controllers.TeacherController.index
 POST    /send-teacher               controllers.TeacherController.teacherPost
 
 
+GET     /timetable                    controllers.TimetableController.index
+
+
 
 GET     /group                     controllers.GroupsController.index
 GET     /group/dashboard           controllers.GroupsController.dashboard

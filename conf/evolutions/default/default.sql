@@ -18,6 +18,18 @@ CREATE TABLE "Groups" (
   "direction" VARCHAR NOT NULL
 );
 
+CREATE TABLE "Timetable" (
+  "id" SERIAL NOT NULL PRIMARY KEY,
+  "studyShift" VARCHAR NOT NULL,
+  "weekDay" VARCHAR NOT NULL,
+  "couple" VARCHAR NOT NULL,
+  "typeOfLesson" VARCHAR NOT NULL,
+  "groupNumber" VARCHAR NOT NULL,
+  "subject" VARCHAR NOT NULL,
+  "teacher" VARCHAR NOT NULL,
+  "numberRoom" VARCHAR NOT NULL
+);
+
 # --- !Downs
 DROP TABLE "Subject";
 DROP TABLE "Teachers";

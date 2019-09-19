@@ -1,0 +1,100 @@
+@this(webJarsUtil: org.webjars.play.WebJarsUtil)
+@()
+  @import views.html.main
+@main("TimeTable - Creates Group", webJarsUtil) {
+  <script src="@routes.Assets.versioned("javascripts/timetable.js")" type="text/javascript"></script>
+  <div class="container">
+    <div class="col-md-8 text-center offset-md-2">
+      <br><br><br><br><br>
+      <h1>Create Timetable</h1>
+      <form class="mt-5 row">
+        <div class="form-group col-sm-4">
+          <select class="custom-select" data-bind="options: vm.studyShift(), optionsText: 'shift',
+                optionsValue: 'shift', value: vm.selectedShift, optionsCaption: 'Select study shift' ">
+          </select>
+        </div>
+        <div class="form-group col-sm-4">
+          <select class="custom-select" data-bind="options: vm.weekDay(), optionsText: 'day',
+                optionsValue: 'day', value: vm.selectedDay, optionsCaption: 'Select week day' ">
+          </select>
+        </div>
+        <div class="form-group col-sm-4">
+          <select class="custom-select" data-bind="options: vm.lCouple(), optionsText: 'couple',
+                optionsValue: 'id', value: vm.selectedCouple, optionsCaption: 'Select couple' ">
+          </select>
+        </div>
+        <div class="form-group col-sm-6 offset-sm-3">
+          <select class="custom-select" >
+            <option value="">leksiya</option>
+            <option value="">Seminar</option>
+            <option value="">laboratoriya</option>
+          </select>
+        </div>
+
+        <div class="form-group col-sm-4">
+          <select class="custom-select" >
+            <option value="">Maftunbek Raxmatov</option>
+            <option value="">Maftunbek Raxmatov</option>
+            <option value="">Maftunbek Raxmatov</option>
+          </select>
+          <select class="custom-select" >
+            <option value="">Maftunbek Raxmatov</option>
+            <option value="">Maftunbek Raxmatov</option>
+            <option value="">Maftunbek Raxmatov</option>
+          </select>
+        </div>
+
+        <div class="form-group col-sm-4">
+          <select class="custom-select" >
+            <option value="">Fizika</option>
+            <option value="">c++</option>
+            <option value="">java</option>
+          </select>
+        </div>
+         <div class="form-group col-sm-4">
+          <select class="custom-select" >
+            <option value="">108</option>
+            <option value="">109</option>
+            <option value="">107</option>
+            <option value="">106</option>
+          </select>
+          <select class="custom-select" >
+            <option value="">108</option>
+            <option value="">109</option>
+            <option value="">107</option>
+            <option value="">106</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-6 offset-md-3">
+          <select class="custom-select" >
+            <option value="">951-17</option>
+            <option value="">941-17</option>
+            <option value="">942-17</option>
+            <option value="">911-17</option>
+          </select>
+          <select class="custom-select" >
+            <option value="">951-17</option>
+            <option value="">941-17</option>
+            <option value="">942-17</option>
+            <option value="">911-17</option>
+          </select>
+          <select class="custom-select" >
+            <option value="">951-17</option>
+            <option value="">941-17</option>
+            <option value="">942-17</option>
+            <option value="">911-17</option>
+          </select>
+          <select class="custom-select" >
+            <option value="">951-17</option>
+            <option value="">941-17</option>
+            <option value="">942-17</option>
+            <option value="">911-17</option>
+          </select>
+        </div>
+        <div class="col-sm-4 offset-sm-4 text-center">
+          <button type="submit" class="btn btn-outline-success" data-bind="click: vm.onSubmit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
