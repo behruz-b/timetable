@@ -24,7 +24,6 @@ class GroupManager @Inject()(val environment: Environment,
       addGroup(group).pipeTo(sender())
 
     case _ => log.info(s"received unknown message")
-
   }
 
   private def addGroup(groupData: Group) = {
@@ -32,5 +31,4 @@ class GroupManager @Inject()(val environment: Environment,
       data
     }
   }
-
 }

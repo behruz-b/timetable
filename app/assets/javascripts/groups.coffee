@@ -5,10 +5,13 @@ $ ->
 
   apiUrl =
     send: '/send-group'
+    getDirections: '/get-directions'
 
 
   vm = ko.mapping.fromJS
     name: ''
+    listDirections: []
+    selectedDirection: ''
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -37,5 +40,17 @@ $ ->
     .fail handleError
     .done (response) ->
       toastr.success(response)
+
+  getDirectionList = ->
+    $.ajax
+      url:apiUrl.getDirections
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      console.log(response)
+      vm.listDirections(response)
+
+  getDirectionList()
+
 
   ko.applyBindings {vm}

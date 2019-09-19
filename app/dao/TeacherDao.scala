@@ -25,7 +25,7 @@ trait TeacherComponent {
 
     def department = column[String]("department")
 
-    def * = (id.?, fullname, tSubject, department) <> (Teacher.tupled, Teacher.unapply _)
+    def * = (id.?, fullName, tSubject, department) <> (Teacher.tupled, Teacher.unapply _)
   }
 
 }

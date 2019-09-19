@@ -28,12 +28,11 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     Ok(teachersTemplate())
   }
 
-
   def teacherPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
-    val fullname = (request.body \ "name").as[String]
-    val tSubject = (request.body \ "name").as[String]
-    val department = (request.body \ "numberClassRoom").as[String].toInt
-    (teacherManager ? AddTeacher(Teacher(None, fullname, tSubject , department))).mapTo[Int].map { pr =>
+    val fullName = (request.body \ "fullName").as[String]
+    val tSubject = (request.body \ "tSubject").as[String]
+    val department = (request.body \ "department").as[String]
+    (teacherManager ? AddTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
   }
