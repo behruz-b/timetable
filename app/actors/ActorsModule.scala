@@ -8,5 +8,6 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
     bindActor[SubjectManager]("subject-manager")
     bindActor[TeacherManager]("teacher-manager")
     bindActor[GroupManager]("group-manager")
+    bindActor[TelegramManager]("telegram-manager")
   }
 }
