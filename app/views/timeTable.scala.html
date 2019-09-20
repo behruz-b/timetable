@@ -30,12 +30,12 @@
         </div>
 
         <div class="form-group col-sm-4">
-          <select class="custom-select" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
             <option value="">Maftunbek Raxmatov</option>
             <option value="">Maftunbek Raxmatov</option>
             <option value="">Maftunbek Raxmatov</option>
           </select>
-          <select class="custom-select" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory'" >
             <option value="">Maftunbek Raxmatov</option>
             <option value="">Maftunbek Raxmatov</option>
             <option value="">Maftunbek Raxmatov</option>
@@ -43,46 +43,46 @@
         </div>
 
         <div class="form-group col-sm-4">
-          <select class="custom-select" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' ||  vm.selectedType() == 'Practice' || vm.selectedType() == 'Lecture'" >
             <option value="">Fizika</option>
             <option value="">c++</option>
             <option value="">java</option>
           </select>
         </div>
-         <div class="form-group col-sm-4">
-          <select class="custom-select" >
+         <div class="form-group col-sm-4" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
             <option value="">108</option>
             <option value="">109</option>
             <option value="">107</option>
             <option value="">106</option>
           </select>
-          <select class="custom-select" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' ">
             <option value="">108</option>
             <option value="">109</option>
             <option value="">107</option>
             <option value="">106</option>
           </select>
         </div>
-        <div class="form-group col-sm-6 offset-md-3">
+        <div class="form-group col-sm-6 offset-md-3" data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice' " >
           <select class="custom-select" >
             <option value="">951-17</option>
             <option value="">941-17</option>
             <option value="">942-17</option>
             <option value="">911-17</option>
           </select>
-          <select class="custom-select" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Lecture'" >
             <option value="">951-17</option>
             <option value="">941-17</option>
             <option value="">942-17</option>
             <option value="">911-17</option>
           </select>
-          <select class="custom-select" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Lecture'">
             <option value="">951-17</option>
             <option value="">941-17</option>
             <option value="">942-17</option>
             <option value="">911-17</option>
           </select>
-          <select class="custom-select" >
+          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Lecture'">
             <option value="">951-17</option>
             <option value="">941-17</option>
             <option value="">942-17</option>

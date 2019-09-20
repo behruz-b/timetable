@@ -13,8 +13,9 @@ $ ->
     weekDay: []
     selectedCouple: ''
     lCouple: []
-    selectedType: ''
+    selectedType: 'undefined'
     typeLesson: []
+
 
   get = ->
     vm.studyShift([{id: 1, shift: "Morning"}, {id: 2, shift: "Afternoon"}])
@@ -25,10 +26,6 @@ $ ->
     vm.typeLesson([{id: 1, type: "Laboratory"}, {id: 2, type: "Practice"}, {id: 3, type: "Lecture"}])
 
   get()
-
-
-
-
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
