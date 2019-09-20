@@ -1,13 +1,12 @@
 package controllers
 
 import akka.actor.ActorRef
-import akka.util.Timeout
 import akka.pattern.ask
+import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
-import protocols.SubjectProtocol.{AddSubject, Subject}
 import protocols.TeacherProtocol.{AddTeacher, Teacher}
 import views.html._
 

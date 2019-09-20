@@ -4,7 +4,7 @@ import play.api.libs.json.{Json, OFormat}
 
 object SubjectProtocol {
 
-  case object GetSubjectLink
+  case object GetSubjectList
 
   case class Room(id: Int, numberRoom: Int)
 
