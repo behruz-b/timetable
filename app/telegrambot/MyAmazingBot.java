@@ -4,7 +4,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 public class MyAmazingBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
@@ -31,14 +30,11 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        // Return bot username
-        // If bot username is @MyAmazingBot, it must return 'MyAmazingBot'
-        return "BOT_NAME";
+        return TelegramCredentials.getTelegramCredentials("./conf/application_local.conf").username();
     }
 
     @Override
     public String getBotToken() {
-        // Return bot token from BotFather
-        return "BOT_TOKEN";
+        return TelegramCredentials.getTelegramCredentials("./conf/application_local.conf").token();
     }
 }
