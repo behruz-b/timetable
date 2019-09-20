@@ -53,7 +53,7 @@ class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
     }
   }
 
-    override def getGroupList: Future[Seq[Group]] = {
-      db.run  (groups.sortBy(_.id).result)
-    }
+  override def getGroupList: Future[Seq[Group]] = {
+    db.run  (groups.sortBy(_.id).result)
+  }
 }
