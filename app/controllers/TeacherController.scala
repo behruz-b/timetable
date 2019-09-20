@@ -28,7 +28,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     Ok(teachersTemplate())
   }
 
-  def teacherPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
+  def addTeacher: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val fullName = (request.body \ "fullName").as[String]
     val tSubject = (request.body \ "tSubject").as[String]
     val department = (request.body \ "department").as[String]

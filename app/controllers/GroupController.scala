@@ -14,12 +14,12 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 @Singleton
-class GroupsController @Inject()(val controllerComponents: ControllerComponents,
-                                 @Named("group-manager") val groupManager: ActorRef,
-                                 groupTemplate: group,
-                                 dashboardTemplate: groupDashboard,
+class GroupController @Inject()(val controllerComponents: ControllerComponents,
+                                @Named("group-manager") val groupManager: ActorRef,
+                                groupTemplate: group,
+                                dashboardTemplate: groupDashboard,
                                 )
-                                (implicit val ec: ExecutionContext)
+                               (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
@@ -32,7 +32,7 @@ class GroupsController @Inject()(val controllerComponents: ControllerComponents,
     Ok(dashboardTemplate())
   }
 
-  def getReportGroup = Action.async(parse.json) { implicit request =>
+  def addGroup = Action.async(parse.json) { implicit request =>
     val name = (request.body \ "name").as[String]
     val direction = (request.body \ "direction").as[String]
     (groupManager ? AddGroup(Group(None, name, direction))).mapTo[Int].map {

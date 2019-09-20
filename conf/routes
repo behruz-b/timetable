@@ -7,18 +7,18 @@ POST    /send-subject               controllers.SubjectController.subjectPost
 
 
 GET     /teacher                    controllers.TeacherController.index
-POST    /send-teacher               controllers.TeacherController.teacherPost
+POST    /send-teacher               controllers.TeacherController.addTeacher
 
 
 GET     /timetable                    controllers.TimetableController.index
 
 
 
-GET     /group                     controllers.GroupsController.index
-GET     /group/dashboard           controllers.GroupsController.dashboard
-GET     /get-directions            controllers.GroupsController.getDirections
-GET     /get-groups                controllers.GroupsController.getGroupsList
-POST    /send-group                controllers.GroupsController.getReportGroup
+GET     /group                     controllers.GroupController.index
+GET     /group/dashboard           controllers.GroupController.dashboard
+GET     /get-directions            controllers.GroupController.getDirections
+GET     /get-groups                controllers.GroupController.getGroupsList
+POST    /send-group                controllers.GroupController.addGroup
 
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)
 ->      /webjars             webjars.Routes

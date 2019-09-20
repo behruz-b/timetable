@@ -13,15 +13,21 @@ $ ->
     weekDay: []
     selectedCouple: ''
     lCouple: []
-
+    selectedType: ''
+    typeLesson: []
 
   get = ->
     vm.studyShift([{id: 1, shift: "Morning"}, {id: 2, shift: "Afternoon"}])
     vm.weekDay([{id: 1, day: "Monday"}, {id: 2, day: "Tuesday"}, {id: 3, day: "Wednesday"}, {id: 4, day: "Thursday"},
       {id: 5, day: "Friday"}, {id: 6, day: "Saturday"}])
     vm.lCouple([{id: 1, couple: "couple 1"}, {id: 2, couple: "couple 2"}, {id: 3, couple: "couple 3"},
-      {id: 4, couple: "coupl e4"}])
+      {id: 4, couple: "couple 4"}])
+    vm.typeLesson([{id: 1, type: "Laboratory"}, {id: 2, type: "Practice"}, {id: 3, type: "Lecture"}])
+
   get()
+
+
+
 
 
   handleError = (error) ->

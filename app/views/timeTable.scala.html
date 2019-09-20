@@ -24,10 +24,8 @@
           </select>
         </div>
         <div class="form-group col-sm-6 offset-sm-3">
-          <select class="custom-select" >
-            <option value="">leksiya</option>
-            <option value="">Seminar</option>
-            <option value="">laboratoriya</option>
+          <select class="custom-select" data-bind="options: vm.typeLesson(), optionsText: 'type',
+                optionsValue: 'type', value: vm.selectedType, optionsCaption: 'Select type lesson' ">
           </select>
         </div>
 
