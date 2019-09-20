@@ -32,7 +32,7 @@ class GroupsController @Inject()(val controllerComponents: ControllerComponents,
     Ok(dashboardTemplate())
   }
 
-  def getReportGroup = Action.async(parse.json) { implicit request =>
+  def addGroup = Action.async(parse.json) { implicit request =>
     val name = (request.body \ "name").as[String]
     val direction = (request.body \ "direction").as[String]
     (groupManager ? AddGroup(Group(None, name, direction))).mapTo[Int].map {
