@@ -1,5 +1,5 @@
 # --- !Ups
-CREATE TABLE "Subject" (
+CREATE TABLE "Subjects" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "name" VARCHAR NOT NULL,
   "numberClassRoom" INTEGER NOT NULL
@@ -18,19 +18,20 @@ CREATE TABLE "Groups" (
   "direction" VARCHAR NOT NULL
 );
 
-CREATE TABLE "Timetable" (
+CREATE TABLE "Timetables" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "studyShift" VARCHAR NOT NULL,
   "weekDay" VARCHAR NOT NULL,
   "couple" VARCHAR NOT NULL,
   "typeOfLesson" VARCHAR NOT NULL,
-  "groupNumber" VARCHAR NOT NULL,
-  "subject" VARCHAR NOT NULL,
-  "teacher" VARCHAR NOT NULL,
+  "groupId" INTEGER CONSTRAINT "timetablesFkGroupId" REFERENCES "Groups" ON UPDATE CASCADE ON DELETE CASCADE,
+  "subjectId" INTEGER CONSTRAINT "timetablesFkSubjectId" REFERENCES "Subjects" ON UPDATE CASCADE ON DELETE CASCADE,
+  "teacherId" INTEGER CONSTRAINT "timetablesFkTeacherId" REFERENCES "Teachers" ON UPDATE CASCADE ON DELETE CASCADE,
   "numberRoom" VARCHAR NOT NULL
 );
 
 # --- !Downs
-DROP TABLE "Subject";
+DROP TABLE "Subjects";
 DROP TABLE "Teachers";
-DROP TABLE "GROUPS";
+DROP TABLE "Groups";
+DROP TABLE "Timetables";
