@@ -5,6 +5,9 @@ $ ->
 
   apiUrl =
     send: '/get-rooms'
+    getGroups: '/get-groups'
+    getRooms: '/get-rooms'
+    getSubject: '/get-subjects'
 
   vm = ko.mapping.fromJS
     selectedShift: ''
@@ -13,8 +16,14 @@ $ ->
     weekDay: []
     selectedCouple: ''
     lCouple: []
-    selectedType: 'undefined'
+    selectedType: ' '
     typeLesson: []
+    listGroups: []
+    selectedGroup: ''
+    listRooms: []
+    selectedRoom: ''
+    subjectList: []
+    selectedSubject: ''
 
 
   get = ->
@@ -32,6 +41,36 @@ $ ->
       toastr.error(error.responseText)
     else
       toastr.error('Something went wrong! Please try again.')
+
+  getGroupList = ->
+    $.ajax
+      url:apiUrl.getGroups
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.listGroups(response)
+
+  getGroupList()
+
+  getRooms = ->
+    $.ajax
+      url: apiUrl.getRooms
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.listRooms(response)
+
+  getRooms()
+
+  getSubjectList = ->
+    $.ajax
+      url: apiUrl.getSubject
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.subjectList(response)
+
+  getSubjectList()
 
   #  vm.onSubmit = ->
   #    toastr.clear()

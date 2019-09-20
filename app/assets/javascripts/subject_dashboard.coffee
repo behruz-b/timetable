@@ -4,7 +4,7 @@ $ ->
   Glob = window.Glob || {}
 
   apiUrl =
-    send: '/get-subjects'
+    getSubject: '/get-subjects'
 
   vm = ko.mapping.fromJS
     subjectList: []
@@ -18,7 +18,7 @@ $ ->
 
   getSubjectList = ->
     $.ajax
-      url: apiUrl.send
+      url: apiUrl.getSubject
       type: 'GET'
     .fail handleError
     .done (response) ->

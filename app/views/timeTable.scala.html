@@ -42,52 +42,42 @@
           </select>
         </div>
 
-        <div class="form-group col-sm-4">
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' ||  vm.selectedType() == 'Practice' || vm.selectedType() == 'Lecture'" >
-            <option value="">Fizika</option>
-            <option value="">c++</option>
-            <option value="">java</option>
+        <div class="form-group col-sm-4" data-bind="visible: vm.selectedType() == 'Laboratory' ||  vm.selectedType() == 'Practice' || vm.selectedType() == 'Lecture'" >
+          <select class="custom-select" data-bind="options: vm.subjectList(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedSubject, optionsCaption: 'Select subject' ">
           </select>
         </div>
-         <div class="form-group col-sm-4" >
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
-            <option value="">108</option>
-            <option value="">109</option>
-            <option value="">107</option>
-            <option value="">106</option>
-          </select>
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' ">
-            <option value="">108</option>
-            <option value="">109</option>
-            <option value="">107</option>
-            <option value="">106</option>
-          </select>
+        <div class="form-group col-sm-4" >
+          <div data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
+            <select class="custom-select" data-bind="options: vm.listRooms(), optionsText: 'numberRoom',
+                optionsValue: 'numberRoom', value: vm.selectedRoom, optionsCaption: 'Select room' ">
+            </select>
+          </div>
+          <div data-bind="visible: vm.selectedType() == 'Laboratory' ">
+            <select class="custom-select" data-bind="options: vm.listRooms(), optionsText: 'numberRoom',
+                optionsValue: 'numberRoom', value: vm.selectedRoom, optionsCaption: 'Select room' ">
+            </select>
+          </div>
         </div>
         <div class="form-group col-sm-6 offset-md-3" data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice' " >
-          <select class="custom-select" >
-            <option value="">951-17</option>
-            <option value="">941-17</option>
-            <option value="">942-17</option>
-            <option value="">911-17</option>
+          <select class="custom-select" data-bind="options: vm.listGroups(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedGroup, optionsCaption: 'Select number group' ">
           </select>
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Lecture'" >
-            <option value="">951-17</option>
-            <option value="">941-17</option>
-            <option value="">942-17</option>
-            <option value="">911-17</option>
-          </select>
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Lecture'">
-            <option value="">951-17</option>
-            <option value="">941-17</option>
-            <option value="">942-17</option>
-            <option value="">911-17</option>
-          </select>
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Lecture'">
-            <option value="">951-17</option>
-            <option value="">941-17</option>
-            <option value="">942-17</option>
-            <option value="">911-17</option>
-          </select>
+          <div data-bind="visible: vm.selectedType() == 'Lecture'" >
+            <select class="custom-select" data-bind="options: vm.listGroups(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedGroup, optionsCaption: 'Select number group' ">
+            </select>
+          </div>
+          <div data-bind="visible: vm.selectedType() == 'Lecture'" >
+            <select class="custom-select" data-bind="options: vm.listGroups(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedGroup, optionsCaption: 'Select number group' ">
+            </select>
+          </div>
+          <div data-bind="visible: vm.selectedType() == 'Lecture'" >
+            <select class="custom-select" data-bind="options: vm.listGroups(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedGroup, optionsCaption: 'Select number group' ">
+            </select>
+          </div>
         </div>
         <div class="col-sm-4 offset-sm-4 text-center">
           <button type="submit" class="btn btn-outline-success" data-bind="click: vm.onSubmit">Submit</button>
