@@ -7,7 +7,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
-import protocols.TeacherProtocol.{AddTeacher, Teacher}
+import protocols.TeacherProtocol.{AddTeacher, GetTeacherList, Teacher}
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -42,10 +42,10 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
-//  def getReportTeacher: Action[AnyContent] = Action.async {
-//    (teacherManager ? GetTeacherList).mapTo[Seq[Teacher]].map {
-//      teachers =>
-//        Ok(Json.toJson(teachers))
-//    }
-//  }
+  def getReportTeacher: Action[AnyContent] = Action.async {
+    (teacherManager ? GetTeacherList).mapTo[Seq[Teacher]].map {
+      teachers =>
+        Ok(Json.toJson(teachers))
+    }
+  }
 }

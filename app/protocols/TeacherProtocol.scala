@@ -4,6 +4,8 @@ import play.api.libs.json.{Json, OFormat}
 
 object TeacherProtocol {
 
+  case object GetTeacherList
+
   case class AddTeacher(teacher: Teacher)
 
   case class Teacher(id: Option[Int] = None,
