@@ -11,15 +11,17 @@
         <thead style="background:linen;">
           <tr>
             <th>№</th>
-            <th>Group Name</th>
-            <th>Group`s Direction</th>
+            <th>Teacher's Name</th>
+            <th>Department</th>
+            <th>Teacher Subject</th>
           </tr>
         </thead>
         <tbody class="" data-bind="foreach: vm.listTeachers">
           <tr>
             <td data-bind="text: $data.id"></td>
-            <td data-bind="text: $data.name"></td>
-            <td data-bind="text: $data.direction"></td>
+            <td data-bind="text: $data.fullName"></td>
+            <td data-bind="text: $data.department"></td>
+            <td data-bind="text: $data.tSubject"></td>
           </tr>
         </tbody>
       </table>
