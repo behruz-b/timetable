@@ -17,6 +17,7 @@ import scala.concurrent.duration.DurationInt
 class TeacherController @Inject()(val controllerComponents: ControllerComponents,
                                   @Named("teacher-manager") val teacherManager: ActorRef,
                                   teachersTemplate: teachers,
+                                  teachersDTemplate: teacher_dashboard,
                                  )
                                  (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -25,6 +26,10 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
 
   def index: Action[AnyContent] = Action {
     Ok(teachersTemplate())
+  }
+
+  def dashboard: Action[AnyContent] = Action {
+    Ok(teachersDTemplate())
   }
 
   def addTeacher: Action[JsValue] = Action.async(parse.json) { implicit request => {

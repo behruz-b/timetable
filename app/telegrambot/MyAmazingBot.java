@@ -15,7 +15,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
             String message_text = update.getMessage().getText();
             long chat_id = update.getMessage().getChatId();
 
-            String newMessage = message_text.equals("951-17") ?  "Timetable of 951-17 is blablablabla go to home and learn scala" :  Text.getText();
+            String newMessage = message_text.equals("951-17") ?  "Timetable of 951-17 is blablablabla go to home and learn scala" :  "hiii";
             SendMessage message = new SendMessage() // Create a message object object
                     .setChatId(chat_id)
                     .setText(newMessage);
