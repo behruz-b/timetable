@@ -24,7 +24,7 @@ class SubjectManager @Inject()(val environment: Environment,
       addSubject(subject).pipeTo(sender())
 
     case GetSubjectList =>
-      getSubjectLink.pipeTo(sender())
+      getSubjectList.pipeTo(sender())
 
     case _ => log.info(s"received unknown message")
 
@@ -34,7 +34,7 @@ class SubjectManager @Inject()(val environment: Environment,
     subjectDao.addSubject(subjectData)
   }
 
-  private def getSubjectLink = {
+  private def getSubjectList = {
     subjectDao.getSubjectList
   }
 
