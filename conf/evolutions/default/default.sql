@@ -24,9 +24,9 @@ CREATE TABLE "Timetables" (
   "weekDay" VARCHAR NOT NULL,
   "couple" VARCHAR NOT NULL,
   "typeOfLesson" VARCHAR NOT NULL,
-  "groupId" INTEGER CONSTRAINT "timetablesFkGroupId" REFERENCES "Groups" ON UPDATE CASCADE ON DELETE CASCADE,
+  "groups" JSONB NOT NULL,
   "subjectId" INTEGER CONSTRAINT "timetablesFkSubjectId" REFERENCES "Subjects" ON UPDATE CASCADE ON DELETE CASCADE,
-  "teacherId" INTEGER CONSTRAINT "timetablesFkTeacherId" REFERENCES "Teachers" ON UPDATE CASCADE ON DELETE CASCADE,
+  "teachers" JSONB NOT NULL,
   "numberRoom" VARCHAR NOT NULL
 );
 

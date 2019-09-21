@@ -41,4 +41,11 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     }
   }
   }
+
+//  def getReportTeacher: Action[AnyContent] = Action.async {
+//    (teacherManager ? GetTeacherList).mapTo[Seq[Teacher]].map {
+//      teachers =>
+//        Ok(Json.toJson(teachers))
+//    }
+//  }
 }
