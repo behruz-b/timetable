@@ -48,4 +48,5 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
         Ok(Json.toJson(teachers))
     }
   }
+
 }

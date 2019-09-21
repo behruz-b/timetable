@@ -33,6 +33,8 @@ trait TeacherComponent {
 @ImplementedBy(classOf[TeacherDaoImpl])
 trait TeacherDao {
   def addTeacher(teacherData: Teacher): Future[Int]
+
+  def getTeachers: Future[Seq[Teacher]]
 }
 
 
@@ -50,6 +52,12 @@ class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   override def addTeacher(teacherData: Teacher): Future[Int] = {
     db.run {
       (teachers returning teachers.map(_.id)) += teacherData
+    }
+  }
+
+  override def getTeachers: Future[Seq[Teacher]] = {
+    db.run {
+      teachers.sortBy(_.id).result
     }
   }
 }

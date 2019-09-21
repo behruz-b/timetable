@@ -24,7 +24,7 @@ class TeacherManager @Inject()(val environment: Environment,
       addTeacher(subject).pipeTo(sender())
 
     case GetTeacherList =>
-//      getTeacherList.pipeTo(sender())
+      getTeacherList.pipeTo(sender())
 
     case _ => log.info(s"received unknown message")
 
@@ -34,8 +34,8 @@ class TeacherManager @Inject()(val environment: Environment,
     teacherDao.addTeacher(teacherData)
   }
 
-//  private def getTeacherList = {
-//    teacherDao.getTeacher
-//  }
+  private def getTeacherList   = {
+    teacherDao.getTeachers
+  }
 
 }
