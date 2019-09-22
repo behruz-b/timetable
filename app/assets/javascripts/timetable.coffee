@@ -24,6 +24,7 @@ $ ->
     selectedRoom: ''
     subjectList: []
     selectedSubject: ''
+    listTeachers: []
 
 
   get = ->
@@ -71,6 +72,16 @@ $ ->
       vm.subjectList(response)
 
   getSubjectList()
+
+  getTeachers = ->
+    $.ajax
+      url: apiUrl.getTeacher
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.listTeachers(response)
+
+  getTeachers()
 
   #  vm.onSubmit = ->
   #    toastr.clear()

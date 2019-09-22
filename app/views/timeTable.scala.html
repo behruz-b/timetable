@@ -23,31 +23,33 @@
                 optionsValue: 'id', value: vm.selectedCouple, optionsCaption: 'Select couple' ">
           </select>
         </div>
-        <div class="form-group col-sm-6 offset-sm-3">
+        <div class="form-group col-sm-6">
+          <select class="custom-select" data-bind="options: vm.subjectList(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedSubject, optionsCaption: 'Select subject' ">
+          </select>
+        </div>
+        <div class="form-group col-sm-6">
           <select class="custom-select" data-bind="options: vm.typeLesson(), optionsText: 'type',
                 optionsValue: 'type', value: vm.selectedType, optionsCaption: 'Select type lesson' ">
           </select>
         </div>
 
-        <div class="form-group col-sm-4">
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
-            <option value="">Maftunbek Raxmatov</option>
-            <option value="">Maftunbek Raxmatov</option>
-            <option value="">Maftunbek Raxmatov</option>
-          </select>
-          <select class="custom-select" data-bind="visible: vm.selectedType() == 'Laboratory'" >
-            <option value="">Maftunbek Raxmatov</option>
-            <option value="">Maftunbek Raxmatov</option>
-            <option value="">Maftunbek Raxmatov</option>
-          </select>
+        <div class="form-group col-sm-6">
+          <div data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
+            <select class="custom-select"  data-bind="options: vm.listTeachers(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedTeacher, optionsCaption: 'Select teacher' ">
+            </select>
+          </div>
+
+          <div data-bind="visible: vm.selectedType() == 'Laboratory'" >
+            <select class="custom-select" data-bind="options: vm.listTeachers(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedTeacher, optionsCaption: 'Select teacher' ">
+            </select>
+          </div>
         </div>
 
-        <div class="form-group col-sm-4" data-bind="visible: vm.selectedType() == 'Laboratory' ||  vm.selectedType() == 'Practice' || vm.selectedType() == 'Lecture'" >
-          <select class="custom-select" data-bind="options: vm.subjectList(), optionsText: 'name',
-                optionsValue: 'name', value: vm.selectedSubject, optionsCaption: 'Select subject' ">
-          </select>
-        </div>
-        <div class="form-group col-sm-4" >
+
+        <div class="form-group col-sm-6" >
           <div data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
             <select class="custom-select" data-bind="options: vm.listRooms(), optionsText: 'numberRoom',
                 optionsValue: 'numberRoom', value: vm.selectedRoom, optionsCaption: 'Select room' ">

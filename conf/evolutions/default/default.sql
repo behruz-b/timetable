@@ -8,7 +8,7 @@ CREATE TABLE "Subjects" (
 CREATE TABLE "Teachers" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "fullName" VARCHAR NOT NULL,
-  "tSubject" VARCHAR NOT NULL,
+  "tSubject" VARCHAR[] NOT NULL,
   "department" VARCHAR NOT NULL
 );
 
@@ -24,9 +24,9 @@ CREATE TABLE "Timetables" (
   "weekDay" VARCHAR NOT NULL,
   "couple" VARCHAR NOT NULL,
   "typeOfLesson" VARCHAR NOT NULL,
-  "groups" JSONB NOT NULL,
+  "groups" VARCHAR[] NOT NULL,
   "subjectId" INTEGER CONSTRAINT "timetablesFkSubjectId" REFERENCES "Subjects" ON UPDATE CASCADE ON DELETE CASCADE,
-  "teachers" JSONB NOT NULL,
+  "teachers" VARCHAR[] NOT NULL,
   "numberRoom" VARCHAR NOT NULL
 );
 

@@ -4,7 +4,7 @@ import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import protocols.TeacherProtocol.Teacher
+import protocols.TeacherProtocol._
 import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
 
@@ -15,6 +15,8 @@ trait TeacherComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import utils.PostgresDriver.api._
+
+//  implicit val stringListType = new SimpleArrayJdbcType[String]("tSubject").to(_.toList)
 
   class TeachersTable(tag: Tag) extends Table[Teacher](tag, "Teachers") with Date2SqlDate {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
