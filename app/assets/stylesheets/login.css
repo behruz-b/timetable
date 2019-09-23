@@ -1,0 +1,102 @@
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  padding-top: 50px;
+  padding-bottom: 4.5em;
+  min-height: 100%;
+  color: black;
+  background-image: url("../images/login-bg.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: "Apple Color Emoji";
+
+}
+
+
+a {
+  text-decoration: none;
+  text-decoration-color: white;
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+  /*text-decoration-color: white;*/
+  color: white;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+  padding-top: 0px;
+}
+
+.input {
+  width: 100%;
+}
+
+input[type=checkbox] {
+  cursor: pointer;
+}
+
+.content {
+  bottom: 0;
+  background: rgb(255, 255, 255); /* Fallback color */
+  background: rgba(255, 255, 255, 0.2); /* Black background with 0.5 opacity */
+  color: #f1f1f1;
+  width: 100%;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.sign-in {
+  color: #495057;
+}
+
+.bg-blue-user {
+  background: #006666;
+  color: lavender;
+  font-size: 25px;
+}
+
+.bg-blue {
+  background: #006666;
+  color: lavender;
+  font-size: 20px;
+}
+
+.circle {
+  width: 90px;
+  height: 90px;
+  background: rgb(10, 160, 190); /* Fallback color */
+  background: rgba(30, 140, 140, 0.3); /* Black background with 0.5 opacity */
+  top: -85px;
+}
+
+.user-img {
+  margin-top: 15px;
+}
+
+.bg-ch {
+  background: rgba(0, 102, 102, 0.2);
+  color: #f1f1f1;
+  font-weight: normal;
+  font-family: "Serif";
+
+}
+
+.mt--5 {
+  margin-top: -5.5em;
+}

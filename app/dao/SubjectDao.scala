@@ -16,7 +16,7 @@ trait SubjectComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import utils.PostgresDriver.api._
 
-  class SubjectTable(tag: Tag) extends Table[Subject](tag, "Subject") with Date2SqlDate  {
+  class SubjectTable(tag: Tag) extends Table[Subject](tag, "Subjects") with Date2SqlDate  {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def name = column[String]("name")

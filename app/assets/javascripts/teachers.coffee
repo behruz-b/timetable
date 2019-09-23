@@ -10,7 +10,7 @@ $ ->
 
   vm = ko.mapping.fromJS
     fullName: ''
-    tSubject: ''
+    tSubject: []
     department: ''
     listTeachers: []
 

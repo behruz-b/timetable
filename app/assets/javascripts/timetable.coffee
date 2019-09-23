@@ -8,6 +8,7 @@ $ ->
     getGroups: '/get-groups'
     getRooms: '/get-rooms'
     getSubject: '/get-subjects'
+    getTeacher: '/get-teacher'
 
   vm = ko.mapping.fromJS
     selectedShift: ''
@@ -25,6 +26,7 @@ $ ->
     subjectList: []
     selectedSubject: ''
     listTeachers: []
+    selectedTeacher: ''
 
 
   get = ->
@@ -49,6 +51,7 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
+      console.log(response)
       vm.listGroups(response)
 
   getGroupList()
@@ -82,6 +85,7 @@ $ ->
       vm.listTeachers(response)
 
   getTeachers()
+
 
   #  vm.onSubmit = ->
   #    toastr.clear()

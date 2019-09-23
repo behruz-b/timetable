@@ -36,14 +36,14 @@
 
         <div class="form-group col-sm-6">
           <div data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice'">
-            <select class="custom-select"  data-bind="options: vm.listTeachers(), optionsText: 'name',
-                optionsValue: 'name', value: vm.selectedTeacher, optionsCaption: 'Select teacher' ">
+            <select class="custom-select"  data-bind="options: vm.listTeachers(), optionsText: 'fullName',
+                optionsValue: 'fullName', value: vm.selectedTeacher, optionsCaption: 'Select teacher' ">
             </select>
           </div>
 
           <div data-bind="visible: vm.selectedType() == 'Laboratory'" >
-            <select class="custom-select" data-bind="options: vm.listTeachers(), optionsText: 'name',
-                optionsValue: 'name', value: vm.selectedTeacher, optionsCaption: 'Select teacher' ">
+            <select class="custom-select" data-bind="options: vm.listTeachers(), optionsText: 'fullName',
+                optionsValue: 'fullName', value: vm.selectedTeacher, optionsCaption: 'Select teacher' ">
             </select>
           </div>
         </div>

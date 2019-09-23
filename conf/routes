@@ -1,5 +1,5 @@
 
-GET     /                           controllers.SubjectController.index
+GET     /subject                    controllers.SubjectController.index
 GET     /dashboard                  controllers.SubjectController.dashboard
 GET     /get-subjects               controllers.SubjectController.getReportSubject
 GET     /get-rooms                  controllers.SubjectController.getRooms
@@ -12,15 +12,18 @@ GET     /get-teacher                controllers.TeacherController.getReportTeach
 POST    /send-teacher               controllers.TeacherController.addTeacher
 
 
-GET     /timetable                    controllers.TimetableController.index
+GET     /timetable                  controllers.TimetableController.index
+
+
+GET     /                           controllers.AuthController.index
 
 
 
-GET     /group                     controllers.GroupController.index
-GET     /group/dashboard           controllers.GroupController.dashboard
-GET     /get-directions            controllers.GroupController.getDirections
-GET     /get-groups                controllers.GroupController.getGroupsList
-POST    /send-group                controllers.GroupController.addGroup
+GET     /group                      controllers.GroupController.index
+GET     /group/dashboard            controllers.GroupController.dashboard
+GET     /get-directions             controllers.GroupController.getDirections
+GET     /get-groups                 controllers.GroupController.getGroupsList
+POST    /send-group                 controllers.GroupController.addGroup
 
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)
 ->      /webjars             webjars.Routes

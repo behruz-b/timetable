@@ -11,15 +11,10 @@ object SubjectProtocol {
   implicit val roomFormat: OFormat[Room] = Json.format[Room]
 
   val roomList = Seq(
-      Room(1, 101),
-      Room(2, 102),
-      Room(3, 103),
-      Room(4, 104),
-      Room(5, 105),
-      Room(6, 106),
-      Room(7, 107),
-      Room(8, 108),
-      Room(9, 109),
+    Room(1, 302), Room(2, 303), Room(3, 308), Room(4, 310), Room(5, 311), Room(6, 312),
+    Room(7, 313), Room(8, 314), Room(9, 315), Room(10, 316), Room(11, 319), Room(12, 321), Room(13, 325),
+
+    Room(14, 201), Room(15, 202), Room(16, 204),
   )
 
   case class AddSubject(subjects: Subject)
