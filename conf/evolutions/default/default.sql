@@ -27,7 +27,7 @@ CREATE TABLE "Timetables" (
   "groups" VARCHAR[] NOT NULL,
   "subjectId" INTEGER CONSTRAINT "timetablesFkSubjectId" REFERENCES "Subjects" ON UPDATE CASCADE ON DELETE CASCADE,
   "teachers" VARCHAR[] NOT NULL,
-  "numberRoom" VARCHAR NOT NULL
+  "numberRoom" INT[] NOT NULL
 );
 
 # --- !Downs

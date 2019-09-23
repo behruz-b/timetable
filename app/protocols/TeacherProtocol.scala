@@ -14,7 +14,7 @@ object TeacherProtocol {
                      department: String
                     )
 
-  implicit val subjectFormat: OFormat[Teacher] = Json.format[Teacher]
+  implicit val teacherFormat: OFormat[Teacher] = Json.format[Teacher]
 
 
 }

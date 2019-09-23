@@ -4,7 +4,7 @@ $ ->
   Glob = window.Glob || {}
 
   apiUrl =
-    send: '/get-rooms'
+    send: '/send-timetable'
     getGroups: '/get-groups'
     getRooms: '/get-rooms'
     getSubject: '/get-subjects'
@@ -17,16 +17,21 @@ $ ->
     weekDay: []
     selectedCouple: ''
     lCouple: []
-    selectedType: ' '
+    selectedType: ''
     typeLesson: []
     listGroups: []
-    selectedGroup: ''
+    selectedGroup1: ''
+    selectedGroup2: ''
+    selectedGroup3: ''
+    selectedGroup4: ''
     listRooms: []
-    selectedRoom: ''
+    selectedRoom1: ''
+    selectedRoom2: ''
     subjectList: []
     selectedSubject: ''
     listTeachers: []
-    selectedTeacher: ''
+    selectedTeacher1: ''
+    selectedTeacher2: ''
 
 
   get = ->
@@ -86,31 +91,161 @@ $ ->
 
   getTeachers()
 
+  vm.selectedType.subscribe (type) ->
+    console.log(type)
+    vm.selectedType(type)
 
-  #  vm.onSubmit = ->
-  #    toastr.clear()
-  #    if (!vm.name())
-  #      toastr.error("Please enter a subject name")
-  #      return no
-  #    else if (vm.name().length < 6)
-  #      toastr.error("The subject name must consist of 6 letters")
-  #      return no
-  #    else if (!vm.selectedDirection())
-  #      toastr.error("Please select group's direction")
-  #      return no
-  #
-  #    data =
-  #      name: vm.name()
-  #      direction: vm.selectedDirection()
-  #    $.ajax
-  #      url: apiUrl.send
-  #      type: 'POST'
-  #      data: JSON.stringify(data)
-  #      dataType: 'json'
-  #      contentType: 'application/json'
-  #    .fail handleError
-  #    .done (response) ->
-  #      toastr.success(response)
+
+  vm.onSubmit = ->
+    toastr.clear()
+    if (!vm.selectedShift())
+      toastr.error("Please select shift")
+      return no
+    else if (!vm.selectedDay())
+      toastr.error("Please select day")
+      return no
+    else if (!vm.selectedCouple())
+      toastr.error("Please select couple")
+      return no
+    else if (!vm.selectedSubject())
+      toastr.error("Please select subject")
+      return no
+    else if (!vm.selectedType())
+      toastr.error("Please select type")
+      return no
+    else if (vm.selectedType() is "Practice" && !vm.selectedTeacher1())
+      toastr.error("Please select teacher")
+      return no
+    else if (vm.selectedType() == 'Practice' && !vm.selectedRoom1())
+      toastr.error("Please select room")
+      return no
+    else if (vm.selectedType() is "Practice" && !vm.selectedGroup1())
+      toastr.error("Please select group")
+      return no
+    else if (vm.selectedType() is "Laboratory" && !vm.selectedTeacher1())
+      toastr.error("Please select first teacher")
+      return no
+    else if (vm.selectedType() is "Laboratory" && !vm.selectedTeacher2())
+      toastr.error("Please select second teacher")
+      return no
+    else if (vm.selectedType() is "Laboratory" && vm.selectedTeacher2() == vm.selectedTeacher1())
+      toastr.error("Please select another teacher")
+      return no
+    else if (vm.selectedType() is "Laboratory" && !vm.selectedRoom1())
+      toastr.error("Please select first room")
+      return no
+    else if (vm.selectedType() is "Laboratory" && !vm.selectedRoom2())
+      toastr.error("Please select second room")
+      return no
+    else if (vm.selectedType() is "Laboratory" && vm.selectedRoom2() == vm.selectedRoom1())
+      toastr.error("Please select another room")
+      return no
+    else if (vm.selectedType() is "Laboratory" && !vm.selectedGroup1())
+      toastr.error("Please select group")
+      return no
+    else if (vm.selectedType() is "Lecture" && !vm.selectedTeacher1())
+      toastr.error("Please select first teacher")
+      return no
+    else if (vm.selectedType() is "Lecture" && !vm.selectedRoom1())
+      toastr.error("Please select first room")
+      return no
+    else if (vm.selectedType() is "Lecture" && !vm.selectedGroup1())
+      toastr.error("Please select group")
+      return no
+
+    if (vm.selectedType() is "Laboratory" && vm.selectedTeacher1() && !vm.selectedTeacher1() &&  vm.selectedRoom1() &&  !vm.selectedRoom2())
+      data =
+        studyShift: vm.selectedShift()
+        weekDay: vm.selectedDay()
+        couple: vm.selectedCouple()
+        typeOfLesson: vm.selectedType()
+        groups: [vm.selectedGroup1()]
+        subjectId: vm.selectedSubject()
+        teachers: [vm.selectedTeacher1()]
+        numberRoom: [vm.selectedRoom1()]
+
+    else if (vm.selectedType() is "Laboratory" && vm.selectedTeacher1() && vm.selectedTeacher1() &&  vm.selectedRoom1() &&  vm.selectedRoom2())
+      console.log('is here laboratory')
+      data =
+        studyShift: vm.selectedShift()
+        weekDay: vm.selectedDay()
+        couple: vm.selectedCouple()
+        typeOfLesson: vm.selectedType()
+        groups: [vm.selectedGroup1()]
+        subjectId: vm.selectedSubject()
+        teachers: [vm.selectedTeacher1(), vm.selectedTeacher1()]
+        numberRoom: [vm.selectedRoom1(), vm.selectedRoom2()]
+
+    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && !vm.selectedGroup2() && !vm.selectedGroup3() && !vm.selectedGroup4())
+      console.log('is here lecture 1')
+
+      data =
+          studyShift: vm.selectedShift()
+          weekDay: vm.selectedDay()
+          couple: vm.selectedCouple()
+          typeOfLesson: vm.selectedType()
+          groups: [vm.selectedGroup1()]
+          subjectId: vm.selectedSubject()
+          teachers: [vm.selectedTeacher1()]
+          numberRoom: [vm.selectedRoom1()]
+
+    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && !vm.selectedGroup3() && !vm.selectedGroup4())
+      console.log('is here lecture 2')
+      data =
+        studyShift: vm.selectedShift()
+        weekDay: vm.selectedDay()
+        couple: vm.selectedCouple()
+        typeOfLesson: vm.selectedType()
+        groups: [vm.selectedGroup1(), vm.selectedGroup2()]
+        subjectId: vm.selectedSubject()
+        teachers: [vm.selectedTeacher1()]
+        numberRoom: [vm.selectedRoom1()]
+
+    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && vm.selectedGroup3() && !vm.selectedGroup4())
+      console.log('is here lecture 3')
+      data =
+        studyShift: vm.selectedShift()
+        weekDay: vm.selectedDay()
+        couple: vm.selectedCouple()
+        typeOfLesson: vm.selectedType()
+        groups: [vm.selectedGroup1(), vm.selectedGroup2(), vm.selectedGroup3()]
+        subjectId: vm.selectedSubject()
+        teachers: [vm.selectedTeacher1()]
+        numberRoom: [vm.selectedRoom1()]
+
+    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && vm.selectedGroup3() && vm.selectedGroup4())
+      console.log('is here lecture 4')
+      data =
+        studyShift: vm.selectedShift()
+        weekDay: vm.selectedDay()
+        couple: vm.selectedCouple()
+        typeOfLesson: vm.selectedType()
+        groups: [vm.selectedGroup1(), vm.selectedGroup2(), vm.selectedGroup3(), vm.selectedGroup4()]
+        subjectId: vm.selectedSubject()
+        teachers: [vm.selectedTeacher1()]
+        numberRoom: [vm.selectedRoom1()]
+
+    else
+      console.log('is here practice')
+      data =
+        studyShift: vm.selectedShift()
+        weekDay: vm.selectedDay()
+        couple: vm.selectedCouple()
+        typeOfLesson: vm.selectedType()
+        groups: [vm.selectedGroup1()]
+        subjectId: vm.selectedSubject()
+        teachers: [vm.selectedTeacher1()]
+        numberRoom: [vm.selectedRoom1()]
+
+    $.ajax
+      url: apiUrl.send
+      type: 'POST'
+      data: JSON.stringify(data)
+      dataType: 'json'
+      contentType: 'application/json'
+    .fail handleError
+    .done (response) ->
+      toastr.success(response)
 
 
   ko.applyBindings {vm}

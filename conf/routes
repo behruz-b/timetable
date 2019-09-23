@@ -13,6 +13,7 @@ POST    /send-teacher               controllers.TeacherController.addTeacher
 
 
 GET     /timetable                  controllers.TimetableController.index
+POST    /send-timetable             controllers.TimetableController.addTimetable
 
 
 GET     /                           controllers.AuthController.index
