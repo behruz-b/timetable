@@ -10,7 +10,7 @@ object TeacherProtocol {
 
   case class Teacher(id: Option[Int] = None,
                      fullName: String,
-                     tSubject: String,
+                     tSubject: List[String],
                      department: String
                     )
 

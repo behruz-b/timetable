@@ -23,7 +23,7 @@ trait TeacherComponent {
 
     def fullName = column[String]("fullName")
 
-    def tSubject = column[String]("tSubject")
+    def tSubject = column[List[String]]("tSubject")
 
     def department = column[String]("department")
 
