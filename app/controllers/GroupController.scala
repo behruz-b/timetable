@@ -49,7 +49,6 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   def getGroupsList = Action.async {
     (groupManager ? GetGroupList).mapTo[Seq[Group]].map {
       group =>
-        logger.error(s"groups: $group")
         Ok(Json.toJson(group))
     }
   }

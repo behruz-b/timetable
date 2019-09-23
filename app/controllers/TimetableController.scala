@@ -18,6 +18,7 @@ import scala.concurrent.duration.DurationInt
 class TimetableController @Inject()(val controllerComponents: ControllerComponents,
                                     @Named("timetable-manager") val timetableManager: ActorRef,
                                     timeTableTemplate: timeTable,
+                                    timeTableDTemplate: timetable_dashboard,
                                    )
                                    (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -26,6 +27,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def index: Action[AnyContent] = Action {
     Ok(timeTableTemplate())
+  }
+
+  def dashboard: Action[AnyContent] = Action {
+    Ok(timeTableDTemplate())
   }
 
 
@@ -44,7 +49,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
   }
 
-  def getReportTeacher = Action.async {
+  def getReportTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
         Ok(Json.toJson(timetable))
