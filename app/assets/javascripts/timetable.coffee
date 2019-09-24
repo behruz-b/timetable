@@ -20,18 +20,13 @@ $ ->
     selectedType: ''
     typeLesson: []
     listGroups: []
-    selectedGroup1: ''
-    selectedGroup2: ''
-    selectedGroup3: ''
-    selectedGroup4: ''
+    selectedGroup: ''
     listRooms: []
-    selectedRoom1: ''
-    selectedRoom2: ''
+    selectedRoom: ''
     subjectList: []
     selectedSubject: ''
     listTeachers: []
-    selectedTeacher1: ''
-    selectedTeacher2: ''
+    selectedTeacher: ''
 
 
   get = ->
@@ -87,7 +82,6 @@ $ ->
     .fail handleError
     .done (response) ->
       vm.listTeachers(response)
-
   getTeachers()
 
   vm.selectedType.subscribe (type) ->
@@ -111,111 +105,27 @@ $ ->
     else if (!vm.selectedType())
       toastr.error("Please select type")
       return no
-    else if (vm.selectedType() is "Practice" && !vm.selectedTeacher1())
+    else if (!vm.selectedTeacher())
       toastr.error("Please select teacher")
       return no
-    else if (vm.selectedType() == 'Practice' && !vm.selectedRoom1())
+    else if (!vm.selectedRoom())
       toastr.error("Please select room")
       return no
-    else if (vm.selectedType() is "Practice" && !vm.selectedGroup1())
-      toastr.error("Please select group")
-      return no
-    else if (vm.selectedType() is "Laboratory" && !vm.selectedTeacher1())
-      toastr.error("Please select first teacher")
-      return no
-    else if (vm.selectedType() is "Laboratory" && !vm.selectedTeacher2())
-      toastr.error("Please select second teacher")
-      return no
-    else if (vm.selectedType() is "Laboratory" && vm.selectedTeacher2() == vm.selectedTeacher1())
-      toastr.error("Please select another teacher")
-      return no
-    else if (vm.selectedType() is "Laboratory" && !vm.selectedRoom1())
-      toastr.error("Please select first room")
-      return no
-    else if (vm.selectedType() is "Laboratory" && !vm.selectedRoom2())
-      toastr.error("Please select second room")
-      return no
-    else if (vm.selectedType() is "Laboratory" && vm.selectedRoom2() == vm.selectedRoom1())
-      toastr.error("Please select another room")
-      return no
-    else if (vm.selectedType() is "Laboratory" && !vm.selectedGroup1())
-      toastr.error("Please select group")
-      return no
-    else if (vm.selectedType() is "Lecture" && !vm.selectedTeacher1())
-      toastr.error("Please select teacher")
-      return no
-    else if (vm.selectedType() is "Lecture" && !vm.selectedRoom1())
-      toastr.error("Please select room")
-      return no
-    else if (vm.selectedType() is "Lecture" && !vm.selectedGroup1())
+    else if (!vm.selectedGroup())
       toastr.error("Please select group")
       return no
 
-    if (vm.selectedType() is "Laboratory" && vm.selectedTeacher1() && !vm.selectedTeacher1() &&  vm.selectedRoom1() &&  !vm.selectedRoom2())
+    if (vm.selectedType() is "Laboratory")
       data =
         studyShift: vm.selectedShift()
         weekDay: vm.selectedDay()
         couple: vm.selectedCouple()
         typeOfLesson: vm.selectedType()
-        groups: [vm.selectedGroup1()]
+        groups: vm.selectedGroup()
+        divorce: 'half'
         subjectId: vm.selectedSubject()
-        teachers: [vm.selectedTeacher1()]
-        numberRoom: [vm.selectedRoom1()]
-
-    else if (vm.selectedType() is "Laboratory" && vm.selectedTeacher1() && vm.selectedTeacher1() &&  vm.selectedRoom1() &&  vm.selectedRoom2())
-      data =
-        studyShift: vm.selectedShift()
-        weekDay: vm.selectedDay()
-        couple: vm.selectedCouple()
-        typeOfLesson: vm.selectedType()
-        groups: [vm.selectedGroup1()]
-        subjectId: vm.selectedSubject()
-        teachers: [vm.selectedTeacher1(), vm.selectedTeacher1()]
-        numberRoom: [vm.selectedRoom1(), vm.selectedRoom2()]
-
-    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && !vm.selectedGroup2() && !vm.selectedGroup3() && !vm.selectedGroup4())
-      data =
-          studyShift: vm.selectedShift()
-          weekDay: vm.selectedDay()
-          couple: vm.selectedCouple()
-          typeOfLesson: vm.selectedType()
-          groups: [vm.selectedGroup1()]
-          subjectId: vm.selectedSubject()
-          teachers: [vm.selectedTeacher1()]
-          numberRoom: [vm.selectedRoom1()]
-
-    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && !vm.selectedGroup3() && !vm.selectedGroup4())
-      data =
-        studyShift: vm.selectedShift()
-        weekDay: vm.selectedDay()
-        couple: vm.selectedCouple()
-        typeOfLesson: vm.selectedType()
-        groups: [vm.selectedGroup1(), vm.selectedGroup2()]
-        subjectId: vm.selectedSubject()
-        teachers: [vm.selectedTeacher1()]
-        numberRoom: [vm.selectedRoom1()]
-
-    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && vm.selectedGroup3() && !vm.selectedGroup4())
-      data =
-        studyShift: vm.selectedShift()
-        weekDay: vm.selectedDay()
-        couple: vm.selectedCouple()
-        typeOfLesson: vm.selectedType()
-        groups: [vm.selectedGroup1(), vm.selectedGroup2(), vm.selectedGroup3()]
-        subjectId: vm.selectedSubject()
-        teachers: [vm.selectedTeacher1()]
-        numberRoom: [vm.selectedRoom1()]
-
-    else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && vm.selectedGroup3() && vm.selectedGroup4())
-      data =
-        studyShift: vm.selectedShift()
-        weekDay: vm.selectedDay()
-        couple: vm.selectedCouple()
-        typeOfLesson: vm.selectedType()
-        groups: [vm.selectedGroup1(), vm.selectedGroup2(), vm.selectedGroup3(), vm.selectedGroup4()]
-        subjectId: vm.selectedSubject()
-        teachers: [vm.selectedTeacher1()]
-        numberRoom: [vm.selectedRoom1()]
+        teachers: vm.selectedTeacher()
+        numberRoom: vm.selectedRoom()
 
     else
       data =
@@ -223,10 +133,11 @@ $ ->
         weekDay: vm.selectedDay()
         couple: vm.selectedCouple()
         typeOfLesson: vm.selectedType()
-        groups: [vm.selectedGroup1()]
+        groups: vm.selectedGroup()
+        divorce: ''
         subjectId: vm.selectedSubject()
-        teachers: [vm.selectedTeacher1()]
-        numberRoom: [vm.selectedRoom1()]
+        teachers: vm.selectedTeacher()
+        numberRoom: vm.selectedRoom()
 
     $.ajax
       url: apiUrl.send

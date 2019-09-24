@@ -24,10 +24,11 @@ CREATE TABLE "Timetables" (
   "weekDay" VARCHAR NOT NULL,
   "couple" VARCHAR NOT NULL,
   "typeOfLesson" VARCHAR NOT NULL,
-  "groups" VARCHAR[] NOT NULL,
+  "groups" VARCHAR NOT NULL,
+  "divorce" VARCHAR NULL,
   "subjectId" INTEGER CONSTRAINT "timetablesFkSubjectId" REFERENCES "Subjects" ON UPDATE CASCADE ON DELETE CASCADE,
-  "teachers" VARCHAR[] NOT NULL,
-  "numberRoom" INT[] NOT NULL
+  "teachers" VARCHAR NOT NULL,
+  "numberRoom" INT NOT NULL
 );
 
 # --- !Downs

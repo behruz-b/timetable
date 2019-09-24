@@ -6,9 +6,9 @@ import akka.util.Timeout
 import dao.TimetableDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.TimetableProtocol.{AddTimetable, GetTimetableList, Timetable}
+import protocols.TimetableProtocol.{AddTimetable, GetText, GetTimetableByGroup, GetTimetableList, Timetable}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
 
 class TimetableManager @Inject()(val environment: Environment,
@@ -26,16 +26,30 @@ class TimetableManager @Inject()(val environment: Environment,
     case GetTimetableList =>
       getTimetableList.pipeTo(sender())
 
+    case GetTimetableByGroup(getText) =>
+      getTimetableByGroup(getText).pipeTo(sender())
+
     case _ => log.info(s"received unknown message")
 
   }
 
-  private def addTimetable(timetableData: Timetable) = {
+  private def addTimetable(timetableData: Timetable): Future[Int] = {
     timetableDao.addTimetable(timetableData)
   }
 
-  private def getTimetableList = {
+  private def getTimetableList: Future[Seq[Timetable]] = {
     timetableDao.getTimetables
+  }
+
+  private def getTimetableByGroup(getText: GetText) = {
+    (for {
+      response <- timetableDao.getTimetableByGroup(getText.weekDay, getText.group)
+    } yield response match {
+      case Some(isGroup) =>
+        Future.successful(isGroup.toString)
+      case None =>
+        Future.successful("this is no Group")
+    }).flatten
   }
 
 }

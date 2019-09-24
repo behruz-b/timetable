@@ -4,7 +4,7 @@ import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import protocols.TimetableProtocol.Timetable
+import protocols.TimetableProtocol.{GetText, Timetable}
 import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
 
@@ -29,15 +29,17 @@ trait TimetableComponent {
 
     def typeOfLesson = column[String]("typeOfLesson")
 
-    def groups = column[List[String]]("groups")
+    def groups = column[String]("groups")
+
+    def divorce = column[String]("divorce")
 
     def subjectId = column[Int]("subjectId")
 
-    def teachers = column[List[String]]("teachers")
+    def teachers = column[String]("teachers")
 
-    def numberRoom = column[List[Int]]("numberRoom")
+    def numberRoom = column[Int]("numberRoom")
 
-    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, subjectId, teachers, numberRoom) <> (Timetable.tupled, Timetable.unapply _)
+    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom) <> (Timetable.tupled, Timetable.unapply _)
   }
 
 }
@@ -47,6 +49,8 @@ trait TimetableDao {
   def addTimetable(timetableData: Timetable): Future[Int]
 
   def getTimetables: Future[Seq[Timetable]]
+
+  def getTimetableByGroup(weekDay: String, group: String): Future[Option[Timetable]]
 }
 
 
@@ -71,5 +75,9 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     db.run {
       timetables.sortBy(_.id).result
     }
+  }
+
+  override def getTimetableByGroup(weekDay: String, group: String): Future[Option[Timetable]] = {
+    db.run(timetables.filter(data => data.groups === group && data.weekDay === weekDay).result.headOption)
   }
 }

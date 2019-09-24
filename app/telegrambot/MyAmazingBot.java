@@ -1,5 +1,6 @@
 package telegrambot;
 
+import controllers.TimetableController;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,7 +16,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
             String message_text = update.getMessage().getText();
             long chat_id = update.getMessage().getChatId();
 
-            String newMessage = message_text.equals("951-17") ?  "Timetable of 951-17 is blablablabla go to home and learn scala" :  "hiii";
+            String newMessage = TimetableController.hasGroup("monday", message_text);
             SendMessage message = new SendMessage() // Create a message object object
                     .setChatId(chat_id)
                     .setText(newMessage);

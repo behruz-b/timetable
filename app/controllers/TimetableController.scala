@@ -3,12 +3,11 @@ package controllers
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
-
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.Json
 import play.api.mvc._
-import protocols.TimetableProtocol.{AddTimetable, GetTimetableList, Timetable}
+import protocols.TimetableProtocol.{AddTimetable, GetText, GetTimetableByGroup, GetTimetableList, Timetable}
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -39,11 +38,12 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val weekDay = (request.body \ "weekDay").as[String]
     val couple = (request.body \ "couple").as[String]
     val typeOfLesson = (request.body \ "typeOfLesson").as[String]
-    val groups = (request.body \ "groups").as[List[String]]
+    val groups = (request.body \ "groups").as[String]
+    val divorce = (request.body \ "divorce").as[String]
     val subjectId = (request.body \ "subjectId").as[Int]
-    val teachers = (request.body \ "teachers").as[List[String]]
-    val numberRoom = (request.body \ "numberRoom").as[List[Int]]
-    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, subjectId, teachers, numberRoom))).mapTo[Int].map { pr =>
+    val teachers = (request.body \ "teachers").as[String]
+    val numberRoom = (request.body \ "numberRoom").as[Int]
+    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
   }
@@ -53,6 +53,13 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
         Ok(Json.toJson(timetable))
+    }
+  }
+
+  def hasGroup(weekDay: String, group: String) =  {
+    (timetableManager ? GetTimetableByGroup(GetText(weekDay, group))).mapTo[String].map {
+      timetable =>
+        Ok(timetable)
     }
   }
 
