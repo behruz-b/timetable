@@ -22,7 +22,6 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
-      console.log(response)
       vm.timetableList(response)
 
   vm.getTable()

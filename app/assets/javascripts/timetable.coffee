@@ -56,7 +56,6 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
-      console.log(response)
       vm.listGroups(response)
 
   getGroupList()
@@ -92,7 +91,6 @@ $ ->
   getTeachers()
 
   vm.selectedType.subscribe (type) ->
-    console.log(type)
     vm.selectedType(type)
 
 
@@ -144,10 +142,10 @@ $ ->
       toastr.error("Please select group")
       return no
     else if (vm.selectedType() is "Lecture" && !vm.selectedTeacher1())
-      toastr.error("Please select first teacher")
+      toastr.error("Please select teacher")
       return no
     else if (vm.selectedType() is "Lecture" && !vm.selectedRoom1())
-      toastr.error("Please select first room")
+      toastr.error("Please select room")
       return no
     else if (vm.selectedType() is "Lecture" && !vm.selectedGroup1())
       toastr.error("Please select group")
@@ -165,7 +163,6 @@ $ ->
         numberRoom: [vm.selectedRoom1()]
 
     else if (vm.selectedType() is "Laboratory" && vm.selectedTeacher1() && vm.selectedTeacher1() &&  vm.selectedRoom1() &&  vm.selectedRoom2())
-      console.log('is here laboratory')
       data =
         studyShift: vm.selectedShift()
         weekDay: vm.selectedDay()
@@ -177,8 +174,6 @@ $ ->
         numberRoom: [vm.selectedRoom1(), vm.selectedRoom2()]
 
     else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && !vm.selectedGroup2() && !vm.selectedGroup3() && !vm.selectedGroup4())
-      console.log('is here lecture 1')
-
       data =
           studyShift: vm.selectedShift()
           weekDay: vm.selectedDay()
@@ -190,7 +185,6 @@ $ ->
           numberRoom: [vm.selectedRoom1()]
 
     else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && !vm.selectedGroup3() && !vm.selectedGroup4())
-      console.log('is here lecture 2')
       data =
         studyShift: vm.selectedShift()
         weekDay: vm.selectedDay()
@@ -202,7 +196,6 @@ $ ->
         numberRoom: [vm.selectedRoom1()]
 
     else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && vm.selectedGroup3() && !vm.selectedGroup4())
-      console.log('is here lecture 3')
       data =
         studyShift: vm.selectedShift()
         weekDay: vm.selectedDay()
@@ -214,7 +207,6 @@ $ ->
         numberRoom: [vm.selectedRoom1()]
 
     else if (vm.selectedType() is "Lecture" && vm.selectedGroup1() && vm.selectedGroup2() && vm.selectedGroup3() && vm.selectedGroup4())
-      console.log('is here lecture 4')
       data =
         studyShift: vm.selectedShift()
         weekDay: vm.selectedDay()
@@ -226,7 +218,6 @@ $ ->
         numberRoom: [vm.selectedRoom1()]
 
     else
-      console.log('is here practice')
       data =
         studyShift: vm.selectedShift()
         weekDay: vm.selectedDay()
