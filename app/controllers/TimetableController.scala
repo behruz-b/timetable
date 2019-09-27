@@ -32,6 +32,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     Ok(timeTableDTemplate())
   }
 
+  def text: Action[AnyContent] = Action {
+    Ok("Hello!")
+  }
+
 
   def addTimetable = Action.async(parse.json) { implicit request => {
     val studyShift = (request.body \ "studyShift").as[String]

@@ -20,6 +20,7 @@ POST    /send-timetable             controllers.TimetableController.addTimetable
 
 GET     /                           controllers.AuthController.index
 
+POST     /text                       controllers.TimetableController.text
 
 
 GET     /group                      controllers.GroupController.index
