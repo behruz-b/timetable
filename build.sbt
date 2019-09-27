@@ -61,5 +61,6 @@ libraryDependencies ++= akkaLibs ++ akkaHttp ++ commonDependencies ++ dbLibs ++ 
   "org.webjars" % "bootstrap" % "4.3.1",
   "org.webjars" % "momentjs" % "2.8.1",
   "org.telegram" % "telegrambots" % "4.4.0.1",
-  "org.apache.logging.log4j" % "log4j-api" % "2.12.1"
+  "org.apache.logging.log4j" % "log4j-api" % "2.12.1",
+  "org.scalaj" % "scalaj-http_2.12" % "2.3.0"
 )

@@ -32,9 +32,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     Ok(timeTableDTemplate())
   }
 
-  def text: Action[AnyContent] = Action {
-    Ok("Hello!")
-  }
+  def text = Action(parse.json) {implicit request => {
+    logger.info(s"${request.body}")
+    Ok(Json.toJson("Hellooooooooooooo"))
+  }}
 
 
   def addTimetable = Action.async(parse.json) { implicit request => {
