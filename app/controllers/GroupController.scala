@@ -24,12 +24,22 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
 
-  def index: Action[AnyContent] = Action {
-    Ok(groupTemplate())
+  val LoginSessionKey = "login.key"
+
+  def index: Action[AnyContent] = Action { implicit request =>
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(groupTemplate())
+    }.getOrElse {
+      Unauthorized
+    }
   }
 
-  def dashboard: Action[AnyContent] = Action {
+  def dashboard: Action[AnyContent] = Action { implicit request =>
+  request.session.get(LoginSessionKey).map{ session =>
     Ok(dashboardTemplate())
+  }.getOrElse {
+    Unauthorized
+  }
   }
 
   def addGroup = Action.async(parse.json) { implicit request =>
@@ -42,14 +52,22 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   }
 
   def getDirections = Action { implicit request => {
-    Ok(Json.toJson(directionsList))
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(Json.toJson(directionsList))
+    }.getOrElse {
+      Unauthorized
+    }
   }
   }
 
-  def getGroupsList = Action.async {
+  def getGroupsList = Action.async { implicit request =>
     (groupManager ? GetGroupList).mapTo[Seq[Group]].map {
       group =>
-        Ok(Json.toJson(group))
+        request.session.get(LoginSessionKey).map{ session =>
+          Ok(Json.toJson(group))
+        }.getOrElse {
+          Unauthorized
+        }
     }
   }
 

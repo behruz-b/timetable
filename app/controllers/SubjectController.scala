@@ -25,12 +25,22 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
 
-  def index: Action[AnyContent] = Action {
-    Ok(subjectTemplate())
+  val LoginSessionKey = "login.key"
+
+  def index: Action[AnyContent] = Action { implicit request =>
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(subjectTemplate())
+    }.getOrElse {
+      Unauthorized
+    }
   }
 
-  def dashboard: Action[AnyContent] = Action {
-    Ok(dashboardTemplate())
+  def dashboard: Action[AnyContent] = Action { implicit request =>
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(dashboardTemplate())
+    }.getOrElse {
+      Unauthorized
+    }
   }
 
   def subjectPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
@@ -42,15 +52,23 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
-  def getReportSubject: Action[AnyContent] = Action.async {
+  def getReportSubject: Action[AnyContent] = Action.async { implicit request =>
     (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
       subject =>
-        Ok(Json.toJson(subject))
+        request.session.get(LoginSessionKey).map{ session =>
+          Ok(Json.toJson(subject))
+        }.getOrElse {
+          Unauthorized
+        }
     }
   }
 
   def getRooms = Action { implicit request => {
-    Ok(Json.toJson(roomList))
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(Json.toJson(roomList))
+    }.getOrElse {
+      Unauthorized
+    }
   }
   }
 }

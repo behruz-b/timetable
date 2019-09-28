@@ -24,10 +24,10 @@
                 <span class="input-group-prepend">
                   <div class="input-group-text bg-white border-0"><i class="fa fa-lock"></i></div>
                 </span>
-                <input class="form-control pb-2 border-right-0 border-0" type="password" placeholder="Password.." data-bind="value: vm.password">
+                <input class="form-control pb-2 border-right-0 border-0" type="password" placeholder="Password.." data-bind="value: vm.pass">
               </div>
               <div class="mt-4 text-center col-sm-4 offset-sm-4">
-                <button type="submit" class="btn bg-blue">
+                <button type="submit" class="btn bg-blue" data-bind="click: vm.onSubmit">
                   Login</button>
               </div>
             </div>

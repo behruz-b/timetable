@@ -24,12 +24,22 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
 
-  def index: Action[AnyContent] = Action {
-    Ok(teachersTemplate())
+  val LoginSessionKey = "login.key"
+
+  def index: Action[AnyContent] = Action { implicit request =>
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(teachersTemplate())
+    }.getOrElse {
+      Unauthorized
+    }
   }
 
-  def dashboard: Action[AnyContent] = Action {
-    Ok(teachersDTemplate())
+  def dashboard: Action[AnyContent] = Action { implicit request =>
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(teachersDTemplate())
+    }.getOrElse {
+      Unauthorized
+    }
   }
 
   def addTeacher: Action[JsValue] = Action.async(parse.json) { implicit request => {
@@ -42,10 +52,14 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
-  def getReportTeacher: Action[AnyContent] = Action.async {
+  def getReportTeacher: Action[AnyContent] = Action.async { implicit request =>
     (teacherManager ? GetTeacherList).mapTo[Seq[Teacher]].map {
       teachers =>
-        Ok(Json.toJson(teachers))
+        request.session.get(LoginSessionKey).map{ session =>
+          Ok(Json.toJson(teachers))
+        }.getOrElse {
+          Unauthorized
+        }
     }
   }
 

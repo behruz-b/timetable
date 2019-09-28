@@ -19,6 +19,7 @@ POST    /send-timetable             controllers.TimetableController.addTimetable
 
 
 GET     /                           controllers.AuthController.index
+POST    /loginPost                  controllers.AuthController.loginPost
 
 POST     /text                       controllers.TimetableController.hasGroup
 

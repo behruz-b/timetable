@@ -27,8 +27,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
 
-  def index: Action[AnyContent] = Action {
+  val LoginSessionKey = "login.key"
+
+  def index: Action[AnyContent] = Action { implicit request =>
+    request.session.get(LoginSessionKey).map{ session =>
     Ok(timeTableTemplate())
+    }.getOrElse {
+      Unauthorized
+    }
   }
 
   def dashboard: Action[AnyContent] = Action {
