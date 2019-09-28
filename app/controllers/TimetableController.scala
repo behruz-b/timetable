@@ -1,5 +1,8 @@
 package controllers
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
@@ -32,12 +35,6 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     Ok(timeTableDTemplate())
   }
 
-  def text = Action(parse.json) {implicit request => {
-    logger.info(s"${request.body}")
-    Ok(Json.toJson("Hellooooooooooooo"))
-  }}
-
-
   def addTimetable = Action.async(parse.json) { implicit request => {
     val studyShift = (request.body \ "studyShift").as[String]
     val weekDay = (request.body \ "weekDay").as[String]
@@ -61,12 +58,31 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
-  def hasGroup(weekDay: String, group: String) =  {
-    (timetableManager ? GetTimetableByGroup(GetText(weekDay, group))).mapTo[String].map {
+  def hasGroup = Action.async(parse.json) {implicit request => {
+    val group = (request.body \ "group").as[String]
+    (timetableManager ? GetTimetableByGroup(GetText(currentDay(convertToStrDate(new Date)), group))).mapTo[String].map {
       timetable =>
         Ok(timetable)
     }
+  }}
+
+  def currentDay(shortDay: String) =  {
+    shortDay match {
+      case  "Mon" => "Monday"
+      case  "Tues" => "Tuesday"
+      case  "Wed" => "Wednesday"
+      case  "Thurs" => "Thursday"
+      case  "Fri" => "Friday"
+      case  "Sat" => "Saturday"
+      case  "Sun" => "Sunday"
+    }
   }
+
+  private def convertToStrDate(date: Date)
+  = {
+    new SimpleDateFormat("E").format(date)
+  }
+
 
 
 }

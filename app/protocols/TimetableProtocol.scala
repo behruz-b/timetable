@@ -28,5 +28,11 @@ object TimetableProtocol {
 
   implicit val timetableFormat: OFormat[Timetable] = Json.format[Timetable]
 
+  import play.api.libs.json._
+
+  case class Group(group: String)
+
+  implicit val groupWrites = Json.writes[Group]
+
 
 }
