@@ -6,6 +6,7 @@ import javax.inject._
 import play.api.libs.json.Json
 import play.api.mvc._
 import views.html._
+import views.html.timetable._
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt

@@ -16,8 +16,8 @@ import scala.concurrent.duration.DurationInt
 @Singleton
 class TeacherController @Inject()(val controllerComponents: ControllerComponents,
                                   @Named("teacher-manager") val teacherManager: ActorRef,
-                                  teachersTemplate: teachers,
-                                  teachersDTemplate: teacher_dashboard,
+                                  teachersTemplate: teacher.teachers,
+                                  teachersDTemplate: teacher.teacher_dashboard,
                                  )
                                  (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {

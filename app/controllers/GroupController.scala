@@ -16,8 +16,8 @@ import scala.concurrent.duration.DurationInt
 @Singleton
 class GroupController @Inject()(val controllerComponents: ControllerComponents,
                                 @Named("group-manager") val groupManager: ActorRef,
-                                groupTemplate: group,
-                                dashboardTemplate: group_dashboard,
+                                groupTemplate: group.group,
+                                dashboardTemplate: group.group_dashboard,
                                 )
                                (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {

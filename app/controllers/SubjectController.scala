@@ -17,8 +17,8 @@ import scala.concurrent.duration.DurationInt
 @Singleton
 class SubjectController @Inject()(val controllerComponents: ControllerComponents,
                                   @Named("subject-manager") val subjectManager: ActorRef,
-                                  subjectTemplate: subject,
-                                  dashboardTemplate: subject_dashboard,
+                                  subjectTemplate: subject.subject,
+                                  dashboardTemplate: subject.subject_dashboard,
                                  )
                                  (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {

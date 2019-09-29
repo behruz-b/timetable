@@ -19,8 +19,8 @@ import scala.concurrent.duration.DurationInt
 @Singleton
 class TimetableController @Inject()(val controllerComponents: ControllerComponents,
                                     @Named("timetable-manager") val timetableManager: ActorRef,
-                                    timeTableTemplate: timeTable,
-                                    timeTableDTemplate: timetable_dashboard,
+                                    timeTableTemplate: timetable.timeTable,
+                                    timeTableDTemplate: timetable.timetable_dashboard,
                                    )
                                    (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
