@@ -51,8 +51,7 @@ class AuthController @Inject()(val controllerComponents: ControllerComponents,
 
   def loginPost = Action { implicit request =>
     val formParams = request.body.asFormUrlEncoded
-    val login = formParams.get("log" +
-      "in").headOption
+    val login = formParams.get("login").headOption
     val password = formParams.get("pass").headOption
     val authByLoginAndPwd = usersList.exists(user => user.login == login.getOrElse("") && user.password == password.getOrElse("") )
     if (authByLoginAndPwd) {
