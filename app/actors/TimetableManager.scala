@@ -8,8 +8,8 @@ import javax.inject.Inject
 import play.api.Environment
 import protocols.TimetableProtocol.{AddTimetable, GetText, GetTimetableByGroup, GetTimetableList, Timetable}
 
-import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
+import scala.concurrent.{ExecutionContext, Future}
 
 class TimetableManager @Inject()(val environment: Environment,
                                  timetableDao: TimetableDao
@@ -47,43 +47,47 @@ class TimetableManager @Inject()(val environment: Environment,
     } yield response match {
       case Some(timetable) =>
         val trNameDay = timetable.weekDay match {
-          case  "Monday" => "Dushanba"
-          case  "Tuesday" => "Seshanba"
-          case  "Wednesday" => "Chorshanba"
-          case  "Thursday" => "Payshanba"
-          case  "Friday" => "Juma"
-          case  "Saturday" => "Shanba"
-          case  "Sunday" => "Yakshanba"
+          case "Monday" => "Dushanba"
+          case "Tuesday" => "Seshanba"
+          case "Wednesday" => "Chorshanba"
+          case "Thursday" => "Payshanba"
+          case "Friday" => "Juma"
+          case "Saturday" => "Shanba"
         }
-        val trStydyShift = timetable.studyShift match {
-          case  "Afternoon" => "2 - Smena"
-          case  "Morning" => "1 - Smena"
+        val trStudyShift = timetable.studyShift match {
+          case "Afternoon" => "2 - Smena"
+          case "Morning" => "1 - Smena"
         }
         val trCouple = timetable.couple match {
-          case  "couple 1" => "1 - Juftlik"
-          case  "couple 2" => "2 - Juftlik"
-          case  "couple 3" => "3 - Juftlik"
-          case  "couple 4" => "4 - Juftlik"
+          case "couple 1" => "1 - Juftlik"
+          case "couple 2" => "2 - Juftlik"
+          case "couple 3" => "3 - Juftlik"
+          case "couple 4" => "4 - Juftlik"
         }
         val trTypeLesson = timetable.typeOfLesson match {
-          case  "Laboratory" => "Laboratoriya"
-          case  "Practice" => "Amaliyot"
-          case  "Lecture" => "Ma'ruza"
+          case "Laboratory" => "Laboratoriya"
+          case "Practice" => "Amaliyot"
+          case "Lecture" => "Ma'ruza"
         }
-        val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStydyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+        val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
         Future.successful(
           "Hafta kuni:                  " + timetableMapped.weekDay.toString + "\n" +
-          "Guruh:                       " + timetableMapped.groups.toString + "\n" +
-          "O'qish vaqti:                " + timetableMapped.studyShift.toString  + "\n" +
-          "Juftlik:                     " + timetableMapped.couple.toString  + "\n" +
-          "Fan:                         " + timetableMapped.subjectId.toString + "\n" +
-          "Mashg'ulot turi              " + timetableMapped.typeOfLesson.toString + "\n" +
-          "O'qituvchi:                  " + timetableMapped.teachers.toString  + "\n" +
-          "Dars xonasi:                 " + timetableMapped.numberRoom.toString
+            "Guruh:                       " + timetableMapped.groups.toString + "\n" +
+            "O'qish vaqti:                " + timetableMapped.studyShift.toString + "\n" +
+            "Juftlik:                     " + timetableMapped.couple.toString + "\n" +
+            "Fan:                         " + timetableMapped.subjectId.toString + "\n" +
+            "Mashg'ulot turi              " + timetableMapped.typeOfLesson.toString + "\n" +
+            "O'qituvchi:                  " + timetableMapped.teachers.toString + "\n" +
+            "Dars xonasi:                 " + timetableMapped.numberRoom.toString
         )
       case None =>
-        Future.successful("this is Group not found")
+        if (getText.weekDay == "Sunday") {
+          Future.successful("Bugun dars yo'q! \n " +
+            "Bugun Yakshanba.")
+        }
+        else {
+          Future.successful("Bunday guruh mavjud emas!")
+        }
     }).flatten
   }
-
 }

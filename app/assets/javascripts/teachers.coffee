@@ -31,7 +31,7 @@ $ ->
     else if (!vm.tSubject())
       toastr.error("Please enter teacher's  subject")
       return no
-    else if (vm.tSubject().length < 6)
+    else if (vm.tSubject().length < 4)
       toastr.error("The teacher's subject must consist of 6 letters")
       return no
     else if (!vm.department())
