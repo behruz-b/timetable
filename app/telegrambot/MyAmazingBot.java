@@ -6,6 +6,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MyAmazingBot extends TelegramLongPollingBot {
+
+    private final String botUserName;
+    private final String botToken;
+
+    public MyAmazingBot(final String botUserName, final String botToken) {
+        this.botUserName = botUserName;
+        this.botToken = botToken;
+    }
+
     @Override
     public void onUpdateReceived(Update update) {
 
@@ -29,12 +38,12 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return TelegramCredentials.getTelegramCredentials("./conf/application_local.conf").username();
+        return new MyAmazingBot(botUserName, botToken).botUserName;
     }
 
     @Override
     public String getBotToken() {
-        return TelegramCredentials.getTelegramCredentials("./conf/application_local.conf").token();
+        return new MyAmazingBot(botUserName, botToken).botToken;
     }
 
 }

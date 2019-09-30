@@ -4,7 +4,7 @@ import actors.TelegramManager.RunBot
 import akka.actor.{Actor, ActorLogging}
 import akka.util.Timeout
 import javax.inject.Inject
-import play.api.Environment
+import play.api.{Configuration, Environment}
 import telegrambot.TelegramBot
 
 import scala.concurrent.ExecutionContext
@@ -14,15 +14,19 @@ object TelegramManager {
   case object RunBot
 }
 
-class TelegramManager @Inject()(val environment: Environment)
+class TelegramManager @Inject()(val environment: Environment,
+                                val configuration: Configuration)
                                (implicit val ec: ExecutionContext)
   extends Actor with ActorLogging {
 
+  val botUsername: String = configuration.get[String]("bot-username")
+  val botToken: String = configuration.get[String]("bot-token")
+
 //  UNCOMMIT to run telegram bot
 
-//  override def preStart() {
-//    self ! RunBot
-//  }
+  override def preStart() {
+    self ! RunBot
+  }
 
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
@@ -35,7 +39,7 @@ class TelegramManager @Inject()(val environment: Environment)
   }
 
   private def runTelegram() = {
-    new TelegramBot().runTelegramJava()
+    new TelegramBot().runTelegramJava(botUsername, botToken)
   }
 
 }
