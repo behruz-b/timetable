@@ -20,9 +20,9 @@ class TelegramManager @Inject()(val environment: Environment)
 
 //  UNCOMMIT to run telegram bot
 
-//  override def preStart() {
-//    self ! RunBot
-//  }
+  override def preStart() {
+    self ! RunBot
+  }
 
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
