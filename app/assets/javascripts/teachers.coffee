@@ -7,13 +7,15 @@ $ ->
     send: '/send-teacher'
     getTeacher: '/get-teacher'
     getDepartment: '/get-department'
+    getSubject: '/get-subjects'
 
 
   vm = ko.mapping.fromJS
     fullName: ''
-    tSubject: []
-    selectedDepartment: ''
+    subjectList: []
+    selectedSubject: ''
     listTeachers: []
+    selectedDepartment: ''
     listDepartment: []
 
   handleError = (error) ->
@@ -30,23 +32,17 @@ $ ->
     else if (vm.fullName().length < 6)
       toastr.error("The teacher's full name must consist of 6 letters")
       return no
-    else if (!vm.tSubject())
+    else if (!vm.selectedSubject())
       toastr.error("Please enter teacher's  subject")
       return no
-    else if (vm.tSubject().length < 4)
-      toastr.error("The teacher's subject must consist of 6 letters")
-      return no
-    else if (!vm.department())
+    else if (!vm.selectedSubject())
       toastr.error("Please enter teacher's department")
-      return no
-    else if (vm.department().length < 6)
-      toastr.error("The teacher's department must consist of 6 letters")
       return no
 
     data =
       fullName: vm.fullName()
-      tSubject: vm.tSubject()
-      department: vm.department()
+      tSubject: vm.selectedSubject()
+      department: vm.selectedSubject()
 
     $.ajax
       url: apiUrl.send
@@ -77,5 +73,15 @@ $ ->
       vm.listDepartment(response)
 
   getDepartment()
+
+  getSubjectList = ->
+    $.ajax
+      url: apiUrl.getSubject
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.subjectList(response)
+
+  getSubjectList()
 
   ko.applyBindings {vm}

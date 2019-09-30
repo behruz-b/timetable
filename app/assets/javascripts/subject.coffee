@@ -9,8 +9,6 @@ $ ->
 
   vm = ko.mapping.fromJS
     name: ''
-    numberClassRoom: ''
-    listRooms: ''
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -26,19 +24,9 @@ $ ->
     else if (vm.name().length < 6)
       toastr.error("The subject name must consist of 6 letters")
       return no
-    else if (!vm.numberClassRoom())
-      toastr.error("Please enter the class number")
-      return no
-    else if (!my.isValidInt(vm.numberClassRoom()))
-      toastr.error("Class number is only a digit")
-      return no
-    else if (vm.numberClassRoom().length < 3)
-      toastr.error("The class number must consist of 3 digit")
-      return no
 
     data =
       name: vm.name()
-      numberClassRoom: vm.numberClassRoom()
     $.ajax
       url: apiUrl.send
       type: 'POST'
@@ -48,15 +36,5 @@ $ ->
     .fail handleError
     .done (response) ->
       toastr.success(response)
-
-  getRooms = ->
-    $.ajax
-      url: apiUrl.getRooms
-      type: 'GET'
-    .fail handleError
-    .done (response) ->
-      vm.listRooms(response)
-
-  getRooms()
 
   ko.applyBindings {vm}

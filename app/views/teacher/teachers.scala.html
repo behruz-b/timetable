@@ -14,7 +14,9 @@
             <input type="text" class=form-control placeholder="Full Name..." data-bind="value: vm.fullName"/>
           </div>
           <div class="form-group">
-            <input type="text" class=form-control placeholder="The subject of the teacher..." data-bind="value: vm.tSubject"/>
+             <select class="custom-select" data-bind="options: vm.subjectList(), optionsText: 'name',
+                optionsValue: 'name', value: vm.selectedSubject, optionsCaption: 'Select subject' ">
+            </select>
           </div>
           <div class="form-group">
             <select class="custom-select" data-bind="options: vm.listDepartment(), optionsText: 'department',
