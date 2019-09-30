@@ -66,27 +66,49 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def hasGroup = Action.async(parse.json) {implicit request => {
     val group = (request.body \ "group").as[String]
-    (timetableManager ? GetTimetableByGroup(GetText(currentDay(convertToStrDate(new Date)), group))).mapTo[String].map {
+    (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[String].map {
       timetable =>
         Ok(timetable)
     }
   }}
 
-  def currentDay(shortDay: String) =  {
-    shortDay match {
-      case  "Mon" => "Monday"
-      case  "Tues" => "Tuesday"
-      case  "Wed" => "Wednesday"
-      case  "Thurs" => "Thursday"
-      case  "Fri" => "Friday"
-      case  "Sat" => "Saturday"
-      case  "Sun" => "Sunday"
+  def momentCouple(time: String) = {
+    val hour = time.substring(0, 2).toInt
+    val minute = time.substring(3, 5).toInt
+    if ((hour == 8  && (minute >= 30 && minute <=59)) || (hour == 9 && (minute >= 0 && minute <=50))) {
+      "1-para"
+    }
+    else if ((hour == 10  && minute >= 0 && minute <=59) || (hour == 11 && minute >= 0 && minute <=20)){
+      "2-para"
+    }
+    else if ((hour == 11  && minute >= 30 && minute <=59) || (hour == 12 && minute >= 0 && minute <=50)) {
+      "3-para"
+    }
+    else if ((hour == 13  && minute >= 30 && minute <=59) || (hour == 14 && minute >= 0 && minute <=50)) {
+      "4-para"
+    }
+    else if ((hour == 15  && minute >= 0 && minute <=59) || (hour == 16 && minute >= 0 && minute <=20)) {
+      "5-para"
+    }
+    else if ((hour == 16  && minute >= 30 && minute <=59) || (hour == 17 && minute >= 0 && minute <=50)) {
+      "6-para"
+    }
+    else if ((hour == 17  && minute >= 51 && minute <=59) || (hour >= 18 && minute >= 0 && minute <=59) || (hour == 8 && minute >= 0 && minute <=29) || (hour < 8 && minute >= 0 && minute <=59) ) {
+      "Dars tugadi!"
+    }
+    else {
+      "Tanaffus"
     }
   }
 
   private def convertToStrDate(date: Date)
   = {
-    new SimpleDateFormat("E").format(date)
+    new SimpleDateFormat("EEEE").format(date)
+  }
+
+  private def momentHourAndMinute(date: Date)
+  = {
+    new SimpleDateFormat("HH:mm:ss").format(date)
   }
 
 
