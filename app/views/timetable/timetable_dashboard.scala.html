@@ -1,41 +1,44 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
 @()
-@import views.html.main
+  @import views.html.main
 @main("TimeTable - Dashboard", webJarsUtil) {
   <script src="@routes.Assets.versioned("javascripts/timetable_dashboard.js")" type="text/javascript"></script>
   @navbar()
   <div class="container">
-    <div class=" text-center">
+    <div class="text-center">
       <br><br><br><br><br>
       <h1>Timetable Dashboard</h1>
-      <table class="table table-hover table-condensed table-bordered">
-        <thead style="background:linen;">
-          <tr>
-            <th>№</th>
-            <th>Study Shift</th>
-            <th>Week Day</th>
-            <th>Couple</th>
-            <th>Type Of Lesson</th>
-            <th>Groups</th>
-            <th>Subject Id</th>
-            <th>Teacher's Name</th>
-            <th>numberRoom</th>
-          </tr>
-        </thead>
-        <tbody class="" data-bind="foreach: vm.timetableList">
-          <tr>
-            <td data-bind="text: $data.id"></td>
-            <td data-bind="text: $data.studyShift"></td>
-            <td data-bind="text: $data.weekDay"></td>
-            <td data-bind="text: $data.couple"></td>
-            <td data-bind="text: $data.typeOfLesson"></td>
-            <td data-bind="text: $data.groups"></td>
-            <td data-bind="text: $data.subjectId"></td>
-            <td data-bind="text: $data.teachers"></td>
-            <td data-bind="text: $data.numberRoom"></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive text-nowrap">
+        <table class="table table-hover table-condensed table-bordered">
+          <thead style="background: linen;">
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Study Shift</th>
+              <th scope="col">Week Day</th>
+              <th scope="col">Couple</th>
+              <th scope="col">Type Of Lesson</th>
+              <th scope="col">Groups</th>
+              <th scope="col">Subject Id</th>
+              <th scope="col">Teacher's Name</th>
+              <th scope="col">numberRoom</th>
+            </tr>
+          </thead>
+          <tbody class="" data-bind="foreach: vm.timetableList">
+            <tr>
+              <th scope="row" data-bind="text: $data.id"></th>
+              <td data-bind="text: $data.studyShift"></td>
+              <td data-bind="text: $data.weekDay"></td>
+              <td data-bind="text: $data.couple"></td>
+              <td data-bind="text: $data.typeOfLesson"></td>
+              <td data-bind="text: $data.groups"></td>
+              <td data-bind="text: $data.subjectId"></td>
+              <td data-bind="text: $data.teachers"></td>
+              <td data-bind="text: $data.numberRoom"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+
 }
