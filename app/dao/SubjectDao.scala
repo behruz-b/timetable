@@ -21,9 +21,7 @@ trait SubjectComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 
     def name = column[String]("name")
 
-    def numberClassRoom = column[Int]("numberClassRoom")
-
-    def * = (id.?, name, numberClassRoom) <> (Subject.tupled, Subject.unapply _)
+    def * = (id.?, name) <> (Subject.tupled, Subject.unapply _)
   }
 }
 

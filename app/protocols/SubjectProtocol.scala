@@ -24,7 +24,6 @@ object SubjectProtocol {
 
   case class Subject(id: Option[Int] = None,
                      name: String,
-                     numberClassRoom: Int,
                     )
 
   implicit val subjectFormat: OFormat[Subject] = Json.format[Subject]
