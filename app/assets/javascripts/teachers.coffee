@@ -6,13 +6,15 @@ $ ->
   apiUrl =
     send: '/send-teacher'
     getTeacher: '/get-teacher'
+    getDepartment: '/get-department'
 
 
   vm = ko.mapping.fromJS
     fullName: ''
     tSubject: []
-    department: ''
+    selectedDepartment: ''
     listTeachers: []
+    listDepartment: []
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -65,5 +67,15 @@ $ ->
       vm.listTeachers(response)
 
   getTeachers()
+
+  getDepartment = ->
+    $.ajax
+      url: apiUrl.getDepartment
+      type: 'GET'
+    .fail handleError
+    .done (response) ->
+      vm.listDepartment(response)
+
+  getDepartment()
 
   ko.applyBindings {vm}

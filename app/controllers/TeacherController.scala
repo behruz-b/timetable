@@ -7,7 +7,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
-import protocols.TeacherProtocol.{AddTeacher, GetTeacherList, Teacher}
+import protocols.TeacherProtocol._
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -61,6 +61,15 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
           Unauthorized
         }
     }
+  }
+
+  def getDepartment = Action { implicit request => {
+    request.session.get(LoginSessionKey).map{ session =>
+      Ok(Json.toJson(directionsList))
+    }.getOrElse {
+      Unauthorized
+    }
+  }
   }
 
 }

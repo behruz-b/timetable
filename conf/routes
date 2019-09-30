@@ -9,6 +9,7 @@ POST    /send-subject               controllers.SubjectController.subjectPost
 GET     /teacher                    controllers.TeacherController.index
 GET     /teacher/dashboard          controllers.TeacherController.dashboard
 GET     /get-teacher                controllers.TeacherController.getReportTeacher
+GET     /get-department             controllers.TeacherController.getDepartment
 POST    /send-teacher               controllers.TeacherController.addTeacher
 
 
