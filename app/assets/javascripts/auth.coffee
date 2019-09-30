@@ -17,7 +17,7 @@ $ ->
       toastr.error('Something went wrong! Please try again.')
 
   redirect = () ->
-    window.location.replace("http://localhost:9000/")
+    window.location.replace("https://dars-jadvali-ubtuit.herokuapp.com/`")
 
   vm.onSubmit = ->
     toastr.clear()

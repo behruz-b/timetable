@@ -1,5 +1,5 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
-@()
+@()(implicit flash: Flash)
   @import views.html.main
 @main("Login", webJarsUtil) {
   <link href="@routes.Assets.versioned("stylesheets/login.css")" rel="stylesheet">
@@ -8,7 +8,17 @@
     <div class="col-xs-4 col-md-4 col-sm-8 col-12 offset-xs-4 offset-md-4 offset-sm-2  offset-0">
       <div class="row">
         <div class="col-md-10 col-sm-10 offset-md-1 offset-sm-1">
-          <form class="content row">
+
+        @flash.get("error").map { errorText =>
+          <div class="text-danger">
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <h3>@errorText</h3>
+              </div>
+            </div>
+          </div>
+        }
+          <form class="content row" action="@routes.AuthController.loginPost()" method="post">
             <div class="rounded-circle bg-blue-user circle col-sm-4 col-4 offset-4 offset-sm-4 text-center">
               <i class="fas fa-user fa-2x user-img"></i>
             </div>
@@ -18,16 +28,16 @@
                 <span class="input-group-prepend">
                   <div class="input-group-text bg-white border-0"><i class="fa fa-user"></i></div>
                 </span>
-                <input class="form-control pb-2 border-right-0 border-0" type="text" placeholder="Username..." data-bind="value: vm.login">
+                <input class="form-control pb-2 border-right-0 border-0" type="text" placeholder="Username..." name="login">
               </div>
               <div class="input-group mb-4">
                 <span class="input-group-prepend">
                   <div class="input-group-text bg-white border-0"><i class="fa fa-lock"></i></div>
                 </span>
-                <input class="form-control pb-2 border-right-0 border-0" type="password" placeholder="Password.." data-bind="value: vm.pass">
+                <input class="form-control pb-2 border-right-0 border-0" type="password" placeholder="Password.." name="pass">
               </div>
               <div class="mt-4 text-center col-sm-4 offset-sm-4">
-                <button type="submit" class="btn bg-blue" data-bind="click: vm.onSubmit">
+                <button type="submit" class="btn bg-blue">
                   Login</button>
               </div>
             </div>

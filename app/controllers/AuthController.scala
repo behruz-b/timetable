@@ -49,16 +49,18 @@ class AuthController @Inject()(val controllerComponents: ControllerComponents,
       }
   } }
 
-  def loginPost = Action(parse.json) { implicit request => {
-    val login = (request.body \ "login").as[String]
-    val password = (request.body \ "password").as[String]
-    val authByLoginAndPwd = usersList.exists(user => user.login == login && user.password == password )
-    if (!authByLoginAndPwd) {
-      Ok(Json.toJson("Your login or password is incorrect."))
+  def loginPost = Action { implicit request =>
+    val formParams = request.body.asFormUrlEncoded
+    val login = formParams.get("log" +
+      "in").headOption
+    val password = formParams.get("pass").headOption
+    val authByLoginAndPwd = usersList.exists(user => user.login == login.getOrElse("") && user.password == password.getOrElse("") )
+    if (authByLoginAndPwd) {
+      Redirect(routes.TimetableController.dashboard()).addingToSession(LoginSessionKey -> login.getOrElse(""))
     } else {
-      Redirect("/timetable/dashboard").addingToSession(LoginSessionKey -> login)
+      Redirect(routes.AuthController.index()).flashing("error" -> "Your login or password is incorrect.")
     }
-  }}
+  }
 
   def logout = Action { implicit request => {
     Redirect(routes.AuthController.index()).withSession(
