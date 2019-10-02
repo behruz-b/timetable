@@ -1,6 +1,6 @@
 package telegrambot
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 import protocols.TimetableProtocol.Group
 import scalaj.http.{Http, HttpOptions}
 

@@ -1,36 +1,36 @@
 
-GET     /subject                    controllers.SubjectController.index
-GET     /subject/dashboard          controllers.SubjectController.dashboard
-GET     /get-subjects               controllers.SubjectController.getReportSubject
-GET     /get-rooms                  controllers.SubjectController.getRooms
-POST    /send-subject               controllers.SubjectController.subjectPost
+GET     /subject                    @controllers.SubjectController.index
+GET     /subject/dashboard          @controllers.SubjectController.dashboard
+GET     /get-subjects               @controllers.SubjectController.getReportSubject
+GET     /get-rooms                  @controllers.SubjectController.getRooms
+POST    /send-subject               @controllers.SubjectController.subjectPost
 
 
-GET     /teacher                    controllers.TeacherController.index
-GET     /teacher/dashboard          controllers.TeacherController.dashboard
-GET     /get-teacher                controllers.TeacherController.getReportTeacher
-GET     /get-department             controllers.TeacherController.getDepartment
-POST    /send-teacher               controllers.TeacherController.addTeacher
+GET     /teacher                    @controllers.TeacherController.index
+GET     /teacher/dashboard          @controllers.TeacherController.dashboard
+GET     /get-teacher                @controllers.TeacherController.getReportTeacher
+GET     /get-department             @controllers.TeacherController.getDepartment
+POST    /send-teacher               @controllers.TeacherController.addTeacher
 
 
-GET     /timetable                  controllers.TimetableController.index
-GET     /timetable/dashboard        controllers.TimetableController.dashboard
-GET     /get-timetable              controllers.TimetableController.getReportTimetable
-POST    /send-timetable             controllers.TimetableController.addTimetable
+GET     /timetable                  @controllers.TimetableController.index
+GET     /timetable/dashboard        @controllers.TimetableController.dashboard
+GET     /get-timetable              @controllers.TimetableController.getReportTimetable
+POST    /send-timetable             @controllers.TimetableController.addTimetable
 
 
-GET     /                           controllers.AuthController.index
-GET     /logout                     controllers.AuthController.logout
-POST    /loginPost                  controllers.AuthController.loginPost
+GET     /                           @controllers.AuthController.index
+GET     /logout                     @controllers.AuthController.logout
+POST    /loginPost                  @controllers.AuthController.loginPost
 
-POST     /text                       controllers.TimetableController.hasGroup
+POST     /text                      @controllers.TimetableController.hasGroup
 
 
-GET     /group                      controllers.GroupController.index
-GET     /group/dashboard            controllers.GroupController.dashboard
-GET     /get-directions             controllers.GroupController.getDirections
-GET     /get-groups                 controllers.GroupController.getGroupsList
-POST    /send-group                 controllers.GroupController.addGroup
+GET     /group                      @controllers.GroupController.index
+GET     /group/dashboard            @controllers.GroupController.dashboard
+GET     /get-directions             @controllers.GroupController.getDirections
+GET     /get-groups                 @controllers.GroupController.getGroupsList
+POST    /send-group                 @controllers.GroupController.addGroup
 
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)
 ->      /webjars             webjars.Routes

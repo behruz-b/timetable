@@ -31,7 +31,7 @@ CREATE TABLE "Timetables" (
 );
 
 # --- !Downs
-DROP TABLE "Subjects";
-DROP TABLE "Teachers";
-DROP TABLE "Groups";
 DROP TABLE "Timetables";
+DROP TABLE "Groups";
+DROP TABLE "Teachers";
+DROP TABLE "Subjects";
