@@ -26,6 +26,7 @@ class TelegramManager @Inject()(val environment: Environment,
 //  UNCOMMIT to run telegram bot
 
   override def preStart() {
+    log.error("Telegram bot started...")
     self ! RunBot
   }
 
