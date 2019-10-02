@@ -21,6 +21,7 @@ class TelegramManager @Inject()(val environment: Environment,
 
   val botUsername: String = configuration.get[String]("bot-username")
   val botToken: String = configuration.get[String]("bot-token")
+  val httpLink: String = configuration.get[String]("http-link")
 
 //  UNCOMMIT to run telegram bot
 
@@ -39,7 +40,7 @@ class TelegramManager @Inject()(val environment: Environment,
   }
 
   private def runTelegram() = {
-    new TelegramBot().runTelegramJava(botUsername, botToken)
+    new TelegramBot().runTelegramJava(botUsername, botToken, httpLink)
   }
 
 }
