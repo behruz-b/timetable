@@ -4,6 +4,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import utils.StringUtils;
 
 public class MyAmazingBot extends TelegramLongPollingBot {
 
@@ -40,6 +41,8 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
+        String prepareToMask = new MyAmazingBot(botUserName, botToken, httpLink).botUserName;
+        System.out.println(StringUtils.maskMiddlePart(prepareToMask, 2,3,"X"));
         return new MyAmazingBot(botUserName, botToken, httpLink).botUserName;
     }
 
