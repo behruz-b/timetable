@@ -6,7 +6,7 @@ import akka.util.Timeout
 import dao.TeacherDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.TeacherProtocol.{AddTeacher, GetTeacherList, Teacher}
+import protocols.TeacherProtocol.{AddTeacher, GetTeacherList, GetTeacherListByTS, Teacher}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
@@ -26,6 +26,9 @@ class TeacherManager @Inject()(val environment: Environment,
     case GetTeacherList =>
       getTeacherList.pipeTo(sender())
 
+    case GetTeacherListByTS(tSubject) =>
+      getTeacherListByTS(tSubject).pipeTo(sender())
+
     case _ => log.info(s"received unknown message")
 
   }
@@ -36,6 +39,10 @@ class TeacherManager @Inject()(val environment: Environment,
 
   private def getTeacherList   = {
     teacherDao.getTeachers
+  }
+
+  private def getTeacherListByTS(subject: String)   = {
+    teacherDao.getTeachersByTS(subject)
   }
 
 }

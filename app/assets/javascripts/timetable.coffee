@@ -8,7 +8,7 @@ $ ->
     getGroups: '/get-groups'
     getRooms: '/get-rooms'
     getSubject: '/get-subjects'
-    getTeacher: '/get-teacher'
+    getTeacherBySubject: '/get-tBySubject'
 
   vm = ko.mapping.fromJS
     selectedShift: ''
@@ -27,7 +27,6 @@ $ ->
     selectedSubject: ''
     listTeachers: []
     selectedTeacher: ''
-
 
   get = ->
     vm.studyShift([{id: 1, shift: "Morning"}, {id: 2, shift: "Afternoon"}])
@@ -75,18 +74,26 @@ $ ->
 
   getSubjectList()
 
-  getTeachers = ->
-    $.ajax
-      url: apiUrl.getTeacher
-      type: 'GET'
-    .fail handleError
-    .done (response) ->
-      vm.listTeachers(response)
-  getTeachers()
-
   vm.selectedType.subscribe (type) ->
     vm.selectedType(type)
 
+  vm.selectedSubject.subscribe (subject) ->
+    if subject is undefined
+      data =
+        tSubject: ""
+    else
+      data =
+        tSubject: subject
+    console.log(data)
+    $.ajax
+      url: apiUrl.getTeacherBySubject
+      type: 'POST'
+      data: JSON.stringify(data)
+      dataType: 'json'
+      contentType: 'application/json'
+    .fail handleError
+    .done (response) ->
+      vm.listTeachers(response)
 
   vm.onSubmit = ->
     toastr.clear()
@@ -148,6 +155,5 @@ $ ->
     .fail handleError
     .done (response) ->
       toastr.success(response)
-
 
   ko.applyBindings {vm}

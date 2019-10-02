@@ -46,7 +46,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     val fullName = (request.body \ "fullName").as[String]
     val tSubject = (request.body \ "tSubject").as[String]
     val department = (request.body \ "department").as[String]
-    (teacherManager ? AddTeacher(Teacher(None, fullName, List(tSubject), department))).mapTo[Int].map { pr =>
+    (teacherManager ? AddTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
   }
@@ -61,6 +61,19 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
           Unauthorized
         }
     }
+  }
+
+  def getReportTeacherByTS: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val tSubject = (request.body \ "tSubject").as[String]
+    (teacherManager ? GetTeacherListByTS(tSubject)).mapTo[Seq[Teacher]].map {
+      teachers =>
+        request.session.get(LoginSessionKey).map { session =>
+          Ok(Json.toJson(teachers))
+        }.getOrElse {
+          Unauthorized
+        }
+    }
+  }
   }
 
   def getDepartment = Action { implicit request => {
