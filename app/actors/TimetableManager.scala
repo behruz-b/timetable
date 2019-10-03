@@ -82,7 +82,7 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Lecture" => "Ma'ruza"
       }
       val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
-      "Hafta kuni:                  " + timetableMapped.weekDay.toString + "\n" +
+        "Hafta kuni:                  " + timetableMapped.weekDay.toString + "\n" +
         "Guruh:                       " + timetableMapped.groups.toString + "\n" +
         "O'qish vaqti:                " + timetableMapped.studyShift.toString + "\n" +
         "Juftlik:                     " + timetableMapped.couple.toString + "\n" +

@@ -66,18 +66,16 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def hasGroup = Action.async(parse.json) {implicit request => {
     val group = (request.body \ "group").as[String]
-    (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[String].map {
+    (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[Seq[String]].map {
       timetable =>
-        Ok(timetable)
+        Ok(timetable.mkString("\n"))
     }
   }}
 
   def emptyRoom = Action.async {
     (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom("Tuesday","couple 1"))).mapTo[Seq[Int]].map {
       rooms =>
-        logger.error(s"rooms: ${rooms.length}")
         Ok(Json.toJson(rooms))
-
     }
   }
 
