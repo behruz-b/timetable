@@ -80,7 +80,7 @@ $ ->
   vm.selectedSubject.subscribe (subject) ->
     if subject is undefined
       data =
-        tSubject: ""
+        tSubject: 0
     else
       data =
         tSubject: subject

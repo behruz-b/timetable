@@ -64,7 +64,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def getReportTeacherByTS: Action[JsValue] = Action.async(parse.json) { implicit request => {
-    val tSubject = (request.body \ "tSubject").as[String]
+    val tSubject = (request.body \ "tSubject").as[Int]
     (teacherManager ? GetTeacherListByTS(tSubject)).mapTo[Seq[Teacher]].map {
       teachers =>
         request.session.get(LoginSessionKey).map { session =>

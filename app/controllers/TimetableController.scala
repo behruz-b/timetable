@@ -10,7 +10,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.Json
 import play.api.mvc._
-import protocols.TimetableProtocol.{AddTimetable, GetText, GetTimetableByGroup, GetTimetableList, Timetable}
+import protocols.TimetableProtocol._
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -72,26 +72,35 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }}
 
+  def emptyRoom = Action.async {implicit request => {
+    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom("",""))).mapTo[String].map {
+      rooms =>
+        logger.error(s"rooms: $rooms")
+        Ok(rooms)
+
+    }
+  }}
+
   def momentCouple(time: String) = {
     val hour = time.substring(0, 2).toInt
     val minute = time.substring(3, 5).toInt
     if ((hour == 8  && (minute >= 30 && minute <=59)) || (hour == 9 && (minute >= 0 && minute <=50))) {
-      "1-para"
+      "couple 2"
     }
     else if ((hour == 10  && minute >= 0 && minute <=59) || (hour == 11 && minute >= 0 && minute <=20)){
-      "2-para"
+      "couple 2"
     }
     else if ((hour == 11  && minute >= 30 && minute <=59) || (hour == 12 && minute >= 0 && minute <=50)) {
-      "3-para"
+      "couple 2"
     }
     else if ((hour == 13  && minute >= 30 && minute <=59) || (hour == 14 && minute >= 0 && minute <=50)) {
-      "4-para"
+      "couple 2"
     }
     else if ((hour == 15  && minute >= 0 && minute <=59) || (hour == 16 && minute >= 0 && minute <=20)) {
-      "5-para"
+      "couple 2"
     }
     else if ((hour == 16  && minute >= 30 && minute <=59) || (hour == 17 && minute >= 0 && minute <=50)) {
-      "6-para"
+      "couple 2"
     }
     else if ((hour == 17  && minute >= 51 && minute <=59) || (hour >= 18 && minute >= 0 && minute <=59) || (hour == 8 && minute >= 0 && minute <=29) || (hour < 8 && minute >= 0 && minute <=59) ) {
       "Dars tugadi!"

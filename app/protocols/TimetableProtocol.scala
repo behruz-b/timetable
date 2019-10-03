@@ -14,6 +14,12 @@ object TimetableProtocol {
 
   implicit val getTextFormat: OFormat[GetText] = Json.format[GetText]
 
+  case class GetEmptyRoomByCouple(getCouple: GetEmptyRoom)
+
+  case class GetEmptyRoom(weekDay: String, couple: String)
+
+  implicit val getBusyRoomFormat: OFormat[GetEmptyRoom] = Json.format[GetEmptyRoom]
+
   case class Timetable(id: Option[Int] = None,
                        studyShift: String,
                        weekDay: String,

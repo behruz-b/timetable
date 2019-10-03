@@ -36,7 +36,7 @@ trait TeacherComponent {
 trait TeacherDao {
   def addTeacher(teacherData: Teacher): Future[Int]
 
-  def getTeachersByTS(tSubject: String): Future[Seq[Teacher]]
+  def getTeachersByTS(tSubject: Int): Future[Seq[Teacher]]
 
   def getTeachers: Future[Seq[Teacher]]
 }
@@ -65,9 +65,9 @@ class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     }
   }
 
-  override def getTeachersByTS(Subject: String): Future[Seq[Teacher]] = {
+  override def getTeachersByTS(SubjectId: Int): Future[Seq[Teacher]] = {
     db.run {
-      teachers.filter(_.tSubject === Subject).sortBy(_.id).result
+      teachers.filter(_.id === SubjectId).sortBy(_.id).result
     }
   }
 }
