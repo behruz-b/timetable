@@ -72,14 +72,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }}
 
-  def emptyRoom = Action.async {implicit request => {
-    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom("",""))).mapTo[String].map {
+  def emptyRoom = Action.async {
+    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom("Tuesday","couple 1"))).mapTo[Seq[Int]].map {
       rooms =>
-        logger.error(s"rooms: $rooms")
-        Ok(rooms)
+        logger.error(s"rooms: ${rooms.length}")
+        Ok(Json.toJson(rooms))
 
     }
-  }}
+  }
 
   def momentCouple(time: String) = {
     val hour = time.substring(0, 2).toInt
