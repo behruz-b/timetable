@@ -7,7 +7,7 @@ CREATE TABLE "Subjects" (
 CREATE TABLE "Teachers" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "fullName" VARCHAR NOT NULL,
-  "tSubject" VARCHAR[] NOT NULL,
+  "tSubject" VARCHAR NOT NULL,
   "department" VARCHAR NOT NULL
 );
 

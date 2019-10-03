@@ -16,14 +16,14 @@ trait TeacherComponent {
 
   import utils.PostgresDriver.api._
 
-//  implicit val stringListType = new SimpleArrayJdbcType[String]("tSubject").to(_.toList)
+  //  implicit val stringListType = new SimpleArrayJdbcType[String]("tSubject").to(_.toList)
 
   class TeachersTable(tag: Tag) extends Table[Teacher](tag, "Teachers") with Date2SqlDate {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
     def fullName = column[String]("fullName")
 
-    def tSubject = column[List[String]]("tSubject")
+    def tSubject = column[String]("tSubject")
 
     def department = column[String]("department")
 
@@ -35,6 +35,8 @@ trait TeacherComponent {
 @ImplementedBy(classOf[TeacherDaoImpl])
 trait TeacherDao {
   def addTeacher(teacherData: Teacher): Future[Int]
+
+  def getTeachersByTS(tSubject: Int): Future[Seq[Teacher]]
 
   def getTeachers: Future[Seq[Teacher]]
 }
@@ -60,6 +62,12 @@ class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   override def getTeachers: Future[Seq[Teacher]] = {
     db.run {
       teachers.sortBy(_.id).result
+    }
+  }
+
+  override def getTeachersByTS(SubjectId: Int): Future[Seq[Teacher]] = {
+    db.run {
+      teachers.filter(_.id === SubjectId).sortBy(_.id).result
     }
   }
 }

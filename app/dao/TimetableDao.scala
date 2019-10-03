@@ -50,7 +50,9 @@ trait TimetableDao {
 
   def getTimetables: Future[Seq[Timetable]]
 
-  def getTimetableByGroup(weekDay: String, group: String): Future[Option[Timetable]]
+  def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]]
+
+  def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]]
 }
 
 
@@ -77,7 +79,11 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     }
   }
 
-  override def getTimetableByGroup(weekDay: String, group: String): Future[Option[Timetable]] = {
-    db.run(timetables.filter(data => data.groups === group && data.weekDay === weekDay).result.headOption)
+  override def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]] = {
+      db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
+  }
+
+  override def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]] = {
+    db.run(timetables.filter(data => data.groups === group && data.weekDay === weekDay).result)
   }
 }
