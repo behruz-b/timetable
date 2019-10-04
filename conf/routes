@@ -17,7 +17,8 @@ POST    /send-teacher               @controllers.TeacherController.addTeacher
 GET     /timetable                  @controllers.TimetableController.index
 GET     /timetable/dashboard        @controllers.TimetableController.dashboard
 GET     /get-timetable              @controllers.TimetableController.getReportTimetable
-GET     /get-emptyrooms              @controllers.TimetableController.emptyRoom
+GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
+POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
 POST    /send-timetable             @controllers.TimetableController.addTimetable
 
 

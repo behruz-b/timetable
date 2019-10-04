@@ -14,6 +14,10 @@ object TimetableProtocol {
 
   implicit val getTextFormat: OFormat[GetText] = Json.format[GetText]
 
+  case class TeacherName(teacher: String)
+
+  implicit val TeacherNameFormat: OFormat[TeacherName] = Json.format[TeacherName]
+
   case class GetEmptyRoomByCouple(getCouple: GetEmptyRoom)
 
   case class GetEmptyRoom(weekDay: String, couple: String)

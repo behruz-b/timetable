@@ -33,6 +33,9 @@ class TimetableManager @Inject()(val environment: Environment,
     case GetEmptyRoomByCouple(presentCouple) =>
       GetEmptyRoomByCouple(presentCouple).pipeTo(sender())
 
+    case TeacherName(name) =>
+      teacherName(name).pipeTo(sender())
+
     case _ => log.info(s"received unknown message")
 
   }
@@ -43,6 +46,10 @@ class TimetableManager @Inject()(val environment: Environment,
 
   private def getTimetableList: Future[Seq[Timetable]] = {
     timetableDao.getTimetables
+  }
+
+  private def teacherName(teacherName: String): Future[Seq[Timetable]] = {
+    timetableDao.getTimetablesByTeacher(teacherName)
   }
 
   private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[Int]] = {

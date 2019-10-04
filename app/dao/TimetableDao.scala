@@ -50,6 +50,8 @@ trait TimetableDao {
 
   def getTimetables: Future[Seq[Timetable]]
 
+  def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]]
+
   def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]]
 
   def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]]
@@ -77,6 +79,10 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     db.run {
       timetables.sortBy(_.id).result
     }
+  }
+
+  override def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]] = {
+    db.run(timetables.filter(data => data.teachers === teacher).result)
   }
 
   override def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]] = {

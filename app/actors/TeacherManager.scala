@@ -41,7 +41,7 @@ class TeacherManager @Inject()(val environment: Environment,
     teacherDao.getTeachers
   }
 
-  private def getTeacherListByTS(subject: Int)   = {
+  private def getTeacherListByTS(subject: String)   = {
     teacherDao.getTeachersByTS(subject)
   }
 

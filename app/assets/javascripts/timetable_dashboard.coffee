@@ -5,9 +5,11 @@ $ ->
 
   apiUrl =
     getTimetable: '/get-timetable'
+    getTeacherTimetable: '/get-Ttimetable'
 
   vm = ko.mapping.fromJS
     timetableList: []
+    teacherName: ''
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -25,5 +27,20 @@ $ ->
       vm.timetableList(response)
 
   vm.getTable()
+
+  vm.teacherName.subscribe (name) ->
+    data =
+      teacherName: name
+    $.ajax
+      url: apiUrl.getTeacherTimetable
+      type: 'POST'
+      data: JSON.stringify(data)
+      dataType: 'json'
+      contentType: 'application/json'
+    .fail handleError
+    .done (result) ->
+      vm.timetableList(result)
+
+
 
   ko.applyBindings {vm}

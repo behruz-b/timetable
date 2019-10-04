@@ -4,7 +4,7 @@ import play.api.libs.json.{Json, OFormat}
 
 object TeacherProtocol {
 
-  case class GetTeacherListByTS(tSubject: Int)
+  case class GetTeacherListByTS(tSubject: String)
 
   implicit val getTeacherListByTSFormat: OFormat[GetTeacherListByTS] = Json.format[GetTeacherListByTS]
 

@@ -72,6 +72,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }}
 
+  def getTeacherTimetable = Action.async(parse.json) {implicit request => {
+    val name = (request.body \ "teacherName").as[String]
+    (timetableManager ? TeacherName(name)).mapTo[Seq[Timetable]].map {
+      timetable =>
+        Ok(Json.toJson(timetable))
+    }
+  }}
+
   def emptyRoom = Action.async {
     (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom("Tuesday","couple 1"))).mapTo[Seq[Int]].map {
       rooms =>
@@ -82,22 +90,22 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def momentCouple(time: String) = {
     val hour = time.substring(0, 2).toInt
     val minute = time.substring(3, 5).toInt
-    if ((hour == 8  && (minute >= 30 && minute <=59)) || (hour == 9 && (minute >= 0 && minute <=50))) {
+    if ((hour == 8  && (minute >= 30 && minute <=59)) || (hour == 9 && (minute >= 0 && minute <= 50))) {
       "couple 2"
     }
-    else if ((hour == 10  && minute >= 0 && minute <=59) || (hour == 11 && minute >= 0 && minute <=20)){
+    else if ((hour == 10  && minute >= 0 && minute <= 59) || (hour == 11 && minute >= 0 && minute <= 20)){
       "couple 2"
     }
-    else if ((hour == 11  && minute >= 30 && minute <=59) || (hour == 12 && minute >= 0 && minute <=50)) {
+    else if ((hour == 11  && minute >= 30 && minute <= 59) || (hour == 12 && minute >= 0 && minute <= 50)) {
       "couple 2"
     }
-    else if ((hour == 13  && minute >= 30 && minute <=59) || (hour == 14 && minute >= 0 && minute <=50)) {
+    else if ((hour == 13  && minute >= 30 && minute <= 59) || (hour == 14 && minute >= 0 && minute <= 50)) {
       "couple 2"
     }
-    else if ((hour == 15  && minute >= 0 && minute <=59) || (hour == 16 && minute >= 0 && minute <=20)) {
+    else if ((hour == 15  && minute >= 0 && minute <= 59) || (hour == 16 && minute >= 0 && minute <= 20)) {
       "couple 2"
     }
-    else if ((hour == 16  && minute >= 30 && minute <=59) || (hour == 17 && minute >= 0 && minute <=50)) {
+    else if ((hour == 16  && minute >= 30 && minute <= 59) || (hour == 17 && minute >= 0 && minute <= 50)) {
       "couple 2"
     }
     else if ((hour == 17  && minute >= 51 && minute <=59) || (hour >= 18 && minute >= 0 && minute <=59) || (hour == 8 && minute >= 0 && minute <=29) || (hour < 8 && minute >= 0 && minute <=59) ) {

@@ -77,14 +77,15 @@ $ ->
   vm.selectedType.subscribe (type) ->
     vm.selectedType(type)
 
-  vm.selectedSubject.subscribe (subject) ->
-    if subject is undefined
+  vm.selectedSubject.subscribe (subjectId) ->
+    if subjectId is undefined
       data =
-        tSubject: 0
+        tSubject: ""
     else
-      data =
-        tSubject: subject
-    console.log(data)
+      vm.subjectList().map (pr) ->
+        if pr.id is subjectId
+          data =
+            tSubject: pr.name
     $.ajax
       url: apiUrl.getTeacherBySubject
       type: 'POST'
