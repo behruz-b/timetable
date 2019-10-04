@@ -45,10 +45,11 @@ class TimetableManager @Inject()(val environment: Environment,
     timetableDao.getTimetables
   }
 
-  private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[String]] = {
+  private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[Int]] = {
    for {
       presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple)
-    } yield presentLessons.map(_.couple).intersect(roomList.map(_.numberRoom))
+    } yield roomList.map(_.numberRoom).diff(presentLessons.map(_.numberRoom))
+
 
 
   }
@@ -81,7 +82,7 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Lecture" => "Ma'ruza"
       }
       val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
-      "Hafta kuni:                  " + timetableMapped.weekDay.toString + "\n" +
+        "Hafta kuni:                  " + timetableMapped.weekDay.toString + "\n" +
         "Guruh:                       " + timetableMapped.groups.toString + "\n" +
         "O'qish vaqti:                " + timetableMapped.studyShift.toString + "\n" +
         "Juftlik:                     " + timetableMapped.couple.toString + "\n" +
