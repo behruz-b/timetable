@@ -15,6 +15,7 @@
               <th>№</th>
               <th>Group Name</th>
               <th>Group`s Direction</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody class="" data-bind="foreach: vm.listGroups">
@@ -22,6 +23,10 @@
               <td data-bind="text: $data.id"></td>
               <td data-bind="text: $data.name"></td>
               <td data-bind="text: $data.direction"></td>
+              <td>
+                <a class="mr-3" title="Edit" data-toggle="tooltip" href=""><i class="fas fa-pen-alt"></i></a>
+                <a title="Delete" data-toggle="tooltip" href=""><i class="fas fa-trash-alt"></i></a>
+              </td>
             </tr>
           </tbody>
         </table>
