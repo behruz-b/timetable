@@ -66,9 +66,13 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def hasGroup = Action.async(parse.json) {implicit request => {
     val group = (request.body \ "group").as[String]
-    (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[Seq[String]].map {
-      timetable =>
+    (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[Seq[String]].map { timetable =>
+      if (timetable.isEmpty) {
+        logger.warn(s"Timetable is empty for group: $group")
+        Ok(s"Bugun $group guruhga dars yo'q")
+      } else {
         Ok(timetable.mkString("\n"))
+      }
     }
   }}
 

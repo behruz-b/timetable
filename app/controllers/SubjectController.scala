@@ -28,7 +28,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   val LoginSessionKey = "login.key"
 
   def index: Action[AnyContent] = Action { implicit request =>
-    request.session.get(LoginSessionKey).map{ session =>
+    request.session.get(LoginSessionKey).map{ _ =>
       Ok(subjectTemplate())
     }.getOrElse {
       Unauthorized
@@ -36,7 +36,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
-    request.session.get(LoginSessionKey).map{ session =>
+    request.session.get(LoginSessionKey).map{ _ =>
       Ok(dashboardTemplate())
     }.getOrElse {
       Unauthorized
@@ -54,7 +54,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   def getReportSubject: Action[AnyContent] = Action.async { implicit request =>
     (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
       subject =>
-        request.session.get(LoginSessionKey).map{ session =>
+        request.session.get(LoginSessionKey).map{ _ =>
           Ok(Json.toJson(subject))
         }.getOrElse {
           Unauthorized
@@ -63,7 +63,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def getRooms = Action { implicit request => {
-    request.session.get(LoginSessionKey).map{ session =>
+    request.session.get(LoginSessionKey).map{ _ =>
       Ok(Json.toJson(roomList))
     }.getOrElse {
       Unauthorized

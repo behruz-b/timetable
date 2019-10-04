@@ -1,7 +1,7 @@
 # --- !Ups
 CREATE TABLE "Subjects" (
   "id" SERIAL NOT NULL PRIMARY KEY,
-  "name" VARCHAR NOT NULL,
+  "name" VARCHAR NOT NULL
 );
 
 CREATE TABLE "Teachers" (
