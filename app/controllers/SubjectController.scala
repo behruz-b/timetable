@@ -51,6 +51,14 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
+  def update: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val name = (request.body \ "name").as[String]
+    (subjectManager ? UpdateSubject(Subject(None, name))).mapTo[Int].map { pr =>
+      Ok(Json.toJson(s"$pr"))
+    }
+  }
+  }
+
   def getReportSubject: Action[AnyContent] = Action.async { implicit request =>
     (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
       subject =>

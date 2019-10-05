@@ -6,9 +6,9 @@ import akka.util.Timeout
 import dao.TeacherDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.TeacherProtocol.{AddTeacher, GetTeacherList, GetTeacherListByTS, Teacher}
+import protocols.TeacherProtocol._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
 
 class TeacherManager @Inject()(val environment: Environment,
@@ -23,6 +23,9 @@ class TeacherManager @Inject()(val environment: Environment,
     case AddTeacher(subject) =>
       addTeacher(subject).pipeTo(sender())
 
+    case UpdateTeacher(teacher) =>
+      updateTeacher(teacher).pipeTo(sender())
+
     case GetTeacherList =>
       getTeacherList.pipeTo(sender())
 
@@ -36,6 +39,15 @@ class TeacherManager @Inject()(val environment: Environment,
   private def addTeacher(teacherData: Teacher) = {
     teacherDao.addTeacher(teacherData)
   }
+
+  private def updateTeacher(teacher: Teacher): Future[Int] = {
+    for {
+      selectedTeacher <- teacherDao.getTeacherById(teacher.id)
+      updatedTeacher = selectedTeacher.get.copy(id = teacher.id)
+      response <- teacherDao.update(updatedTeacher)
+    } yield response
+  }
+
 
   private def getTeacherList   = {
     teacherDao.getTeachers
