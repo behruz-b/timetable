@@ -6,10 +6,12 @@ $ ->
   apiUrl =
     getTimetable: '/get-timetable'
     getTeacherTimetable: '/get-Ttimetable'
+    getGroupTimetable: '/get-GroupTimetable '
 
   vm = ko.mapping.fromJS
     timetableList: []
     teacherName: ''
+    groupNumber: ''
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -33,6 +35,19 @@ $ ->
       teacherName: name
     $.ajax
       url: apiUrl.getTeacherTimetable
+      type: 'POST'
+      data: JSON.stringify(data)
+      dataType: 'json'
+      contentType: 'application/json'
+    .fail handleError
+    .done (result) ->
+      vm.timetableList(result)
+
+  vm.groupNumber.subscribe (number) ->
+    data =
+      groupNumber: number
+    $.ajax
+      url: apiUrl.getGroupTimetable
       type: 'POST'
       data: JSON.stringify(data)
       dataType: 'json'

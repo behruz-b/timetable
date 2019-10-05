@@ -33,6 +33,9 @@ class TimetableManager @Inject()(val environment: Environment,
     case GetTimetableByGroup(getText) =>
       getTimetableByGroup(getText).pipeTo(sender())
 
+    case GetTimetableByGr(getText) =>
+      getTimetableByGr(getText).pipeTo(sender())
+
     case GetEmptyRoomByCouple(presentCouple) =>
       GetEmptyRoomByCouple(presentCouple).pipeTo(sender())
 
@@ -68,8 +71,6 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple)
     } yield roomList.map(_.numberRoom).diff(presentLessons.map(_.numberRoom))
-
-
   }
 
   private def getTimetableByGroup(getText: GetText) = {
@@ -110,5 +111,11 @@ class TimetableManager @Inject()(val environment: Environment,
         "Dars xonasi:                 " + timetableMapped.numberRoom.toString
 
     }
+  }
+
+  private def getTimetableByGr(group: String) = {
+    for {
+      response <- timetableDao.getTimetableByGr(group)
+    } yield response
   }
 }

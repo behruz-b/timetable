@@ -19,6 +19,7 @@ GET     /timetable/dashboard        @controllers.TimetableController.dashboard
 GET     /get-timetable              @controllers.TimetableController.getReportTimetable
 GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
 POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
+POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTimetable
 POST    /send-timetable             @controllers.TimetableController.addTimetable
 
 

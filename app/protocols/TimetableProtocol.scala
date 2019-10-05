@@ -10,6 +10,10 @@ object TimetableProtocol {
 
   case class UpdateTimetable(timetable: Timetable)
 
+  case class GetTimetableByGr(group: String)
+
+  implicit val getTimetableByGrFormat: OFormat[GetTimetableByGr] = Json.format[GetTimetableByGr]
+
   case class GetTimetableByGroup(getText: GetText)
 
   case class GetText(weekDay: String, group: String)

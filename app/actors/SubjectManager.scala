@@ -6,8 +6,7 @@ import akka.util.Timeout
 import dao.SubjectDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.SubjectProtocol.{AddSubject, GetSubjectList, Subject}
-import protocols.TeacherProtocol.{Teacher, UpdateTeacher}
+import protocols.SubjectProtocol._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
@@ -24,8 +23,8 @@ class SubjectManager @Inject()(val environment: Environment,
     case AddSubject(subject) =>
       addSubject(subject).pipeTo(sender())
 
-    case UpdateSubject(teacher) =>
-      updateSubject(teacher).pipeTo(sender())
+    case UpdateSubject(subject) =>
+      updateSubject(subject).pipeTo(sender())
 
     case GetSubjectList =>
       getSubjectList.pipeTo(sender())
