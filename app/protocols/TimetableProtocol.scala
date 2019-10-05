@@ -6,7 +6,9 @@ object TimetableProtocol {
 
   case object GetTimetableList
 
-  case class AddTimetable(teacher: Timetable)
+  case class AddTimetable(timetable: Timetable)
+
+  case class UpdateTimetable(timetable: Timetable)
 
   case class GetTimetableByGroup(getText: GetText)
 

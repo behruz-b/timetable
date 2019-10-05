@@ -6,8 +6,8 @@ import akka.util.Timeout
 import dao.TimetableDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.TimetableProtocol._
 import protocols.SubjectProtocol._
+import protocols.TimetableProtocol._
 
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
@@ -23,6 +23,9 @@ class TimetableManager @Inject()(val environment: Environment,
   def receive = {
     case AddTimetable(subject) =>
       addTimetable(subject).pipeTo(sender())
+
+    case UpdateTimetable(timetable) =>
+      updateTimetable(timetable).pipeTo(sender())
 
     case GetTimetableList =>
       getTimetableList.pipeTo(sender())
@@ -44,6 +47,15 @@ class TimetableManager @Inject()(val environment: Environment,
     timetableDao.addTimetable(timetableData)
   }
 
+  private def updateTimetable(timetable: Timetable): Future[Int] = {
+    for {
+      selectedTimetable <- timetableDao.getTimetableById(timetable.id)
+      updatedTimetable = selectedTimetable.get.copy(id = timetable.id)
+      response <- timetableDao.update(updatedTimetable)
+    } yield response
+  }
+
+
   private def getTimetableList: Future[Seq[Timetable]] = {
     timetableDao.getTimetables
   }
@@ -53,10 +65,9 @@ class TimetableManager @Inject()(val environment: Environment,
   }
 
   private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[Int]] = {
-   for {
+    for {
       presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple)
     } yield roomList.map(_.numberRoom).diff(presentLessons.map(_.numberRoom))
-
 
 
   }
@@ -89,7 +100,7 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Lecture" => "Ma'ruza"
       }
       val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
-        "Hafta kuni:                  " + timetableMapped.weekDay.toString + "\n" +
+      "Hafta kuni:                  " + timetableMapped.weekDay.toString + "\n" +
         "Guruh:                       " + timetableMapped.groups.toString + "\n" +
         "O'qish vaqti:                " + timetableMapped.studyShift.toString + "\n" +
         "Juftlik:                     " + timetableMapped.couple.toString + "\n" +

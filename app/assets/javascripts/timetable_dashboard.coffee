@@ -41,6 +41,4 @@ $ ->
     .done (result) ->
       vm.timetableList(result)
 
-
-
   ko.applyBindings {vm}
