@@ -37,7 +37,7 @@ class SubjectManager @Inject()(val environment: Environment,
   private def updateSubject(subject: Subject): Future[Int] = {
     for {
       selectedSubject <- subjectDao.getSubjectById(subject.id)
-      updatedSubject = selectedSubject.get.copy(id = subject.id)
+      updatedSubject = selectedSubject.get.copy(id = subject.id, name = subject.name)
       response <- subjectDao.update(updatedSubject)
     } yield response
   }

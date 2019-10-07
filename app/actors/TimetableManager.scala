@@ -53,7 +53,18 @@ class TimetableManager @Inject()(val environment: Environment,
   private def updateTimetable(timetable: Timetable): Future[Int] = {
     for {
       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
-      updatedTimetable = selectedTimetable.get.copy(id = timetable.id)
+      updatedTimetable = selectedTimetable.get.copy(
+        id = timetable.id,
+        studyShift = timetable.studyShift,
+        weekDay = timetable.weekDay,
+        couple = timetable.couple,
+        typeOfLesson = timetable.typeOfLesson,
+        groups = timetable.groups,
+        divorce = timetable.divorce,
+        subjectId = timetable.subjectId,
+        teachers = timetable.teachers,
+        numberRoom = timetable.numberRoom
+      )
       response <- timetableDao.update(updatedTimetable)
     } yield response
   }

@@ -43,7 +43,12 @@ class TeacherManager @Inject()(val environment: Environment,
   private def updateTeacher(teacher: Teacher): Future[Int] = {
     for {
       selectedTeacher <- teacherDao.getTeacherById(teacher.id)
-      updatedTeacher = selectedTeacher.get.copy(id = teacher.id)
+      updatedTeacher = selectedTeacher.get.copy(
+        id = teacher.id,
+        fullName = teacher.fullName,
+        tSubject = teacher.tSubject,
+        department = teacher.department
+      )
       response <- teacherDao.update(updatedTeacher)
     } yield response
   }

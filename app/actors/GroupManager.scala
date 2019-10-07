@@ -39,7 +39,7 @@ class GroupManager @Inject()(val environment: Environment,
   private def updateGroup(group: Group): Future[Int] = {
     for {
       selectedGroup <- groupDao.getGroupById(group.id)
-      updatedGroup = selectedGroup.get.copy(id = group.id)
+      updatedGroup = selectedGroup.get.copy(id = group.id, name = group.name, direction = group.direction)
       response <- groupDao.update(updatedGroup)
     } yield response
   }
