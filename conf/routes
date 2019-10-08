@@ -23,8 +23,9 @@ POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTim
 POST    /send-timetable             @controllers.TimetableController.addTimetable
 
 
-GET     /map/floor1                 @controllers.MapController.floor1
-GET     /map/floor3                 @controllers.MapController.floor3
+GET     /map/1-floor                 @controllers.MapController.firstFloor
+GET     /map/2-floor                 @controllers.MapController.secondFloor
+GET     /map/3-floor                 @controllers.MapController.thirdFloor
 
 
 GET     /                           @controllers.AuthController.index
@@ -32,8 +33,6 @@ GET     /logout                     @controllers.AuthController.logout
 POST    /loginPost                  @controllers.AuthController.loginPost
 
 POST     /text                      @controllers.TimetableController.hasGroup
-POST     /test                      @controllers.TimetableController.test
-
 
 GET     /group                      @controllers.GroupController.index
 GET     /group/dashboard            @controllers.GroupController.dashboard
