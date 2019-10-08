@@ -57,6 +57,22 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
   }
 
+  def update = Action.async(parse.json) { implicit request => {
+    val studyShift = (request.body \ "studyShift").as[String]
+    val weekDay = (request.body \ "weekDay").as[String]
+    val couple = (request.body \ "couple").as[String]
+    val typeOfLesson = (request.body \ "typeOfLesson").as[String]
+    val groups = (request.body \ "groups").as[String]
+    val divorce = (request.body \ "divorce").as[String]
+    val subjectId = (request.body \ "subjectId").as[Int]
+    val teachers = (request.body \ "teachers").as[String]
+    val numberRoom = (request.body \ "numberRoom").as[Int]
+    (timetableManager ? UpdateTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[Int].map { pr =>
+      Ok(Json.toJson(s"you successful added: $pr"))
+    }
+  }
+  }
+
   def getReportTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
@@ -76,9 +92,23 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }}
 
+  def test = Action(parse.json) {implicit request => {
+    val test = (request.body \ "number").as[Int]
+    logger.info(s"number: $test")
+    Ok(Json.obj("response" -> test))
+  }}
+
   def getTeacherTimetable = Action.async(parse.json) {implicit request => {
     val name = (request.body \ "teacherName").as[String]
     (timetableManager ? TeacherName(name)).mapTo[Seq[Timetable]].map {
+      timetable =>
+        Ok(Json.toJson(timetable))
+    }
+  }}
+
+  def getGroupTimetable = Action.async(parse.json) {implicit request => {
+    val groupName = (request.body \ "groupNumber").as[String]
+    (timetableManager ? GetTimetableByGr(groupName)).mapTo[Seq[Timetable]].map {
       timetable =>
         Ok(Json.toJson(timetable))
     }

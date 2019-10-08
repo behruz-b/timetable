@@ -19,7 +19,13 @@ GET     /timetable/dashboard        @controllers.TimetableController.dashboard
 GET     /get-timetable              @controllers.TimetableController.getReportTimetable
 GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
 POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
+POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTimetable
 POST    /send-timetable             @controllers.TimetableController.addTimetable
+
+
+GET     /map/1-floor                 @controllers.MapController.firstFloor
+GET     /map/2-floor                 @controllers.MapController.secondFloor
+GET     /map/3-floor                 @controllers.MapController.thirdFloor
 
 
 GET     /                           @controllers.AuthController.index
@@ -27,7 +33,6 @@ GET     /logout                     @controllers.AuthController.logout
 POST    /loginPost                  @controllers.AuthController.loginPost
 
 POST     /text                      @controllers.TimetableController.hasGroup
-
 
 GET     /group                      @controllers.GroupController.index
 GET     /group/dashboard            @controllers.GroupController.dashboard

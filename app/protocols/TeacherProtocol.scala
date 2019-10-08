@@ -8,6 +8,8 @@ object TeacherProtocol {
 
   implicit val getTeacherListByTSFormat: OFormat[GetTeacherListByTS] = Json.format[GetTeacherListByTS]
 
+  case class UpdateTeacher(teacher: Teacher)
+
   case object GetTeacherList
 
   case class Department(id: Int, department: String)

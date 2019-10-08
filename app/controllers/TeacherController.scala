@@ -52,6 +52,16 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
+  def update: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val fullName = (request.body \ "fullName").as[String]
+    val tSubject = (request.body \ "tSubject").as[String]
+    val department = (request.body \ "department").as[String]
+    (teacherManager ? UpdateTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Int].map { pr =>
+      Ok(Json.toJson(s" $pr"))
+    }
+  }
+  }
+
   def getReportTeacher: Action[AnyContent] = Action.async { implicit request =>
     (teacherManager ? GetTeacherList).mapTo[Seq[Teacher]].map {
       teachers =>

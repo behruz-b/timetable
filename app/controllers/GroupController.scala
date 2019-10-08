@@ -51,6 +51,15 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
     }
   }
 
+  def update = Action.async(parse.json) { implicit request =>
+    val name = (request.body \ "name").as[String]
+    val direction = (request.body \ "direction").as[String]
+    (groupManager ? UpdateGroup(Group(None, name, direction))).mapTo[Int].map {
+      id =>
+        Ok(Json.toJson(s"ID: $id"))
+    }
+  }
+
   def getDirections = Action { implicit request => {
     request.session.get(LoginSessionKey).map{ session =>
       Ok(Json.toJson(directionsList))
