@@ -36,6 +36,10 @@ trait TeacherComponent {
 trait TeacherDao {
   def addTeacher(teacherData: Teacher): Future[Int]
 
+  def update(teacherData: Teacher): Future[Int]
+
+  def getTeacherById(id: Option[Int]): Future[Option[Teacher]]
+
   def getTeachersByTS(tSubject: String): Future[Seq[Teacher]]
 
   def getTeachers: Future[Seq[Teacher]]
@@ -57,6 +61,14 @@ class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     db.run {
       (teachers returning teachers.map(_.id)) += teacherData
     }
+  }
+
+  override def update(teacherData: Teacher): Future[Int] = {
+    db.run(teachers.filter(_.id === teacherData.id).update(teacherData))
+  }
+
+  override def getTeacherById(id: Option[Int]): Future[Option[Teacher]] = {
+    db.run(teachers.filter(_.id === id).result.headOption)
   }
 
   override def getTeachers: Future[Seq[Teacher]] = {

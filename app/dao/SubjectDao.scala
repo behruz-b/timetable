@@ -29,6 +29,10 @@ trait SubjectComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 trait SubjectDao {
   def addSubject(subjectData: Subject): Future[Int]
 
+  def update(subjectData: Subject): Future[Int]
+
+  def getSubjectById(id: Option[Int]): Future[Option[Subject]]
+
   def getSubjectList: Future[Seq[Subject]]
 }
 
@@ -47,6 +51,14 @@ class SubjectDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
     db.run {
       (subjects returning subjects.map(_.id)) += subjectData
     }
+  }
+
+  override def update(subjectData: Subject): Future[Int] = {
+    db.run(subjects.filter(_.id === subjectData.id).update(subjectData))
+  }
+
+  override def getSubjectById(id: Option[Int]): Future[Option[Subject]] ={
+    db.run(subjects.filter(_.id === id).result.headOption)
   }
 
   override def getSubjectList: Future[Seq[Subject]] = {

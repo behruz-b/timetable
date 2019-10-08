@@ -6,6 +6,8 @@ object SubjectProtocol {
 
   case object GetSubjectList
 
+  case class UpdateSubject(subject: Subject)
+
   case class Room(id: Int, numberRoom: Int)
 
   implicit val roomFormat: OFormat[Room] = Json.format[Room]

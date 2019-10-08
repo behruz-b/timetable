@@ -1,10 +1,13 @@
 package protocols
 
 import play.api.libs.json.{Json, OFormat}
+import protocols.TeacherProtocol.Teacher
 
 object GroupProtocol {
 
   case class AddGroup(groupData: Group)
+
+  case class UpdateGroup(group: Group)
 
   case object GetGroupList
 

@@ -5,6 +5,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import protocols.GroupProtocol.Group
+import protocols.TeacherProtocol.Teacher
 import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
 
@@ -32,7 +33,11 @@ trait GroupComponent {
 trait GroupDao {
   def addGroup(GroupData: Group): Future[Int]
 
-    def getGroupList: Future[Seq[Group]]
+  def update(groupData: Group): Future[Int]
+
+  def getGroupById(id: Option[Int]): Future[Option[Group]]
+
+  def getGroupList: Future[Seq[Group]]
 }
 
 
@@ -51,6 +56,14 @@ class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
     db.run {
       (groups returning groups.map(_.id)) += groupData
     }
+  }
+
+  override def update(groupData: Group): Future[Int] = {
+    db.run(groups.filter(_.id === groupData.id).update(groupData))
+  }
+
+  override def getGroupById(id: Option[Int]): Future[Option[Group]] = {
+    db.run(groups.filter(_.id === id).result.headOption)
   }
 
   override def getGroupList: Future[Seq[Group]] = {
