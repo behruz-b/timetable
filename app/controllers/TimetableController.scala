@@ -95,7 +95,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def test = Action(parse.json) {implicit request => {
     val test = (request.body \ "number").as[Int]
     logger.info(s"number: $test")
-    Ok(Json.stringify(Json.toJson((s"""{"response": "$test"}"""))))
+    Ok(Json.toJson((s"""{"response": "$test"}""")))
   }}
 
   def getTeacherTimetable = Action.async(parse.json) {implicit request => {
