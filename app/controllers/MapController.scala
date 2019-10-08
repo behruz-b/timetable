@@ -17,7 +17,7 @@ import scala.concurrent.duration.DurationInt
 class MapController @Inject()(val controllerComponents: ControllerComponents,
                               @Named("group-manager") val groupManager: ActorRef,
                               floor1Template: map.floor1,
-                              floor2Template: map.floor2,
+                              floor3Template: map.floor3,
                                 )
                              (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -27,8 +27,8 @@ class MapController @Inject()(val controllerComponents: ControllerComponents,
   def floor1: Action[AnyContent] = Action {
       Ok(floor1Template())
   }
-  def floor2: Action[AnyContent] = Action {
-      Ok(floor2Template())
+  def floor3: Action[AnyContent] = Action {
+      Ok(floor3Template())
   }
 
 }

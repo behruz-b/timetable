@@ -24,7 +24,7 @@ POST    /send-timetable             @controllers.TimetableController.addTimetabl
 
 
 GET     /map/floor1                 @controllers.MapController.floor1
-GET     /map/floor2                 @controllers.MapController.floor2
+GET     /map/floor3                 @controllers.MapController.floor3
 
 
 GET     /                           @controllers.AuthController.index
