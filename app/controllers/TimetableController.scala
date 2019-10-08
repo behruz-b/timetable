@@ -76,6 +76,12 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }}
 
+  def test = Action(parse.json) {implicit request => {
+    val test = (request.body \ "number").as[Int]
+    logger.info(s"number: $test")
+    Ok(Json.toJson(s"number is accepted: $test"))
+  }}
+
   def getTeacherTimetable = Action.async(parse.json) {implicit request => {
     val name = (request.body \ "teacherName").as[String]
     (timetableManager ? TeacherName(name)).mapTo[Seq[Timetable]].map {

@@ -27,6 +27,7 @@ GET     /logout                     @controllers.AuthController.logout
 POST    /loginPost                  @controllers.AuthController.loginPost
 
 POST     /text                      @controllers.TimetableController.hasGroup
+POST     /test                      @controllers.TimetableController.test
 
 
 GET     /group                      @controllers.GroupController.index
