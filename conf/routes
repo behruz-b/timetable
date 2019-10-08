@@ -24,7 +24,7 @@ POST    /send-timetable             @controllers.TimetableController.addTimetabl
 
 
 GET     /map/1-floor                 @controllers.MapController.firstFloor
-#GET     /map/2-floor                 @controllers.MapController.secondFloor
+GET     /map/2-floor                 @controllers.MapController.secondFloor
 GET     /map/3-floor                 @controllers.MapController.thirdFloor
 
 
