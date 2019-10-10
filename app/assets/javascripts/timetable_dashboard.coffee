@@ -10,6 +10,7 @@ $ ->
 
   vm = ko.mapping.fromJS
     timetableList: []
+    groups: []
     teacherName: ''
     groupNumber: ''
 
@@ -26,7 +27,9 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
-      vm.timetableList(response)
+      vm.timetableList response
+      for k,v of vm.timetableList()
+        vm.groups.push k
 
   vm.getTable()
 

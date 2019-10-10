@@ -76,7 +76,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def getReportTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
-        Ok(Json.toJson(timetable))
+        val grouped = timetable.groupBy(_.groups)
+        Ok(Json.toJson(grouped))
     }
   }
 
