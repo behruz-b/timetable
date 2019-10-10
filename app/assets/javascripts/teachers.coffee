@@ -35,14 +35,14 @@ $ ->
     else if (!vm.selectedSubject())
       toastr.error("Please enter teacher's  subject")
       return no
-    else if (!vm.selectedSubject())
+    else if (!vm.selectedDepartment())
       toastr.error("Please enter teacher's department")
       return no
 
     data =
       fullName: vm.fullName()
       tSubject: vm.selectedSubject()
-      department: vm.selectedSubject()
+      department: vm.selectedDepartment()
 
     $.ajax
       url: apiUrl.send
