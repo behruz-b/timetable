@@ -21,6 +21,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
                                     @Named("timetable-manager") val timetableManager: ActorRef,
                                     timeTableTemplate: timetable.timeTable,
                                     timeTableDTemplate: timetable.timetable_dashboard,
+                                    realTemplate: timetable.realTimetable,
                                    )
                                    (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -39,6 +40,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def dashboard: Action[AnyContent] = Action {
     Ok(timeTableDTemplate())
+  }
+
+  def realDashboard: Action[AnyContent] = Action {
+    Ok(realTemplate())
   }
 
   def addTimetable = Action.async(parse.json) { implicit request => {
