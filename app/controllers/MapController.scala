@@ -31,6 +31,7 @@ class MapController @Inject()(val controllerComponents: ControllerComponents,
   def secondFloor: Action[AnyContent] = Action {
     Ok(floor2Template())
   }
+
   def thirdFloor: Action[AnyContent] = Action {
     Ok(floor3Template())
   }
