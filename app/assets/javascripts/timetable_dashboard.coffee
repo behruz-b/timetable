@@ -34,6 +34,8 @@ $ ->
   vm.getTable()
 
   vm.teacherName.subscribe (name) ->
+    vm.groups = []
+    console.log(vm.groups.length)
     data =
       teacherName: name
     $.ajax
@@ -44,7 +46,10 @@ $ ->
       contentType: 'application/json'
     .fail handleError
     .done (result) ->
-      vm.timetableList(result)
+      vm.timetableList result
+      for k,v of vm.timetableList()
+        vm.groups.push k
+
 
   vm.groupNumber.subscribe (number) ->
     data =
@@ -57,6 +62,8 @@ $ ->
       contentType: 'application/json'
     .fail handleError
     .done (result) ->
-      vm.timetableList(result)
+      vm.timetableList result
+      for k,v of vm.timetableList()
+        vm.groups.push k
 
   ko.applyBindings {vm}

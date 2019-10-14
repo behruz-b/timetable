@@ -89,7 +89,9 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetables: Future[Seq[Timetable]] = {
-      val query =  timetables.joinLeft(subjects).on(_.subjectId === _.id)
+      val query =  timetables
+        .joinLeft(subjects)
+        .on(_.subjectId === _.id)
       db.run(query.result).map { r =>
         r.groupBy(_._1.id).map {case (_, tuples) =>
         val (t, s) = tuples.head
@@ -106,12 +108,28 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]] = {
-    db.run(timetables.filter(data => data.teachers === teacher).result)
-  }
+    val query =  timetables
+      .filter(data => data.teachers === teacher)
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+  }}
 
   override def getTimetableByGr(group: String): Future[Seq[Timetable]] = {
-    db.run(timetables.filter(_.groups === group).result)
-  }
+    val query =  timetables
+      .filter(_.groups === group)
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+  }}
 
   override def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]] = {
     db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
@@ -119,5 +137,14 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   override def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]] = {
     db.run(timetables.filter(data => data.groups === group && data.weekDay === weekDay).result)
-  }
+    val query = timetables
+      .filter(data => data.groups === group && data.weekDay === weekDay)
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+    }}
 }
