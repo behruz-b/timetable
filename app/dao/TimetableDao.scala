@@ -4,7 +4,7 @@ import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import protocols.TimetableProtocol.{GetText, Timetable}
+import protocols.TimetableProtocol.Timetable
 import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
 
@@ -16,7 +16,6 @@ trait TimetableComponent extends SubjectComponent {
 
   import utils.PostgresDriver.api._
 
-  //  implicit val stringListType = new SimpleArrayJdbcType[String]("tSubject").to(_.toList)
 
   class TimetablesTable(tag: Tag) extends Table[Timetable](tag, "Timetables") with Date2SqlDate {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
@@ -83,9 +82,11 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetables: Future[Seq[Timetable]] = {
-    db.run {
-      timetables.sortBy(_.id).result
-    }
+    val timetableList = for {
+      (timetable, subject) <- timetables joinLeft subjects on (_.subjectId === _.id)
+    } yield (timetable, subject)
+
+    db.run(timetableList.map(_._1).result)
   }
 
   override def update(timetable: Timetable): Future[Int] = {
@@ -105,7 +106,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]] = {
-      db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
+    db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
   }
 
   override def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]] = {
