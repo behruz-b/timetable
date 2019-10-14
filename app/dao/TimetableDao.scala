@@ -11,7 +11,7 @@ import utils.Date2SqlDate
 import scala.concurrent.Future
 
 
-trait TimetableComponent {
+trait TimetableComponent extends SubjectComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import utils.PostgresDriver.api._
@@ -74,6 +74,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   import utils.PostgresDriver.api._
 
   val timetables = TableQuery[TimetablesTable]
+  val subjects = TableQuery[SubjectTable]
 
   override def addTimetable(timetableData: Timetable): Future[Int] = {
     db.run {

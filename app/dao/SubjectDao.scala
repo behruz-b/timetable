@@ -62,6 +62,6 @@ class SubjectDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   }
 
   override def getSubjectList: Future[Seq[Subject]] = {
-    db.run  (subjects.sortBy(_.id).result)
+    db.run  (subjects.sortBy(_.name).result)
   }
 }
