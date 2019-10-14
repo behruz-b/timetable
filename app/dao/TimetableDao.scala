@@ -1,5 +1,7 @@
 package dao
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
@@ -8,7 +10,7 @@ import protocols.TimetableProtocol.Timetable
 import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 trait TimetableComponent extends SubjectComponent {
@@ -38,7 +40,9 @@ trait TimetableComponent extends SubjectComponent {
 
     def numberRoom = column[Int]("numberRoom")
 
-    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom) <> (Timetable.tupled, Timetable.unapply _)
+    def specPart = column[String]("specPart")
+
+    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, specPart.?) <> (Timetable.tupled, Timetable.unapply _)
   }
 
 }
@@ -64,7 +68,9 @@ trait TimetableDao {
 
 
 @Singleton
-class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider,
+                                 val actorSystem: ActorSystem)
+                                (implicit val ec: ExecutionContext)
   extends TimetableDao
     with TimetableComponent
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -74,6 +80,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   val timetables = TableQuery[TimetablesTable]
   val subjects = TableQuery[SubjectTable]
+  implicit val materializer = ActorMaterializer()(actorSystem)
 
   override def addTimetable(timetableData: Timetable): Future[Int] = {
     db.run {
@@ -82,12 +89,13 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetables: Future[Seq[Timetable]] = {
-    val timetableList = for {
-      (timetable, subject) <- timetables joinLeft subjects on (_.subjectId === _.id)
-    } yield (timetable, subject)
-
-    db.run(timetableList.map(_._1).result)
-  }
+      val query =  timetables.joinLeft(subjects).on(_.subjectId === _.id)
+      db.run(query.result).map { r =>
+        r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+  }}
 
   override def update(timetable: Timetable): Future[Int] = {
     db.run(timetables.filter(_.id === timetable.id).update(timetable))
