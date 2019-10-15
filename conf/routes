@@ -16,11 +16,13 @@ POST    /send-teacher               @controllers.TeacherController.addTeacher
 
 GET     /timetable                  @controllers.TimetableController.index
 GET     /timetable/dashboard        @controllers.TimetableController.dashboard
+GET     /real-timetable             @controllers.TimetableController.realDashboard
 GET     /get-timetable              @controllers.TimetableController.getReportTimetable
 GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
 POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
 POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTimetable
 POST    /send-timetable             @controllers.TimetableController.addTimetable
+GET    /groupped-timetable         @controllers.TimetableController.grouppedTimetable
 
 
 GET     /map/1-floor                 @controllers.MapController.firstFloor

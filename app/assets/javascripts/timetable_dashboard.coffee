@@ -10,6 +10,7 @@ $ ->
 
   vm = ko.mapping.fromJS
     timetableList: []
+    groups: []
     teacherName: ''
     groupNumber: ''
 
@@ -26,11 +27,15 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
-      vm.timetableList(response)
+      vm.timetableList response
+      for k,v of vm.timetableList()
+        vm.groups.push k
 
   vm.getTable()
 
   vm.teacherName.subscribe (name) ->
+    vm.groups = []
+    console.log(vm.groups.length)
     data =
       teacherName: name
     $.ajax
@@ -41,7 +46,10 @@ $ ->
       contentType: 'application/json'
     .fail handleError
     .done (result) ->
-      vm.timetableList(result)
+      vm.timetableList result
+      for k,v of vm.timetableList()
+        vm.groups.push k
+
 
   vm.groupNumber.subscribe (number) ->
     data =
@@ -54,6 +62,8 @@ $ ->
       contentType: 'application/json'
     .fail handleError
     .done (result) ->
-      vm.timetableList(result)
+      vm.timetableList result
+      for k,v of vm.timetableList()
+        vm.groups.push k
 
   ko.applyBindings {vm}

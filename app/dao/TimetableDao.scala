@@ -1,22 +1,23 @@
 package dao
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import protocols.TimetableProtocol.{GetText, Timetable}
+import protocols.TimetableProtocol.Timetable
 import slick.jdbc.JdbcProfile
 import utils.Date2SqlDate
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
-trait TimetableComponent {
+trait TimetableComponent extends SubjectComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import utils.PostgresDriver.api._
 
-  //  implicit val stringListType = new SimpleArrayJdbcType[String]("tSubject").to(_.toList)
 
   class TimetablesTable(tag: Tag) extends Table[Timetable](tag, "Timetables") with Date2SqlDate {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
@@ -39,7 +40,9 @@ trait TimetableComponent {
 
     def numberRoom = column[Int]("numberRoom")
 
-    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom) <> (Timetable.tupled, Timetable.unapply _)
+    def specPart = column[String]("specPart")
+
+    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, specPart.?) <> (Timetable.tupled, Timetable.unapply _)
   }
 
 }
@@ -65,7 +68,9 @@ trait TimetableDao {
 
 
 @Singleton
-class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider,
+                                 val actorSystem: ActorSystem)
+                                (implicit val ec: ExecutionContext)
   extends TimetableDao
     with TimetableComponent
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -74,6 +79,8 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   import utils.PostgresDriver.api._
 
   val timetables = TableQuery[TimetablesTable]
+  val subjects = TableQuery[SubjectTable]
+  implicit val materializer = ActorMaterializer()(actorSystem)
 
   override def addTimetable(timetableData: Timetable): Future[Int] = {
     db.run {
@@ -82,10 +89,15 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetables: Future[Seq[Timetable]] = {
-    db.run {
-      timetables.sortBy(_.id).result
-    }
-  }
+      val query =  timetables
+        .joinLeft(subjects)
+        .on(_.subjectId === _.id)
+      db.run(query.result).map { r =>
+        r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+  }}
 
   override def update(timetable: Timetable): Future[Int] = {
     db.run(timetables.filter(_.id === timetable.id).update(timetable))
@@ -96,18 +108,43 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]] = {
-    db.run(timetables.filter(data => data.teachers === teacher).result)
-  }
+    val query =  timetables
+      .filter(data => data.teachers === teacher)
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+  }}
 
   override def getTimetableByGr(group: String): Future[Seq[Timetable]] = {
-    db.run(timetables.filter(_.groups === group).result)
-  }
+    val query =  timetables
+      .filter(_.groups === group)
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+  }}
 
   override def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]] = {
-      db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
+    db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
   }
 
   override def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]] = {
     db.run(timetables.filter(data => data.groups === group && data.weekDay === weekDay).result)
-  }
+    val query = timetables
+      .filter(data => data.groups === group && data.weekDay === weekDay)
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map {case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+    }}
 }

@@ -10,6 +10,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.Json
 import play.api.mvc._
+import play.mvc.Http
 import protocols.TimetableProtocol._
 import views.html._
 
@@ -21,6 +22,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
                                     @Named("timetable-manager") val timetableManager: ActorRef,
                                     timeTableTemplate: timetable.timeTable,
                                     timeTableDTemplate: timetable.timetable_dashboard,
+                                    realTemplate: timetable.realTimetable,
                                    )
                                    (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -39,6 +41,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def dashboard: Action[AnyContent] = Action {
     Ok(timeTableDTemplate())
+  }
+
+  def realDashboard: Action[AnyContent] = Action {
+    Ok(realTemplate())
   }
 
   def addTimetable = Action.async(parse.json) { implicit request => {
@@ -76,7 +82,19 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def getReportTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
-        Ok(Json.toJson(timetable))
+        val grouped = timetable.groupBy(_.groups)
+        Ok(Json.toJson(grouped))
+    }
+  }
+
+  def grouppedTimetable = Action.async {
+    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+      timetable =>
+        val grouped = timetable.groupBy(_.groups).map { g =>
+          val w = g._2.filter(_.groups == g._1).groupBy(_.weekDay)
+          (g._1, w)
+        }
+        Ok(Json.toJson(grouped))
     }
   }
 
@@ -100,17 +118,39 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def getTeacherTimetable = Action.async(parse.json) {implicit request => {
     val name = (request.body \ "teacherName").as[String]
+    logger.warn(s"name: $name")
+    if (name != ""){
     (timetableManager ? TeacherName(name)).mapTo[Seq[Timetable]].map {
       timetable =>
-        Ok(Json.toJson(timetable))
+        val grouped = timetable.groupBy(_.groups)
+        Ok(Json.toJson(grouped))
     }
+    }
+    else {
+      (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+        timetable =>
+          val grouped = timetable.groupBy(_.groups)
+          Ok(Json.toJson(grouped))
+      }
+    }
+
   }}
 
   def getGroupTimetable = Action.async(parse.json) {implicit request => {
     val groupName = (request.body \ "groupNumber").as[String]
-    (timetableManager ? GetTimetableByGr(groupName)).mapTo[Seq[Timetable]].map {
-      timetable =>
-        Ok(Json.toJson(timetable))
+    if (groupName != ""){
+      (timetableManager ? GetTimetableByGr(groupName)).mapTo[Seq[Timetable]].map {
+        timetable =>
+          val grouped = timetable.groupBy(_.groups)
+          Ok(Json.toJson(grouped))
+      }
+    }
+    else {
+      (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+        timetable =>
+          val grouped = timetable.groupBy(_.groups)
+          Ok(Json.toJson(grouped))
+      }
     }
   }}
 
