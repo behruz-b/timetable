@@ -59,16 +59,39 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
-  def getReportSubject: Action[AnyContent] = Action.async { implicit request =>
-    (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
-      subject =>
-        request.session.get(LoginSessionKey).map{ _ =>
-          Ok(Json.toJson(subject))
-        }.getOrElse {
-          Unauthorized
-        }
+  def getSortedSubject: Action[JsValue] = Action.async(parse.json)  { implicit request => {
+    val key = (request.body \ "key").as[String]
+    if (key == "id") {
+      (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
+        subject =>
+          request.session.get(LoginSessionKey).map { _ =>
+            Ok(Json.toJson(subject.sortBy(_.id)))
+          }.getOrElse {
+            Unauthorized
+          }
+      }
     }
-  }
+    else if (key == "name") {
+      (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
+        subject =>
+          request.session.get(LoginSessionKey).map { _ =>
+            Ok(Json.toJson(subject.sortBy(_.name)))
+          }.getOrElse {
+            Unauthorized
+          }
+      }
+    }
+    else {
+      (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
+        subject =>
+          request.session.get(LoginSessionKey).map{ _ =>
+            Ok(Json.toJson(subject))
+          }.getOrElse {
+            Unauthorized
+          }
+      }
+    }
+  }}
 
   def getRooms = Action { implicit request => {
     request.session.get(LoginSessionKey).map{ _ =>

@@ -1,7 +1,8 @@
 
 GET     /subject                    @controllers.SubjectController.index
 GET     /subject/dashboard          @controllers.SubjectController.dashboard
-GET     /get-subjects               @controllers.SubjectController.getReportSubject
+#GET     /get-subjects               @controllers.SubjectController.getSortedSubject
+POST    /subjects                   @controllers.SubjectController.getSortedSubject
 GET     /get-rooms                  @controllers.SubjectController.getRooms
 POST    /send-subject               @controllers.SubjectController.subjectPost
 
