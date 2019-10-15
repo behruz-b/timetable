@@ -87,6 +87,17 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
+  def grouppedTimetable = Action.async {
+    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+      timetable =>
+        val grouped = timetable.groupBy(_.groups).map { g =>
+          val w = g._2.filter(_.groups == g._1).groupBy(_.weekDay)
+          (g._1, w)
+        }
+        Ok(Json.toJson(grouped))
+    }
+  }
+
   def hasGroup = Action.async(parse.json) {implicit request => {
     val group = (request.body \ "group").as[String]
     (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[Seq[String]].map { timetable =>

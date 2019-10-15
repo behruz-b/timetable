@@ -22,6 +22,7 @@ GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
 POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
 POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTimetable
 POST    /send-timetable             @controllers.TimetableController.addTimetable
+GET    /groupped-timetable         @controllers.TimetableController.grouppedTimetable
 
 
 GET     /map/1-floor                 @controllers.MapController.firstFloor
