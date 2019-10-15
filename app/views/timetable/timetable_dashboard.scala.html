@@ -28,8 +28,8 @@
         </div>
       </form>
       <div class="table-responsive text-nowrap text-center" data-bind="foreach: vm.groups">
-        <div data-bind="visible: $root.vm.groups().length > 0">
-          <h1 data-bind="text: $root.vm.groups().length"></h1>
+        <div data-bind="hidden: $room.vm.timetableList().length > 0">
+          <h1 data-bind="text: $data"></h1>
           <table class="table table-hover table-condensed table-bordered">
             <thead style="background: linen;">
               <tr>

@@ -66,4 +66,5 @@ $ ->
       for k,v of vm.timetableList()
         vm.groups.push k
 
+
   ko.applyBindings {vm}
