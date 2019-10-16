@@ -7,7 +7,7 @@ import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{AnyContent, _}
+import play.api.mvc.{AnyContent, request, _}
 import protocols.SubjectProtocol._
 import views.html._
 
@@ -57,6 +57,18 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
       Ok(Json.toJson(s"$pr"))
     }
   }
+  }
+
+
+  def getSubjects: Action[AnyContent] = Action.async { implicit request =>
+    (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
+      subject =>
+        request.session.get(LoginSessionKey).map { _ =>
+          Ok(Json.toJson(subject.sortBy(_.id)))
+        }.getOrElse {
+          Unauthorized
+        }
+    }
   }
 
   def getSortedSubject: Action[JsValue] = Action.async(parse.json)  { implicit request => {

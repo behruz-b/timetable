@@ -1,10 +1,16 @@
 
 GET     /subject                    @controllers.SubjectController.index
 GET     /subject/dashboard          @controllers.SubjectController.dashboard
-#GET     /get-subjects               @controllers.SubjectController.getSortedSubject
+GET     /get-subjects               @controllers.SubjectController.getSubjects
 POST    /subjects                   @controllers.SubjectController.getSortedSubject
 GET     /get-rooms                  @controllers.SubjectController.getRooms
 POST    /send-subject               @controllers.SubjectController.subjectPost
+
+
+GET     /suggestion                 @controllers.SuggestionController.index
+GET     /suggestion/dashboard       @controllers.SuggestionController.dashboard
+POST    /get-suggestion             @controllers.SuggestionController.getSortedSuggestion
+POST    /suggestionPost             @controllers.SuggestionController.addSuggestion
 
 
 GET     /teacher                    @controllers.TeacherController.index

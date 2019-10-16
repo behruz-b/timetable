@@ -4,7 +4,6 @@
   Glob = window.Glob || {}
 
   apiUrl =
-    getSubject: '/get-subjects'
     SortSubject: '/subjects'
 
   vm = ko.mapping.fromJS

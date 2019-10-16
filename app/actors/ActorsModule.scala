@@ -9,5 +9,6 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
     bindActor[TeacherManager]("teacher-manager")
     bindActor[TimetableManager]("timetable-manager")
     bindActor[GroupManager]("group-manager")
+    bindActor[SuggestionManager]("suggestion-manager")
   }
 }
