@@ -3,7 +3,6 @@ package controllers
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
-import play.api.libs.json.Json
 import play.api.mvc._
 import views.html._
 import views.html.timetable._
@@ -32,28 +31,30 @@ class AuthController @Inject()(val controllerComponents: ControllerComponents,
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
 
   val LoginSessionKey = "login.key"
+
   import AuthController._
 
-  def index: Action[AnyContent] = Action {  implicit request: RequestHeader => {
-      try{
-        val result= request.session.get(LoginSessionKey)
-        if(!result.isEmpty){
-          Ok(timetable())
-        }
-        else
-          Ok(loginT())
-      }catch{
-        case e:Exception=>
-          println(e.toString)
-          Redirect("/").withNewSession
+  def index: Action[AnyContent] = Action { implicit request: RequestHeader => {
+    try {
+      val result = request.session.get(LoginSessionKey)
+      if (!result.isEmpty) {
+        Ok(timetable(true))
       }
-  } }
+      else
+        Ok(loginT(false))
+    } catch {
+      case e: Exception =>
+        println(e.toString)
+        Redirect("/").withNewSession
+    }
+  }
+  }
 
   def loginPost = Action { implicit request =>
     val formParams = request.body.asFormUrlEncoded
     val login = formParams.get("login").headOption
     val password = formParams.get("pass").headOption
-    val authByLoginAndPwd = usersList.exists(user => user.login == login.getOrElse("") && user.password == password.getOrElse("") )
+    val authByLoginAndPwd = usersList.exists(user => user.login == login.getOrElse("") && user.password == password.getOrElse(""))
     if (authByLoginAndPwd) {
       Redirect(routes.TimetableController.dashboard()).addingToSession(LoginSessionKey -> login.getOrElse(""))
     } else {
@@ -65,5 +66,6 @@ class AuthController @Inject()(val controllerComponents: ControllerComponents,
     Redirect(routes.AuthController.index()).withSession(
       request.session - LoginSessionKey
     )
-  }}
+  }
+  }
 }

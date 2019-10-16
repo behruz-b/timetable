@@ -1,8 +1,8 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
-@()
+@(logged: Boolean)
 @import views.html.main
 @main("TimeTable - Creates Group", webJarsUtil) {
-@navbar()
+@navbar(logged)
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center"><h1>2-qavat</h1></div>

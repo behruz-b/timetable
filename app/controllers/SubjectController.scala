@@ -7,7 +7,7 @@ import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{AnyContent, _}
+import play.api.mvc.{AnyContent, request, _}
 import protocols.SubjectProtocol._
 import views.html._
 
@@ -29,7 +29,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
 
   def index: Action[AnyContent] = Action { implicit request =>
     request.session.get(LoginSessionKey).map{ _ =>
-      Ok(subjectTemplate())
+      Ok(subjectTemplate(true))
     }.getOrElse {
       Unauthorized
     }
@@ -37,7 +37,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
     request.session.get(LoginSessionKey).map{ _ =>
-      Ok(dashboardTemplate())
+      Ok(dashboardTemplate(true))
     }.getOrElse {
       Unauthorized
     }
@@ -59,16 +59,51 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
-  def getReportSubject: Action[AnyContent] = Action.async { implicit request =>
+
+  def getSubjects: Action[AnyContent] = Action.async { implicit request =>
     (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
       subject =>
-        request.session.get(LoginSessionKey).map{ _ =>
-          Ok(Json.toJson(subject))
+        request.session.get(LoginSessionKey).map { _ =>
+          Ok(Json.toJson(subject.sortBy(_.id)))
         }.getOrElse {
           Unauthorized
         }
     }
   }
+
+  def getSortedSubject: Action[JsValue] = Action.async(parse.json)  { implicit request => {
+    val key = (request.body \ "key").as[String]
+    if (key == "id") {
+      (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
+        subject =>
+          request.session.get(LoginSessionKey).map { _ =>
+            Ok(Json.toJson(subject.sortBy(_.id)))
+          }.getOrElse {
+            Unauthorized
+          }
+      }
+    }
+    else if (key == "name") {
+      (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
+        subject =>
+          request.session.get(LoginSessionKey).map { _ =>
+            Ok(Json.toJson(subject.sortBy(_.name)))
+          }.getOrElse {
+            Unauthorized
+          }
+      }
+    }
+    else {
+      (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
+        subject =>
+          request.session.get(LoginSessionKey).map{ _ =>
+            Ok(Json.toJson(subject))
+          }.getOrElse {
+            Unauthorized
+          }
+      }
+    }
+  }}
 
   def getRooms = Action { implicit request => {
     request.session.get(LoginSessionKey).map{ _ =>

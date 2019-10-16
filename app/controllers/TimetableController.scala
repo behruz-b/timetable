@@ -8,7 +8,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OWrites}
 import play.api.mvc._
 import protocols.TimetableProtocol._
 import views.html._
@@ -31,19 +31,24 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   val LoginSessionKey = "login.key"
 
   def index: Action[AnyContent] = Action { implicit request =>
-    request.session.get(LoginSessionKey).map{ session =>
-    Ok(timeTableTemplate())
+    request.session.get(LoginSessionKey).map { _ =>
+      Ok(timeTableTemplate(true))
     }.getOrElse {
       Unauthorized
     }
   }
 
   def dashboard: Action[AnyContent] = Action {
-    Ok(timeTableDTemplate())
+    implicit request =>
+      request.session.get(LoginSessionKey).map { _ =>
+        Ok(timeTableDTemplate(true))
+      }.getOrElse {
+        Unauthorized
+      }
   }
 
   def realDashboard: Action[AnyContent] = Action {
-    Ok(realTemplate())
+    Ok(realTemplate(false))
   }
 
   def addTimetable = Action.async(parse.json) { implicit request => {
@@ -86,7 +91,38 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
-  def hasGroup = Action.async(parse.json) {implicit request => {
+  case class GroupT(group: String, weekdays: Seq[WeekdayT])
+  implicit val weekdayTWrites: OWrites[WeekdayT] = Json.writes[WeekdayT]
+  case class WeekdayT(weekday: String, timetable: Seq[Timetable])
+
+//  implicit val groupTFormat = Json.format[GroupT]
+//  implicit val weekdayTFormat = Json.format[WeekdayT]
+  implicit val groupTWrites: OWrites[GroupT] = Json.writes[GroupT]
+
+
+//  def grouppedTimetable = Action.async {
+//    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+//      timetable =>
+//        val grouped = timetable.groupBy(_.groups).map { g =>
+//          val weekdays = g._2.filter(_.groups == g._1).groupBy(_.weekDay).map {w =>
+//            WeekdayT(w._1, w._2)
+//          }.toSeq
+//          GroupT(g._1, weekdays)
+//        }
+//        Ok(Json.toJson(grouped))
+//    }
+//  }
+  case class GT(groups: Set[String], timetables: Seq[Timetable])
+  implicit val gtWrites = Json.writes[GT]
+  def grouppedTimetable = Action.async {
+    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+      timetable =>
+        val grouped = timetable.map(_.groups).toSet
+        Ok(Json.toJson(GT(grouped, timetable)))
+    }
+  }
+
+  def hasGroup = Action.async(parse.json) { implicit request => {
     val group = (request.body \ "group").as[String]
     (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[Seq[String]].map { timetable =>
       if (timetable.isEmpty) {
@@ -96,32 +132,58 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
         Ok(timetable.mkString("\n"))
       }
     }
-  }}
+  }
+  }
 
-  def test = Action(parse.json) {implicit request => {
+  def test = Action(parse.json) { implicit request => {
     val test = (request.body \ "number").as[Int]
     logger.info(s"number: $test")
     Ok(Json.obj("response" -> test))
-  }}
+  }
+  }
 
-  def getTeacherTimetable = Action.async(parse.json) {implicit request => {
+  def getTeacherTimetable = Action.async(parse.json) { implicit request => {
     val name = (request.body \ "teacherName").as[String]
-    (timetableManager ? TeacherName(name)).mapTo[Seq[Timetable]].map {
-      timetable =>
-        Ok(Json.toJson(timetable))
+    logger.warn(s"name: $name")
+    if (name != "") {
+      (timetableManager ? TeacherName(name)).mapTo[Seq[Timetable]].map {
+        timetable =>
+          val grouped = timetable.groupBy(_.groups)
+          Ok(Json.toJson(grouped))
+      }
     }
-  }}
+    else {
+      (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+        timetable =>
+          val grouped = timetable.groupBy(_.groups)
+          Ok(Json.toJson(grouped))
+      }
+    }
 
-  def getGroupTimetable = Action.async(parse.json) {implicit request => {
+  }
+  }
+
+  def getGroupTimetable = Action.async(parse.json) { implicit request => {
     val groupName = (request.body \ "groupNumber").as[String]
-    (timetableManager ? GetTimetableByGr(groupName)).mapTo[Seq[Timetable]].map {
-      timetable =>
-        Ok(Json.toJson(timetable))
+    if (groupName != "") {
+      (timetableManager ? GetTimetableByGr(groupName)).mapTo[Seq[Timetable]].map {
+        timetable =>
+          val grouped = timetable.groupBy(_.groups)
+          Ok(Json.toJson(grouped))
+      }
     }
-  }}
+    else {
+      (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+        timetable =>
+          val grouped = timetable.groupBy(_.groups)
+          Ok(Json.toJson(grouped))
+      }
+    }
+  }
+  }
 
   def emptyRoom = Action.async {
-    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom("Tuesday","couple 1"))).mapTo[Seq[Int]].map {
+    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom("Tuesday", "couple 1"))).mapTo[Seq[Int]].map {
       rooms =>
         Ok(Json.toJson(rooms))
     }
@@ -130,25 +192,25 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def momentCouple(time: String) = {
     val hour = time.substring(0, 2).toInt
     val minute = time.substring(3, 5).toInt
-    if ((hour == 8  && (minute >= 30 && minute <=59)) || (hour == 9 && (minute >= 0 && minute <= 50))) {
+    if ((hour == 8 && (minute >= 30 && minute <= 59)) || (hour == 9 && (minute >= 0 && minute <= 50))) {
       "couple 2"
     }
-    else if ((hour == 10  && minute >= 0 && minute <= 59) || (hour == 11 && minute >= 0 && minute <= 20)){
+    else if ((hour == 10 && minute >= 0 && minute <= 59) || (hour == 11 && minute >= 0 && minute <= 20)) {
       "couple 2"
     }
-    else if ((hour == 11  && minute >= 30 && minute <= 59) || (hour == 12 && minute >= 0 && minute <= 50)) {
+    else if ((hour == 11 && minute >= 30 && minute <= 59) || (hour == 12 && minute >= 0 && minute <= 50)) {
       "couple 2"
     }
-    else if ((hour == 13  && minute >= 30 && minute <= 59) || (hour == 14 && minute >= 0 && minute <= 50)) {
+    else if ((hour == 13 && minute >= 30 && minute <= 59) || (hour == 14 && minute >= 0 && minute <= 50)) {
       "couple 2"
     }
-    else if ((hour == 15  && minute >= 0 && minute <= 59) || (hour == 16 && minute >= 0 && minute <= 20)) {
+    else if ((hour == 15 && minute >= 0 && minute <= 59) || (hour == 16 && minute >= 0 && minute <= 20)) {
       "couple 2"
     }
-    else if ((hour == 16  && minute >= 30 && minute <= 59) || (hour == 17 && minute >= 0 && minute <= 50)) {
+    else if ((hour == 16 && minute >= 30 && minute <= 59) || (hour == 17 && minute >= 0 && minute <= 50)) {
       "couple 2"
     }
-    else if ((hour == 17  && minute >= 51 && minute <=59) || (hour >= 18 && minute >= 0 && minute <=59) || (hour == 8 && minute >= 0 && minute <=29) || (hour < 8 && minute >= 0 && minute <=59) ) {
+    else if ((hour == 17 && minute >= 51 && minute <= 59) || (hour >= 18 && minute >= 0 && minute <= 59) || (hour == 8 && minute >= 0 && minute <= 29) || (hour < 8 && minute >= 0 && minute <= 59)) {
       "Dars tugadi!"
     }
     else {
@@ -165,7 +227,6 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   = {
     new SimpleDateFormat("HH:mm:ss").format(date)
   }
-
 
 
 }

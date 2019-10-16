@@ -1,9 +1,16 @@
 
 GET     /subject                    @controllers.SubjectController.index
 GET     /subject/dashboard          @controllers.SubjectController.dashboard
-GET     /get-subjects               @controllers.SubjectController.getReportSubject
+GET     /get-subjects               @controllers.SubjectController.getSubjects
+POST    /subjects                   @controllers.SubjectController.getSortedSubject
 GET     /get-rooms                  @controllers.SubjectController.getRooms
 POST    /send-subject               @controllers.SubjectController.subjectPost
+
+
+GET     /suggestion                 @controllers.SuggestionController.index
+GET     /suggestion/dashboard       @controllers.SuggestionController.dashboard
+POST    /get-suggestion             @controllers.SuggestionController.getSortedSuggestion
+POST    /suggestionPost             @controllers.SuggestionController.addSuggestion
 
 
 GET     /teacher                    @controllers.TeacherController.index
@@ -14,14 +21,15 @@ GET     /get-department             @controllers.TeacherController.getDepartment
 POST    /send-teacher               @controllers.TeacherController.addTeacher
 
 
+GET     /                           @controllers.TimetableController.realDashboard
 GET     /timetable                  @controllers.TimetableController.index
 GET     /timetable/dashboard        @controllers.TimetableController.dashboard
-GET     /real-timetable             @controllers.TimetableController.realDashboard
 GET     /get-timetable              @controllers.TimetableController.getReportTimetable
 GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
 POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
 POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTimetable
 POST    /send-timetable             @controllers.TimetableController.addTimetable
+GET     /groupped-timetable         @controllers.TimetableController.grouppedTimetable
 
 
 GET     /map/1-floor                 @controllers.MapController.firstFloor
@@ -29,7 +37,7 @@ GET     /map/2-floor                 @controllers.MapController.secondFloor
 GET     /map/3-floor                 @controllers.MapController.thirdFloor
 
 
-GET     /                           @controllers.AuthController.index
+GET     /login                      @controllers.AuthController.index
 GET     /logout                     @controllers.AuthController.logout
 POST    /loginPost                  @controllers.AuthController.loginPost
 
