@@ -29,7 +29,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
 
   def index: Action[AnyContent] = Action { implicit request =>
     request.session.get(LoginSessionKey).map{ _ =>
-      Ok(subjectTemplate())
+      Ok(subjectTemplate(true))
     }.getOrElse {
       Unauthorized
     }
@@ -37,7 +37,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
     request.session.get(LoginSessionKey).map{ _ =>
-      Ok(dashboardTemplate())
+      Ok(dashboardTemplate(true))
     }.getOrElse {
       Unauthorized
     }
