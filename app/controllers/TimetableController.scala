@@ -8,7 +8,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OWrites}
 import play.api.mvc._
 import protocols.TimetableProtocol._
 import views.html._
@@ -91,14 +91,34 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
+  case class GroupT(group: String, weekdays: Seq[WeekdayT])
+  implicit val weekdayTWrites: OWrites[WeekdayT] = Json.writes[WeekdayT]
+  case class WeekdayT(weekday: String, timetable: Seq[Timetable])
+
+//  implicit val groupTFormat = Json.format[GroupT]
+//  implicit val weekdayTFormat = Json.format[WeekdayT]
+  implicit val groupTWrites: OWrites[GroupT] = Json.writes[GroupT]
+
+
+//  def grouppedTimetable = Action.async {
+//    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+//      timetable =>
+//        val grouped = timetable.groupBy(_.groups).map { g =>
+//          val weekdays = g._2.filter(_.groups == g._1).groupBy(_.weekDay).map {w =>
+//            WeekdayT(w._1, w._2)
+//          }.toSeq
+//          GroupT(g._1, weekdays)
+//        }
+//        Ok(Json.toJson(grouped))
+//    }
+//  }
+  case class GT(groups: Set[String], timetables: Seq[Timetable])
+  implicit val gtWrites = Json.writes[GT]
   def grouppedTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
-        val grouped = timetable.groupBy(_.groups).map { g =>
-          val w = g._2.filter(_.groups == g._1).groupBy(_.weekDay)
-          (g._1, w)
-        }
-        Ok(Json.toJson(grouped))
+        val grouped = timetable.map(_.groups).toSet
+        Ok(Json.toJson(GT(grouped, timetable)))
     }
   }
 

@@ -9,80 +9,90 @@
         <br><br><br><br><br>
         <h1>Timetable Dashboard</h1>
         <div class="table-responsive text-nowrap text-center">
-@*          <table class="table table-hover table-condensed table-bordered"  data-bind="foreach: vm.groups">
-            <thead style="background: linen;" data-bind="visible: $index() == 0">
-              <tr data-bind="foreach: $root.vm.groups">
-                <th scope="col" data-bind="visible: $index() == 0">Hafta kuni</th>
-                <th scope="col" data-bind="visible: $index() == 0">Juftlik</th>
-                <th scope="col" data-bind="text: $data">951-17</th>
-              </tr>
-            </thead>
-            <tbody data-bind=" foreach: $root.vm.timetableList()[$data]">
-              <tr>
-                <td rowspan="4" data-bind="text: $data.weekDay">Dushanba</td>
-                <td data-bind="text: $data.groups">1</td>
-                <td data-bind="text: $data.subjectId">Cyber Security injiniringi</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Ma'lumotlar bazasi
-                  xavfsizligi (ma'ruza)
-                  ass.Quzibayev X. 302</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Axborot nazariyasi va
-                  kodlash</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Axborot nazariyasi va
-                  kodlash</td>
-              </tr>
-            </tbody>
-          </table>*@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th rowspan="2">Group</th>
-              <th colspan="3">Monday</th>
-              <th colspan="3">TH</th>
-              <th colspan="3">Wen</th>
-              <th colspan="3">Thur</th>
-              <th colspan="3">Fr</th>
-              <th colspan="3">Sat</th>
+              <th rowspan="2">Guruh</th>
+              <th colspan="3">Dushanba</th>
+              <th colspan="3">Seshanba</th>
+              <th colspan="3">Chorshanba</th>
+              <th colspan="3">Payshanba</th>
+              <th colspan="3">Juma</th>
+              <th colspan="3">Shanba</th>
             </tr>
             <tr>
-              <th>Couple</th>
-              <th>Subject</th>
-              <th>Room</th>
-              <th>Couple</th>
-              <th>Subject</th>
-              <th>Room</th>
-              <th>Couple</th>
-              <th>Subject</th>
-              <th>Room</th>
-              <th>Couple</th>
-              <th>Subject</th>
-              <th>Room</th>
-              <th>Couple</th>
-              <th>Subject</th>
-              <th>Room</th>
-              <th>Couple</th>
-              <th>Subject</th>
-              <th>Room</th>
+              <th>Juftlik</th>
+              <th>Fan</th>
+              <th>Xona</th>
+              <th>Juftlik</th>
+              <th>Fan</th>
+              <th>Xona</th>
+              <th>Juftlik</th>
+              <th>Fan</th>
+              <th>Xona</th>
+              <th>Juftlik</th>
+              <th>Fan</th>
+              <th>Xona</th>
+              <th>Juftlik</th>
+              <th>Fan</th>
+              <th>Xona</th>
+              <th>Juftlik</th>
+              <th>Fan</th>
+              <th>Xona</th>
             </tr>
           </thead>
-          <tbody data-bind="foreach: vm.groups">
+          <!-- ko foreach: {data: vm.groups(), as: 'group'} -->
+          <tbody>
             <tr>
-              <td rowspan="2" data-bind="text: $data"></td>
+              <td rowspan="4" data-bind="text: group"></td>
             </tr>
-            <tr data-bind="foreach: $root.vm.timetableList()">
-              <td data-bind="text: $data.couple"></td>
-              <td data-bind="text: $data.weekDay"></td>
-              <td data-bind="text: $data.numberRoom"></td>
+
+            <tr>
+                <!-- ko foreach: {data: $root.vm.getT(group, 'Friday'), as: 'timetable'} -->
+                      <td data-bind="text: timetable.couple"></td>
+                      <td data-bind="text: timetable.weekDay"></td>
+                      <td data-bind="text: timetable.numberRoom"></td>
+
+                <!-- /ko -->
             </tr>
+@*
+           <!-- ko foreach: {data: $root.vm.getT(group, 'Tuesday'), as: 'timetable'} -->
+            <tr>
+                <td data-bind="text: timetable.couple"></td>
+                <td data-bind="text: timetable.weekDay"></td>
+                <td data-bind="text: timetable.numberRoom"></td>
+            </tr>
+            <!-- /ko -->
+           <!-- ko foreach: {data: $root.vm.getT(group, 'Wednesday'), as: 'timetable'} -->
+            <tr>
+                <td data-bind="text: timetable.couple"></td>
+                <td data-bind="text: timetable.weekDay"></td>
+                <td data-bind="text: timetable.numberRoom"></td>
+            </tr>
+            <!-- /ko -->
+           <!-- ko foreach: {data: $root.vm.getT(group, 'Thursday'), as: 'timetable'} -->
+            <tr>
+                <td data-bind="text: timetable.couple"></td>
+                <td data-bind="text: timetable.weekDay"></td>
+                <td data-bind="text: timetable.numberRoom"></td>
+            </tr>
+            <!-- /ko -->
+           <!-- ko foreach: {data: $root.vm.getT(group, 'Friday'), as: 'timetable'} -->
+            <tr>
+                <td data-bind="text: timetable.couple"></td>
+                <td data-bind="text: timetable.weekDay"></td>
+                <td data-bind="text: timetable.numberRoom"></td>
+            </tr>
+            <!-- /ko -->
+           <!-- ko foreach: {data: $root.vm.getT(group, 'Saturday'), as: 'timetable'} -->
+            <tr>
+                <td data-bind="text: timetable.couple"></td>
+                <td data-bind="text: timetable.weekDay"></td>
+                <td data-bind="text: timetable.numberRoom"></td>
+            </tr>
+            <!-- /ko -->*@
           </tbody>
+          <!-- /ko -->
         </table>
         </div>
       </div>
