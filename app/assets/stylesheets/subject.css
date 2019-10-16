@@ -13,3 +13,8 @@
 .border-right-dark {
   border-right:2px solid black
 }
+.word-wrap {
+  word-break: break-all;
+/*// word-wrap: break-word;*/
+/*// overflow-wrap: break-word;*/
+}
