@@ -28,7 +28,7 @@ class SuggestionController @Inject()(val controllerComponents: ControllerCompone
 
   def index: Action[AnyContent] = Action { implicit request =>
     request.session.get(LoginSessionKey).map { _ =>
-      Ok(suggestionTemplate())
+      Ok(suggestionTemplate(true))
     }.getOrElse {
       Unauthorized
     }
@@ -36,7 +36,7 @@ class SuggestionController @Inject()(val controllerComponents: ControllerCompone
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
     request.session.get(LoginSessionKey).map { _ =>
-      Ok(dashboardTemplate())
+      Ok(dashboardTemplate(true))
     }.getOrElse {
       Unauthorized
     }

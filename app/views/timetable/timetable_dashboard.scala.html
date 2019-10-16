@@ -1,12 +1,12 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
-@()
+@(logged: Boolean)
   @import views.html.main
 @main("TimeTable - Dashboard", webJarsUtil) {
   <link href="@routes.Assets.versioned("stylesheets/editTable.css")" rel="stylesheet">
   <script src="@routes.Assets.versioned("javascripts/timetable_dashboard.js")" type="text/javascript"></script>
   <script src="@routes.Assets.versioned("javascripts/editTable.js")" type="text/javascript"></script>
 
-  @navbar()
+  @navbar(logged)
   <div class="container-fluid">
     <div class="text-center">
       <br><br><br><br><br>

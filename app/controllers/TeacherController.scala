@@ -27,16 +27,16 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   val LoginSessionKey = "login.key"
 
   def index: Action[AnyContent] = Action { implicit request =>
-    request.session.get(LoginSessionKey).map{ session =>
-      Ok(teachersTemplate())
+    request.session.get(LoginSessionKey).map{ _ =>
+      Ok(teachersTemplate(true))
     }.getOrElse {
       Unauthorized
     }
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
-    request.session.get(LoginSessionKey).map{ session =>
-      Ok(teachersDTemplate())
+    request.session.get(LoginSessionKey).map{ _ =>
+      Ok(teachersDTemplate(true))
     }.getOrElse {
       Unauthorized
     }

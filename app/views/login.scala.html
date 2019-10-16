@@ -1,29 +1,29 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
-@()(implicit flash: Flash)
+@(logged: Boolean)(implicit flash: Flash)
   @import views.html.main
 @main("Login", webJarsUtil) {
   <link href="@routes.Assets.versioned("stylesheets/login.css")" rel="stylesheet">
   <script src="@routes.Assets.versioned("javascripts/auth.js")" type="text/javascript"></script>
-  <div class="row mt-5">
+  @navbar(logged)
+  <div class="row mt-5" style="padding-top: 50px;">
     <div class="col-xs-4 col-md-4 col-sm-8 col-12 offset-xs-4 offset-md-4 offset-sm-2  offset-0">
       <div class="row">
         <div class="col-md-10 col-sm-10 offset-md-1 offset-sm-1">
-
-        @flash.get("error").map { errorText =>
-          <div class="text-danger">
-            <div class="row">
-              <div class="col-xs-12 text-center">
-                <h3>@errorText</h3>
-              </div>
-            </div>
-          </div>
-        }
           <form class="content row" action="@routes.AuthController.loginPost()" method="post">
             <div class="rounded-circle bg-blue-user circle col-sm-4 col-4 offset-4 offset-sm-4 text-center">
               <i class="fas fa-user fa-2x user-img"></i>
             </div>
             <div class="row text-center mt--5">
                 <h1 class="sign-in mt-3">Sign In</h1>
+              @flash.get("error").map { errorText =>
+                <div class="text-danger">
+                  <div class="row">
+                    <div class="col-xs-12 text-center">
+                      <b style="font-size: 16px">@errorText</b>
+                    </div>
+                  </div>
+                </div>
+              }
               <div class="input-group mb-4">
                 <span class="input-group-prepend">
                   <div class="input-group-text bg-white border-0"><i class="fa fa-user"></i></div>
