@@ -24,13 +24,23 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
-      vm.timetableList response
       console.log(response)
-      for k,v of vm.timetableList()
-        vm.groups.push k
-        vm.timetable v
-        for key, value of v
-          vm.weekday.push key
+      for k,v of response
+        if k is 'groups'
+          vm.groups(v)
+        if k is 'timetables'
+          vm.timetableList(v)
+      console.log('timetable:', vm.timetableList())
+      console.log('groups:', vm.groups())
+
+  vm.getT = (group, weekday) ->
+    console.log(group, weekday)
+    tt = ko.observableArray([])
+    for t in vm.timetableList()
+      if t.weekDay is weekday && t.groups is group
+        tt.push(t)
+      console.log('eee',tt())
+    tt
 
 
   vm.getTable()
