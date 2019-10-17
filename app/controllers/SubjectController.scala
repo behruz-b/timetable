@@ -64,7 +64,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
     (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
       subject =>
         request.session.get(LoginSessionKey).map { _ =>
-          Ok(Json.toJson(subject.sortBy(_.id)))
+          Ok(Json.toJson(subject.sortBy(_.name)))
         }.getOrElse {
           Unauthorized
         }
