@@ -1,9 +1,9 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
-@()
-@import views.html.main
+@(logged: Boolean)
+  @import views.html.main
 @main("TimeTable - Creates Group", webJarsUtil) {
   <script src="@routes.Assets.versioned("javascripts/timetable.js")" type="text/javascript"></script>
-  @navbar()
+  @navbar(logged)
   <div class="container">
     <div class="row">
       <div class="col-md-8 text-center offset-md-2 offset-0 col-12">

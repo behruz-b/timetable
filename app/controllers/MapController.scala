@@ -22,17 +22,18 @@ class MapController @Inject()(val controllerComponents: ControllerComponents,
                                 )
                              (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
+  val LoginSessionKey = "login.key"
 
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
 
-  def firstFloor: Action[AnyContent] = Action {
-      Ok(floor1Template())
-  }
-  def secondFloor: Action[AnyContent] = Action {
-    Ok(floor2Template())
-  }
-  def thirdFloor: Action[AnyContent] = Action {
-    Ok(floor3Template())
-  }
+  def firstFloor: Action[AnyContent] = Action {implicit request: RequestHeader => {
+      Ok(floor1Template(!request.session.get(LoginSessionKey).isEmpty))
+  }}
+  def secondFloor: Action[AnyContent] = Action {implicit request: RequestHeader => {
+    Ok(floor2Template(!request.session.get(LoginSessionKey).isEmpty))
+  }}
+  def thirdFloor: Action[AnyContent] = Action {implicit request: RequestHeader => {
+    Ok(floor3Template(!request.session.get(LoginSessionKey).isEmpty))
+  }}
 
 }

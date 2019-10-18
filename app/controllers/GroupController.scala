@@ -27,16 +27,16 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   val LoginSessionKey = "login.key"
 
   def index: Action[AnyContent] = Action { implicit request =>
-    request.session.get(LoginSessionKey).map{ session =>
-      Ok(groupTemplate())
+    request.session.get(LoginSessionKey).map{ _ =>
+      Ok(groupTemplate(true))
     }.getOrElse {
       Unauthorized
     }
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
-  request.session.get(LoginSessionKey).map{ session =>
-    Ok(dashboardTemplate())
+  request.session.get(LoginSessionKey).map{ _ =>
+    Ok(dashboardTemplate(true))
   }.getOrElse {
     Unauthorized
   }

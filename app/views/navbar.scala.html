@@ -1,5 +1,4 @@
-@()
-
+@(logged: Boolean)
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="#">Timetable UBTUIT</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,62 +7,90 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="groupDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Group
-        </a>
-        <div class="dropdown-menu" aria-labelledby="groupDropdown">
-          <a class="dropdown-item" href="@routes.GroupController.index()">Create group</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="@routes.GroupController.dashboard()">Group dashboard</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="teacherDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Teacher
-        </a>
-        <div class="dropdown-menu" aria-labelledby="teacherDropdown">
-          <a class="dropdown-item" href="@routes.TeacherController.index()">Create teacher</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="@routes.TeacherController.dashboard()">Teacher dashboard</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="subjectDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Subject
-        </a>
-        <div class="dropdown-menu" aria-labelledby="subjectDropdown">
-          <a class="dropdown-item" href="@routes.SubjectController.index()">Create subject</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="@routes.SubjectController.dashboard()">Subject dashboard</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="timetableDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Timetable
-        </a>
-        <div class="dropdown-menu" aria-labelledby="timetableDropdown">
-          <a class="dropdown-item" href="@routes.TimetableController.index()">Create timetable</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="@routes.TimetableController.dashboard()">Timetable dashboard</a>
-        </div>
-      </li>
+      @if(logged) {
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="groupDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Group
+          </a>
+          <div class="dropdown-menu" aria-labelledby="groupDropdown">
+            <a class="dropdown-item" href="@routes.GroupController.index()">Create group</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="@routes.GroupController.dashboard()">Group dashboard</a>
+          </div>
+        </li>
+      }
+      @if(logged) {
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="teacherDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Teacher
+          </a>
+          <div class="dropdown-menu" aria-labelledby="teacherDropdown">
+            <a class="dropdown-item" href="@routes.TeacherController.index()">Create teacher</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="@routes.TeacherController.dashboard()">Teacher dashboard</a>
+          </div>
+        </li>
+      }
+      @if(logged) {
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="subjectDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Subject
+          </a>
+          <div class="dropdown-menu" aria-labelledby="subjectDropdown">
+            <a class="dropdown-item" href="@routes.SubjectController.index()">Create subject</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="@routes.SubjectController.dashboard()">Subject dashboard</a>
+          </div>
+        </li>
+      }
+      @if(logged || !logged) {
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="timetableDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Timetable
+          </a>
+          <div class="dropdown-menu" aria-labelledby="timetableDropdown">
+          @if(logged) {
+            <a class="dropdown-item" href="@routes.TimetableController.index()">Create timetable</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="@routes.TimetableController.dashboard()">Timetable dashboard</a>
+            <div class="dropdown-divider"></div>
+          }
+            <a class="dropdown-item" href="@routes.TimetableController.realDashboard()">RealTimetable dashboard</a>
+          </div>
+        </li>
+      }
+      @if(logged || !logged) {
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="timetableDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Map University
+          </a>
+          <div class="dropdown-menu" aria-labelledby="timetableDropdown">
+            <a class="dropdown-item" href="@routes.MapController.firstFloor()">1 - Floor</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="@routes.MapController.secondFloor()">2 - Floor</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="@routes.MapController.thirdFloor()">3 - Floor</a>
+          </div>
+        </li>
+      }
     </ul>
-    <form class="nav navbar-nav float-md-right">
-      @*<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">*@
-      @*<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>*@
-      <li class="nav-item">
-        <a class="nav-link" href="@routes.AuthController.index()">
-          <span class="fas fa-sign-in-alt"></span>
-          Login
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="@routes.AuthController.logout()">
-          <span class="fas fa-sign-out-alt"></span>
-          Logout
-        </a>
-      </li>
-    </form>
+    <div class="nav navbar-nav float-md-right">
+      @if(!logged) {
+        <li class="nav-item">
+          <a class="nav-link" href="@routes.AuthController.index()">
+            <span class="fas fa-sign-in-alt"></span>
+            Login
+          </a>
+        </li>
+      }
+      @if(logged) {
+        <li class="nav-item">
+          <a class="nav-link" href=" @routes.AuthController.logout()">
+            <span class="fas fa-sign-out-alt"></span>
+            Logout
+          </a>
+        </li>
+      }
+    </div>
   </div>
 </nav>
