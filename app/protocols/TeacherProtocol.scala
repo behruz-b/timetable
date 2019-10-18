@@ -21,7 +21,8 @@ object TeacherProtocol {
     Department(2, "Dasturiy injiniring kafedrasi "),
     Department(3, "Gumanitar va ijtimoiy fanlar kafedrasi"),
     Department(4, "Telekommunikatsiya injiniringi kafedrasi"),
-    Department(5, "Tabiiy va umumkasbiy fanlar kafedrasi ")
+    Department(5, "Tabiiy va umumkasbiy fanlar kafedrasi "),
+    Department(6, "Axborot talim texnologiyalari kafedrasi")
   )
 
   case class AddTeacher(teacher: Teacher)
