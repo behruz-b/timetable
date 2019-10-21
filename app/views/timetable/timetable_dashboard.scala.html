@@ -30,7 +30,7 @@
       <div class="table-responsive text-nowrap text-center" data-bind="foreach: vm.groups">
         <div data-bind="hidden: $room.vm.timetableList().length > 0">
           <h1 data-bind="text: $data"></h1>
-          <table class="table table-hover table-condensed table-bordered">
+          <table id="table" class="table table-hover table-condensed table-bordered">
             <thead style="background: linen;">
               <tr>
                 <th scope="col">№</th>
@@ -46,8 +46,8 @@
               </tr>
             </thead>
             <tbody class="" data-bind="foreach: $root.vm.timetableList()[$data]">
-              <tr>
-                <th scope="row" data-bind="text: $data.id"></th>
+              <tr data-bind="attr: {'id': 'row' + $data.id}">
+                <td scope="row" class="font-weight-bold" data-bind="text: $data.id"></td>
                 <td data-bind="text: $data.studyShift"></td>
                 <td data-bind="text: $data.weekDay"></td>
                 <td data-bind="text: $data.couple"></td>

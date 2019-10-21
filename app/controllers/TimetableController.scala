@@ -68,16 +68,18 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def update = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
+    logger.warn(s"$id")
     val studyShift = (request.body \ "studyShift").as[String]
-    val weekDay = (request.body \ "weekDay").as[String]
+    val weekday = (request.body \ "weekday").as[String]
     val couple = (request.body \ "couple").as[String]
-    val typeOfLesson = (request.body \ "typeOfLesson").as[String]
-    val groups = (request.body \ "groups").as[String]
-    val divorce = (request.body \ "divorce").as[String]
-    val subjectId = (request.body \ "subjectId").as[Int]
-    val teachers = (request.body \ "teachers").as[String]
-    val numberRoom = (request.body \ "numberRoom").as[Int]
-    (timetableManager ? UpdateTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[Int].map { pr =>
+    val typeOfLesson = (request.body \ "type").as[String]
+    val groups = (request.body \ "group").as[String]
+    val divorce = if(typeOfLesson == "Laboratory") "half" else ""
+    val subject = (request.body \ "subject").as[Int]
+    val teacher = (request.body \ "teacher").as[String]
+    val numberRoom = (request.body \ "numberRoom").as[String].toInt
+    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
   }
