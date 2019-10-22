@@ -22,6 +22,7 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
+      console.log(response)
       vm.listEmptyRooms(response)
       for room in response
         r = "#"+room

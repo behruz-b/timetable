@@ -75,7 +75,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   def getReportTeacher: Action[AnyContent] = Action.async { implicit request =>
     (teacherManager ? GetTeacherList).mapTo[Seq[Teacher]].map {
       teachers =>
-        request.session.get(LoginSessionKey).map{ session =>
+        request.session.get(LoginSessionKey).map{ _ =>
           Ok(Json.toJson(teachers))
         }.getOrElse {
           Unauthorized
@@ -87,7 +87,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     val tSubject = (request.body \ "tSubject").as[String]
     (teacherManager ? GetTeacherListByTS(tSubject)).mapTo[Seq[Teacher]].map {
       teachers =>
-        request.session.get(LoginSessionKey).map { session =>
+        request.session.get(LoginSessionKey).map { _ =>
           Ok(Json.toJson(teachers))
         }.getOrElse {
           Unauthorized
@@ -97,7 +97,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def getDepartment = Action { implicit request => {
-    request.session.get(LoginSessionKey).map{ session =>
+    request.session.get(LoginSessionKey).map{ _ =>
       Ok(Json.toJson(directionsList))
     }.getOrElse {
       Unauthorized

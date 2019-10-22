@@ -85,7 +85,7 @@ class TimetableManager @Inject()(val environment: Environment,
     timetableDao.getTimetablesByTeacher(teacherName)
   }
 
-  private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[Int]] = {
+  private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[String]] = {
     for {
       presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple)
     } yield roomList.map(_.numberRoom).diff(presentLessons.map(_.numberRoom))
