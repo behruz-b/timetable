@@ -54,10 +54,11 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def update: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
     val fullName = (request.body \ "fullName").as[String]
     val tSubject = (request.body \ "tSubject").as[String]
     val department = (request.body \ "department").as[String]
-    (teacherManager ? UpdateTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Int].map { pr =>
+    (teacherManager ? UpdateTeacher(Teacher(Option(id), fullName, tSubject, department))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s" $pr"))
     }
   }
