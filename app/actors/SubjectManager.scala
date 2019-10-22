@@ -26,6 +26,9 @@ class SubjectManager @Inject()(val environment: Environment,
     case UpdateSubject(subject) =>
       updateSubject(subject).pipeTo(sender())
 
+    case DeleteSubject(id) =>
+      deleteSubject(id).pipeTo(sender())
+
     case GetSubjectList =>
       getSubjectList.pipeTo(sender())
 
@@ -42,11 +45,15 @@ class SubjectManager @Inject()(val environment: Environment,
     } yield response
   }
 
-  private def addSubject(subjectData: Subject) = {
+  private def addSubject(subjectData: Subject): Future[Int] = {
     subjectDao.addSubject(subjectData)
   }
 
-  private def getSubjectList = {
+  private def deleteSubject(id: Int): Future[Int] = {
+    subjectDao.delete(id)
+  }
+
+  private def getSubjectList: Future[Seq[Subject]] = {
     subjectDao.getSubjectList
   }
 

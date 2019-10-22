@@ -7,7 +7,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContent, _}
-import protocols.SuggestionProtocol.{AddSuggestion, GetSuggestionList, Suggestion}
+import protocols.SuggestionProtocol._
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -40,6 +40,14 @@ class SuggestionController @Inject()(val controllerComponents: ControllerCompone
     }.getOrElse {
       Unauthorized
     }
+  }
+
+  def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
+    (suggestionManager ? DeleteSuggestion(id)).mapTo[Int].map { id =>
+      Ok(Json.toJson(s"$id"))
+    }
+  }
   }
 
   def addSuggestion: Action[JsValue] = Action.async(parse.json) { implicit request => {

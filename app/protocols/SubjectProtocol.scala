@@ -6,6 +6,8 @@ object SubjectProtocol {
 
   case object GetSubjectList
 
+  case class DeleteSubject(id: Int)
+
   case class UpdateSubject(subject: Subject)
 
   case class Room(id: Int, numberRoom: Int)

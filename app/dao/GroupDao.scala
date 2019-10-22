@@ -35,6 +35,8 @@ trait GroupDao {
 
   def update(groupData: Group): Future[Int]
 
+  def delete(id: Int): Future[Int]
+
   def getGroupById(id: Option[Int]): Future[Option[Group]]
 
   def getGroupList: Future[Seq[Group]]
@@ -60,6 +62,10 @@ class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
 
   override def update(groupData: Group): Future[Int] = {
     db.run(groups.filter(_.id === groupData.id).update(groupData))
+  }
+
+  override def delete(id: Int): Future[Int] = {
+    db.run(groups.filter(_.id === id).delete)
   }
 
   override def getGroupById(id: Option[Int]): Future[Option[Group]] = {

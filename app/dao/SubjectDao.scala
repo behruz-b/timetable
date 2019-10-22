@@ -31,6 +31,8 @@ trait SubjectDao {
 
   def update(subjectData: Subject): Future[Int]
 
+  def delete(id: Int): Future[Int]
+
   def getSubjectById(id: Option[Int]): Future[Option[Subject]]
 
   def getSubjectList: Future[Seq[Subject]]
@@ -55,6 +57,10 @@ class SubjectDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
   override def update(subjectData: Subject): Future[Int] = {
     db.run(subjects.filter(_.id === subjectData.id).update(subjectData))
+  }
+
+  override def delete(id: Int): Future[Int] = {
+    db.run(subjects.filter(_.id === id).delete)
   }
 
   override def getSubjectById(id: Option[Int]): Future[Option[Subject]] ={

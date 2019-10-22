@@ -26,6 +26,9 @@ class TeacherManager @Inject()(val environment: Environment,
     case UpdateTeacher(teacher) =>
       updateTeacher(teacher).pipeTo(sender())
 
+    case DeleteTeacher(id) =>
+      deleteTeacher(id).pipeTo(sender())
+
     case GetTeacherList =>
       getTeacherList.pipeTo(sender())
 
@@ -53,6 +56,10 @@ class TeacherManager @Inject()(val environment: Environment,
     } yield response
   }
 
+
+  private def deleteTeacher(id: Int): Future[Int] = {
+    teacherDao.delete(id)
+  }
 
   private def getTeacherList   = {
     teacherDao.getTeachers

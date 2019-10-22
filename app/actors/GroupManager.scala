@@ -26,13 +26,16 @@ class GroupManager @Inject()(val environment: Environment,
     case UpdateGroup(group) =>
       updateGroup(group).pipeTo(sender())
 
+    case DeleteGroup(id) =>
+      deleteGroup(id).pipeTo(sender())
+
     case GetGroupList =>
      getGroupList.pipeTo(sender())
 
     case _ => log.info(s"received unknown message")
   }
 
-  private def addGroup(groupData: Group) = {
+  private def addGroup(groupData: Group): Future[Int] = {
     groupDao.addGroup(groupData)
   }
 
@@ -44,7 +47,11 @@ class GroupManager @Inject()(val environment: Environment,
     } yield response
   }
 
-  private def getGroupList = {
+  private def deleteGroup(id: Int): Future[Int] = {
+    groupDao.delete(id)
+  }
+
+  private def getGroupList: Future[Seq[Group]] = {
     groupDao.getGroupList
   }
 }

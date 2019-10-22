@@ -7,6 +7,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import protocols.SubjectProtocol.DeleteSubject
 import protocols.TeacherProtocol._
 import views.html._
 
@@ -58,6 +59,14 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     val department = (request.body \ "department").as[String]
     (teacherManager ? UpdateTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s" $pr"))
+    }
+  }
+  }
+
+  def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
+    (teacherManager ? DeleteTeacher(id)).mapTo[Int].map { id =>
+      Ok(Json.toJson(s"$id"))
     }
   }
   }

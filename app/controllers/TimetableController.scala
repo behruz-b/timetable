@@ -8,8 +8,9 @@ import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
-import play.api.libs.json.{Json, OWrites}
+import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc._
+import protocols.TeacherProtocol.DeleteTeacher
 import protocols.TimetableProtocol._
 import views.html._
 
@@ -63,6 +64,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val numberRoom = (request.body \ "numberRoom").as[Int]
     (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
+    }
+  }
+  }
+
+  def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
+    (timetableManager ? DeleteTimetable(id)).mapTo[Int].map { id =>
+      Ok(Json.toJson(s"$id"))
     }
   }
   }

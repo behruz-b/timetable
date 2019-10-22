@@ -46,7 +46,7 @@
               </tr>
             </thead>
             <tbody class="" data-bind="foreach: $root.vm.timetableList()[$data]">
-              <tr data-bind="attr: {'id': 'row' + $data.id}">
+              <tr>
                 <td scope="row" class="font-weight-bold" data-bind="text: $data.id"></td>
                 <td data-bind="text: $data.studyShift"></td>
                 <td data-bind="text: $data.weekDay"></td>

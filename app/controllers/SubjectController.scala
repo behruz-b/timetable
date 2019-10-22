@@ -59,6 +59,14 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
   }
 
+  def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
+    (subjectManager ? DeleteSubject(id)).mapTo[Int].map { id =>
+      Ok(Json.toJson(s"$id"))
+    }
+  }
+  }
+
 
   def getSubjects: Action[AnyContent] = Action.async { implicit request =>
     (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {

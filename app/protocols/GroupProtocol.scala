@@ -9,6 +9,8 @@ object GroupProtocol {
 
   case class UpdateGroup(group: Group)
 
+  case class DeleteGroup(id: Int)
+
   case object GetGroupList
 
   case class Direction(id: Int, nameDirections: String)
