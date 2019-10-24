@@ -8,6 +8,8 @@ object TimetableProtocol {
 
   case class AddTimetable(timetable: Timetable)
 
+  case class DeleteTimetable(id: Int)
+
   case class UpdateTimetable(timetable: Timetable)
 
   case class GetTimetableByGr(group: String)

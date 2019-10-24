@@ -52,9 +52,18 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   }
 
   def update = Action.async(parse.json) { implicit request =>
+    val id = (request.body \ "id").as[String].toInt
     val name = (request.body \ "name").as[String]
     val direction = (request.body \ "direction").as[String]
-    (groupManager ? UpdateGroup(Group(None, name, direction))).mapTo[Int].map {
+    (groupManager ? UpdateGroup(Group(Option(id), name, direction))).mapTo[Int].map {
+      id =>
+        Ok(Json.toJson(s"ID: $id"))
+    }
+  }
+
+  def delete = Action.async(parse.json) { implicit request =>
+    val id = (request.body \ "id").as[String].toInt
+    (groupManager ? DeleteGroup(id)).mapTo[Int].map {
       id =>
         Ok(Json.toJson(s"ID: $id"))
     }

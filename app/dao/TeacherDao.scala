@@ -38,6 +38,8 @@ trait TeacherDao {
 
   def update(teacherData: Teacher): Future[Int]
 
+  def delete(id: Int): Future[Int]
+
   def getTeacherById(id: Option[Int]): Future[Option[Teacher]]
 
   def getTeachersByTS(tSubject: String): Future[Seq[Teacher]]
@@ -65,6 +67,10 @@ class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
   override def update(teacherData: Teacher): Future[Int] = {
     db.run(teachers.filter(_.id === teacherData.id).update(teacherData))
+  }
+
+  override def delete(id: Int): Future[Int] = {
+    db.run(teachers.filter(_.id === id).delete)
   }
 
   override def getTeacherById(id: Option[Int]): Future[Option[Teacher]] = {

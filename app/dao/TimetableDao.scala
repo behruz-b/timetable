@@ -55,6 +55,8 @@ trait TimetableDao {
 
   def update(timetable: Timetable): Future[Int]
 
+  def delete(id: Int): Future[Int]
+
   def getTimetableById(id: Option[Int]): Future[Option[Timetable]]
 
   def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]]
@@ -101,6 +103,10 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   override def update(timetable: Timetable): Future[Int] = {
     db.run(timetables.filter(_.id === timetable.id).update(timetable))
+  }
+
+  override def delete(id: Int): Future[Int] = {
+    db.run(timetables.filter(_.id === id).delete)
   }
 
   override def getTimetableById(id: Option[Int]): Future[Option[Timetable]] = {

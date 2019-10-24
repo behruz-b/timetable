@@ -6,6 +6,8 @@ object SuggestionProtocol {
 
   case object GetSuggestionList
 
+  case class DeleteSuggestion(id: Int)
+
   case class AddSuggestion(suggestion: Suggestion)
 
   case class Suggestion(id: Option[Int] = None,

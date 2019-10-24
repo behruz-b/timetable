@@ -7,6 +7,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import protocols.SubjectProtocol.DeleteSubject
 import protocols.TeacherProtocol._
 import views.html._
 
@@ -53,11 +54,20 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def update: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
     val fullName = (request.body \ "fullName").as[String]
     val tSubject = (request.body \ "tSubject").as[String]
     val department = (request.body \ "department").as[String]
-    (teacherManager ? UpdateTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Int].map { pr =>
+    (teacherManager ? UpdateTeacher(Teacher(Option(id), fullName, tSubject, department))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s" $pr"))
+    }
+  }
+  }
+
+  def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
+    (teacherManager ? DeleteTeacher(id)).mapTo[Int].map { id =>
+      Ok(Json.toJson(s"$id"))
     }
   }
   }
@@ -65,7 +75,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   def getReportTeacher: Action[AnyContent] = Action.async { implicit request =>
     (teacherManager ? GetTeacherList).mapTo[Seq[Teacher]].map {
       teachers =>
-        request.session.get(LoginSessionKey).map{ session =>
+        request.session.get(LoginSessionKey).map{ _ =>
           Ok(Json.toJson(teachers))
         }.getOrElse {
           Unauthorized
@@ -77,7 +87,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     val tSubject = (request.body \ "tSubject").as[String]
     (teacherManager ? GetTeacherListByTS(tSubject)).mapTo[Seq[Teacher]].map {
       teachers =>
-        request.session.get(LoginSessionKey).map { session =>
+        request.session.get(LoginSessionKey).map { _ =>
           Ok(Json.toJson(teachers))
         }.getOrElse {
           Unauthorized
@@ -87,7 +97,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def getDepartment = Action { implicit request => {
-    request.session.get(LoginSessionKey).map{ session =>
+    request.session.get(LoginSessionKey).map{ _ =>
       Ok(Json.toJson(directionsList))
     }.getOrElse {
       Unauthorized

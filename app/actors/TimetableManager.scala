@@ -30,6 +30,9 @@ class TimetableManager @Inject()(val environment: Environment,
     case GetTimetableList =>
       getTimetableList.pipeTo(sender())
 
+    case DeleteTimetable(id) =>
+      deleteTimetable(id).pipeTo(sender())
+
     case GetTimetableByGroup(getText) =>
       getTimetableByGroup(getText).pipeTo(sender())
 
@@ -48,6 +51,10 @@ class TimetableManager @Inject()(val environment: Environment,
 
   private def addTimetable(timetableData: Timetable): Future[Int] = {
     timetableDao.addTimetable(timetableData)
+  }
+
+  private def deleteTimetable(id: Int): Future[Int] = {
+    timetableDao.delete(id)
   }
 
   private def updateTimetable(timetable: Timetable): Future[Int] = {
@@ -78,7 +85,7 @@ class TimetableManager @Inject()(val environment: Environment,
     timetableDao.getTimetablesByTeacher(teacherName)
   }
 
-  private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[Int]] = {
+  private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[String]] = {
     for {
       presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple)
     } yield roomList.map(_.numberRoom).diff(presentLessons.map(_.numberRoom))
