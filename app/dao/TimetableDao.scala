@@ -163,7 +163,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   override def getTByTeacherAndWeekday(weekDay: String, teacher: String): Future[Seq[Timetable]] = {
     db.run(timetables.filter(data => data.teachers === teacher && data.weekDay === weekDay).result)
     val query = timetables
-      .filter(data => data.groups === teacher && data.weekDay === weekDay)
+      .filter(data => data.teachers === teacher && data.weekDay === weekDay)
       .joinLeft(subjects)
       .on(_.subjectId === _.id)
     db.run(query.result).map { r =>

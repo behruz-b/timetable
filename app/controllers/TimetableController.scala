@@ -142,13 +142,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val whoIsClient = data.head
     val when = data.reverse.tail.head
     val name = data.last
+    logger.warn(s"${convertToStrDate(new Date)}: $data")
     whoIsClient match {
       case "O'qituvchi" =>
         if (when == "Bugun") {
           (timetableManager ? GetTimetableForTeacher(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
             if (timetable.isEmpty) {
-              logger.warn(s"Timetable is empty for group: $name")
-              Ok(s"Bugun $name o'qituvchini darsi yo'q")
+              logger.warn(s"Timetable is empty for teacher: $name")
+              Ok(s"Bugun $name ismli o'qituvchini darsi yo'q")
             } else {
               Ok(timetable.mkString("\n"))
             }
@@ -157,7 +158,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
         else {
           (timetableManager ? TeacherName(name)).mapTo[Seq[String]].map { timetable =>
             if (timetable.isEmpty) {
-              logger.warn(s"Timetable is empty for group: $name")
+              logger.warn(s"Timetable is empty for teacher: $name")
               Ok(s"$name ismli o'qituvchi yo'q")
             } else {
               Ok(timetable.mkString("\n"))
@@ -165,7 +166,6 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           }
         }
       case _ =>
-        logger.warn(s"${convertToStrDate(new Date)}")
         if (when == "Bugun") {
           (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
             if (timetable.isEmpty) {
