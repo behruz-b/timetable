@@ -144,62 +144,116 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val whoisClient = data.head
     val when = data.reverse.tail.last
     val name = data.last
-    if (whoisClient == "O'qituvchi") {
-      if (when == "Bugun") {
-        (timetableManager ? GetTimetableForTeacher(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
-          if (timetable.isEmpty) {
-            logger.warn(s"Timetable is empty for group: $name")
-            Ok(s"Bugun $name o'qituvchini darsi yo'q")
-          } else {
-            Ok(timetable.mkString("\n"))
-          }
-        }
-      }
-      else {
-        (timetableManager ? TeacherName(name)).mapTo[Seq[String]].map { timetable =>
-          if (timetable.isEmpty) {
-            logger.warn(s"Timetable is empty for group: $name")
-            Ok(s"$name ismli o'qituvchi yo'q")
-          } else {
-            Ok(timetable.mkString("\n"))
-          }
+    def getTimetable(whom: TimetableOwner, errorText: String) = {
+      (timetableManager ? whom(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
+        if (timetable.isEmpty) {
+          logger.warn(s"Timetable is empty for group: $name")
+          Ok(s"Bugun $name o'qituvchini darsi yo'q")
+        } else {
+          Ok(timetable.mkString("\n"))
         }
       }
     }
-    else {
-      if (when == "Bugun") {
-        (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
-          if (timetable.isEmpty) {
-            logger.warn(s"Timetable is empty for group: $name")
-            Ok(s"Bugun $name guruhga dars yo'q")
-          } else {
-            Ok(timetable.mkString("\n"))
-          }
+    whoisClient match {
+      case "O'qituvchi" =>
+        when match {
+          case "Bugun" =>
+            (timetableManager ? GetTimetableForTeacher(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
+              if (timetable.isEmpty) {
+                logger.warn(s"Timetable is empty for group: $name")
+                Ok(s"Bugun $name o'qituvchini darsi yo'q")
+              } else {
+                Ok(timetable.mkString("\n"))
+              }
+            }
+          case _ =>
+            (timetableManager ? TeacherName(name)).mapTo[Seq[String]].map { timetable =>
+              if (timetable.isEmpty) {
+                logger.warn(s"Timetable is empty for group: $name")
+                Ok(s"$name ismli o'qituvchi yo'q")
+              } else {
+                Ok(timetable.mkString("\n"))
+              }
+            }
         }
-      }
-      else if (when == "Ertaga") {
-        (timetableManager ? GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name))).mapTo[Seq[String]].map { timetable =>
-          if (timetable.isEmpty) {
-            logger.warn(s"Timetable is empty for group: $name")
-            Ok(s"Ertaga $name guruhga dars yo'q")
-          } else {
-            Ok(timetable.mkString("\n"))
-          }
-        }
-      }
-      else {
-        (timetableManager ? Group(name)).mapTo[Seq[String]].map { timetable =>
-          if (timetable.isEmpty) {
-            logger.warn(s"Timetable is empty for group: $name")
-            Ok(s"$name nomli guruh yo'q")
-          } else {
-            Ok(timetable.mkString("\n"))
-          }
-        }
-      }
+      case _ =>
+        when match {
+          case "Bugun" =>
+            (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
+              if (timetable.isEmpty) {
+                logger.warn(s"Timetable is empty for group: $name")
+                Ok(s"Bugun $name guruhga dars yo'q")
+              } else {
+                Ok(timetable.mkString("\n"))
+              }
+            }
+          case "Ertaga" =>
+            (timetableManager ? GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name))).mapTo[Seq[String]].map { timetable =>
+              if (timetable.isEmpty) {
+                logger.warn(s"Timetable is empty for group: $name")
+                Ok(s"Ertaga $name guruhga dars yo'q")
+              } else {
+                Ok(timetable.mkString("\n"))
+              }
+            }
+
+
     }
-  }
-  }
+//    if (whoisClient == "O'qituvchi") {
+//      if (when == "Bugun") {
+//        (timetableManager ? GetTimetableForTeacher(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
+//          if (timetable.isEmpty) {
+//            logger.warn(s"Timetable is empty for group: $name")
+//            Ok(s"Bugun $name o'qituvchini darsi yo'q")
+//          } else {
+//            Ok(timetable.mkString("\n"))
+//          }
+//        }
+//      }
+//      else {
+//        (timetableManager ? TeacherName(name)).mapTo[Seq[String]].map { timetable =>
+//          if (timetable.isEmpty) {
+//            logger.warn(s"Timetable is empty for group: $name")
+//            Ok(s"$name ismli o'qituvchi yo'q")
+//          } else {
+//            Ok(timetable.mkString("\n"))
+//          }
+//        }
+//      }
+//    }
+//    else {
+//      if (when == "Bugun") {
+//        (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
+//          if (timetable.isEmpty) {
+//            logger.warn(s"Timetable is empty for group: $name")
+//            Ok(s"Bugun $name guruhga dars yo'q")
+//          } else {
+//            Ok(timetable.mkString("\n"))
+//          }
+//        }
+//      }
+//      else if (when == "Ertaga") {
+//        (timetableManager ? GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name))).mapTo[Seq[String]].map { timetable =>
+//          if (timetable.isEmpty) {
+//            logger.warn(s"Timetable is empty for group: $name")
+//            Ok(s"Ertaga $name guruhga dars yo'q")
+//          } else {
+//            Ok(timetable.mkString("\n"))
+//          }
+//        }
+//      }
+//      else {
+//        (timetableManager ? Group(name)).mapTo[Seq[String]].map { timetable =>
+//          if (timetable.isEmpty) {
+//            logger.warn(s"Timetable is empty for group: $name")
+//            Ok(s"$name nomli guruh yo'q")
+//          } else {
+//            Ok(timetable.mkString("\n"))
+//          }
+//        }
+//      }
+    }
+  }}
 
 
   def test = Action(parse.json) { implicit request => {
