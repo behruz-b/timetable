@@ -38,7 +38,7 @@ trait TimetableComponent extends SubjectComponent {
 
     def teachers = column[String]("teachers")
 
-    def numberRoom = column[Int]("numberRoom")
+    def numberRoom = column[String]("numberRoom")
 
     def specPart = column[String]("specPart")
 

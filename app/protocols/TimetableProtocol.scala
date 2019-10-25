@@ -18,6 +18,8 @@ object TimetableProtocol {
 
   case class GetTimetableByGroup(getText: GetText)
 
+  case class GetTimetableForTeacher(getText: GetText)
+
   case class GetText(weekDay: String, group: String)
 
   implicit val getTextFormat: OFormat[GetText] = Json.format[GetText]
@@ -41,7 +43,7 @@ object TimetableProtocol {
                        divorce: String,
                        subjectId: Int,
                        teachers: String,
-                       numberRoom: Int,
+                       numberRoom: String,
                        specPart: Option[String] = None
                       )
 
