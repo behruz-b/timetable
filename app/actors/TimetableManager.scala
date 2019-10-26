@@ -42,11 +42,17 @@ class TimetableManager @Inject()(val environment: Environment,
     case GetTimetableByGr(getText) =>
       getTimetableByGr(getText).pipeTo(sender())
 
+    case TimetableForGroup(group) =>
+      timetableForGroup(group).pipeTo(sender())
+
     case GetEmptyRoomByCouple(presentCouple) =>
       GetEmptyRoomByCouple(presentCouple).pipeTo(sender())
 
     case TeacherName(name) =>
       teacherName(name).pipeTo(sender())
+
+    case GetTTeacher(name) =>
+      getTTeacher(name).pipeTo(sender())
 
     case _ => log.info(s"received unknown message")
 
@@ -132,9 +138,9 @@ class TimetableManager @Inject()(val environment: Environment,
         "Fan:            | " + timetableMapped.specPart.toString.substring(5).replace(')', ' ') + "\n" +
         "Mashg'ulot turi | " + timetableMapped.typeOfLesson.toString + "\n" +
         "O'qituvchi:     | " + timetableMapped.teachers.toString + "\n" +
-        "Dars xonasi:    | " + timetableMapped.numberRoom.toString + "\n"+
+        "Dars xonasi:    | " + timetableMapped.numberRoom.toString + "\n" +
         "----------------|-------------------" +
-      "</pre>"
+        "</pre>"
     }
   }
 
@@ -176,7 +182,97 @@ class TimetableManager @Inject()(val environment: Environment,
         "Fan:            | " + timetableMapped.specPart.toString.substring(5).replace(')', ' ') + "\n" +
         "Mashg'ulot turi | " + timetableMapped.typeOfLesson.toString + "\n" +
         "O'qituvchi:     | " + timetableMapped.teachers.toString + "\n" +
-        "Dars xonasi:    | " + timetableMapped.numberRoom.toString + "\n"+
+        "Dars xonasi:    | " + timetableMapped.numberRoom.toString + "\n" +
+        "----------------|-------------------" +
+        "</pre>"
+
+    }
+  }
+
+  private def timetableForGroup(group: String) = {
+    for {
+      response <- timetableDao.getTimetableByGr(group)
+    } yield response.map { timetable =>
+      val trNameDay = timetable.weekDay match {
+        case "Monday" => "Dushanba"
+        case "Tuesday" => "Seshanba"
+        case "Wednesday" => "Chorshanba"
+        case "Thursday" => "Payshanba"
+        case "Friday" => "Juma"
+        case "Saturday" => "Shanba"
+      }
+      val trStudyShift = timetable.studyShift match {
+        case "Afternoon" => "2 - Smena"
+        case "Morning" => "1 - Smena"
+      }
+      val trCouple = timetable.couple match {
+        case "couple 1" => "1 - Juftlik"
+        case "couple 2" => "2 - Juftlik"
+        case "couple 3" => "3 - Juftlik"
+        case "couple 4" => "4 - Juftlik"
+      }
+      val trTypeLesson = timetable.typeOfLesson match {
+        case "Laboratory" => "Laboratoriya"
+        case "Practice" => "Amaliyot"
+        case "Lecture" => "Ma'ruza"
+      }
+      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      "<pre>" +
+        "----------------|-------------------\n" +
+        "Hafta kuni:     | " + timetableMapped.weekDay.toString + "\n" +
+        "----------------|-------------------\n" +
+        "Guruh:          | " + timetableMapped.groups.toString + "\n" +
+        "O'qish vaqti:   | " + timetableMapped.studyShift.toString + "\n" +
+        "Juftlik:        | " + timetableMapped.couple.toString + "\n" +
+        "Fan:            | " + timetableMapped.specPart.toString.substring(5).replace(')', ' ') + "\n" +
+        "Mashg'ulot turi | " + timetableMapped.typeOfLesson.toString + "\n" +
+        "O'qituvchi:     | " + timetableMapped.teachers.toString + "\n" +
+        "Dars xonasi:    | " + timetableMapped.numberRoom.toString + "\n" +
+        "----------------|-------------------" +
+        "</pre>"
+
+    }
+  }
+
+  private def getTTeacher(teacher: String) = {
+    for {
+      response <- timetableDao.getTimetablesByTeacher(teacher)
+    } yield response.map { timetable =>
+      val trNameDay = timetable.weekDay match {
+        case "Monday" => "Dushanba"
+        case "Tuesday" => "Seshanba"
+        case "Wednesday" => "Chorshanba"
+        case "Thursday" => "Payshanba"
+        case "Friday" => "Juma"
+        case "Saturday" => "Shanba"
+      }
+      val trStudyShift = timetable.studyShift match {
+        case "Afternoon" => "2 - Smena"
+        case "Morning" => "1 - Smena"
+      }
+      val trCouple = timetable.couple match {
+        case "couple 1" => "1 - Juftlik"
+        case "couple 2" => "2 - Juftlik"
+        case "couple 3" => "3 - Juftlik"
+        case "couple 4" => "4 - Juftlik"
+      }
+      val trTypeLesson = timetable.typeOfLesson match {
+        case "Laboratory" => "Laboratoriya"
+        case "Practice" => "Amaliyot"
+        case "Lecture" => "Ma'ruza"
+      }
+      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      "<pre>" +
+        "----------------|-------------------\n" +
+        "Hafta kuni:     | " + timetableMapped.weekDay.toString + "\n" +
+        "----------------|-------------------\n" +
+        "Guruh:          | " + timetableMapped.groups.toString + "\n" +
+        "O'qish vaqti:   | " + timetableMapped.studyShift.toString + "\n" +
+        "Juftlik:        | " + timetableMapped.couple.toString + "\n" +
+        "Fan:            | " + timetableMapped.specPart.toString.substring(5).replace(')', ' ') + "\n" +
+        "Mashg'ulot turi | " + timetableMapped.typeOfLesson.toString + "\n" +
+        "O'qituvchi:     | " + timetableMapped.teachers.toString + "\n" +
+        "Dars xonasi:    | " + timetableMapped.numberRoom.toString + "\n" +
         "----------------|-------------------" +
         "</pre>"
 
