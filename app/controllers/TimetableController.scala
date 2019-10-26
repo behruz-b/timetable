@@ -61,7 +61,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val divorce = (request.body \ "divorce").as[String]
     val subjectId = (request.body \ "subjectId").as[Int]
     val teachers = (request.body \ "teachers").as[String]
-    val numberRoom = (request.body \ "numberRoom").as[Int]
+    val numberRoom = (request.body \ "numberRoom").as[String]
     (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
@@ -84,10 +84,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val couple = (request.body \ "couple").as[String]
     val typeOfLesson = (request.body \ "type").as[String]
     val groups = (request.body \ "group").as[String]
-    val divorce = if(typeOfLesson == "Laboratory") "half" else ""
+    val divorce = if (typeOfLesson == "Laboratory") "half" else ""
     val subject = (request.body \ "subject").as[Int]
     val teacher = (request.body \ "teacher").as[String]
-    val numberRoom = (request.body \ "numberRoom").as[String].toInt
+    val numberRoom = (request.body \ "numberRoom").as[String]
     (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"you successful added: $pr"))
     }
@@ -103,28 +103,32 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   case class GroupT(group: String, weekdays: Seq[WeekdayT])
+
   implicit val weekdayTWrites: OWrites[WeekdayT] = Json.writes[WeekdayT]
+
   case class WeekdayT(weekday: String, timetable: Seq[Timetable])
 
-//  implicit val groupTFormat = Json.format[GroupT]
-//  implicit val weekdayTFormat = Json.format[WeekdayT]
+  //  implicit val groupTFormat = Json.format[GroupT]
+  //  implicit val weekdayTFormat = Json.format[WeekdayT]
   implicit val groupTWrites: OWrites[GroupT] = Json.writes[GroupT]
 
 
-//  def grouppedTimetable = Action.async {
-//    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
-//      timetable =>
-//        val grouped = timetable.groupBy(_.groups).map { g =>
-//          val weekdays = g._2.filter(_.groups == g._1).groupBy(_.weekDay).map {w =>
-//            WeekdayT(w._1, w._2)
-//          }.toSeq
-//          GroupT(g._1, weekdays)
-//        }
-//        Ok(Json.toJson(grouped))
-//    }
-//  }
+  //  def grouppedTimetable = Action.async {
+  //    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
+  //      timetable =>
+  //        val grouped = timetable.groupBy(_.groups).map { g =>
+  //          val weekdays = g._2.filter(_.groups == g._1).groupBy(_.weekDay).map {w =>
+  //            WeekdayT(w._1, w._2)
+  //          }.toSeq
+  //          GroupT(g._1, weekdays)
+  //        }
+  //        Ok(Json.toJson(grouped))
+  //    }
+  //  }
   case class GT(groups: Set[String], timetables: Seq[Timetable])
+
   implicit val gtWrites = Json.writes[GT]
+
   def grouppedTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
@@ -134,17 +138,68 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def hasGroup = Action.async(parse.json) { implicit request => {
-    val group = (request.body \ "group").as[String]
-    (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), group))).mapTo[Seq[String]].map { timetable =>
-      if (timetable.isEmpty) {
-        logger.warn(s"Timetable is empty for group: $group")
-        Ok(s"Bugun $group guruhga dars yo'q")
-      } else {
-        Ok(timetable.mkString("\n"))
-      }
+    val data = (request.body \ "group").as[String].toString.split("/").toList
+    val whoIsClient = data.head
+    val when = data.reverse.tail.head
+    val name = data.last
+    logger.warn(s"${convertToStrDate(new Date)}: $data")
+    whoIsClient match {
+      case "O'qituvchi" =>
+        if (when == "Bugun") {
+          (timetableManager ? GetTimetableForTeacher(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
+            if (timetable.isEmpty) {
+              logger.warn(s"Timetable is empty for teacher: $name")
+              Ok(s"Bugun $name ismli o'qituvchini darsi yo'q")
+            } else {
+              Ok(timetable.mkString("\n"))
+            }
+          }
+        }
+        else {
+          (timetableManager ? TeacherName(name)).mapTo[Seq[String]].map { timetable =>
+            if (timetable.isEmpty) {
+              logger.warn(s"Timetable is empty for teacher: $name")
+              Ok(s"$name ismli o'qituvchi yo'q")
+            } else {
+              Ok(timetable.mkString("\n"))
+            }
+          }
+        }
+      case _ =>
+        if (when == "Bugun") {
+          (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
+            if (timetable.isEmpty) {
+              logger.warn(s"Timetable is empty for group: $name")
+              Ok(s"Bugun $name guruhga dars yo'q")
+            } else {
+              Ok(timetable.mkString("\n"))
+            }
+          }
+        }
+        else if (when == "Ertaga") {
+          (timetableManager ? GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name))).mapTo[Seq[String]].map { timetable =>
+            if (timetable.isEmpty) {
+              logger.warn(s"Timetable is empty for group: $name")
+              Ok(s"Ertaga $name guruhga dars yo'q")
+            } else {
+              Ok(timetable.mkString("\n"))
+            }
+          }
+        }
+        else {
+          (timetableManager ? Group(name)).mapTo[Seq[String]].map { timetable =>
+            if (timetable.isEmpty) {
+              logger.warn(s"Timetable is empty for group: $name")
+              Ok(s"$name nomli guruh yo'q")
+            } else {
+              Ok(timetable.mkString("\n"))
+            }
+          }
+        }
     }
   }
   }
+
 
   def test = Action(parse.json) { implicit request => {
     val test = (request.body \ "number").as[Int]
@@ -232,6 +287,18 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   private def convertToStrDate(date: Date)
   = {
     new SimpleDateFormat("EEEE").format(date)
+  }
+
+  private def nextday(day: String) = {
+    day match {
+      case "Monday" => "Tuesday"
+      case "Tuesday" => "Wednesday"
+      case "Wednesday" => "Thursday"
+      case "Thursday" => "Friday"
+      case "Friday" => "Saturday"
+      case "Saturday" => "Sunday"
+      case "Sunday" => "Monday"
+    }
   }
 
   private def momentHourAndMinute(date: Date)
