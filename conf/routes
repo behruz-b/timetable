@@ -42,6 +42,7 @@ POST    /delete/timetable           @controllers.TimetableController.delete
 GET     /map/1-floor                 @controllers.MapController.firstFloor
 GET     /map/2-floor                 @controllers.MapController.secondFloor
 GET     /map/3-floor                 @controllers.MapController.thirdFloor
+GET     /screen-map                  @controllers.MapController.screen
 
 
 GET     /login                      @controllers.AuthController.index
