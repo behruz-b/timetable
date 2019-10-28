@@ -156,7 +156,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           }
         }
         else {
-          (timetableManager ? TeacherName(name)).mapTo[Seq[String]].map { timetable =>
+          (timetableManager ? GetTTeacher(name)).mapTo[Seq[String]].map { timetable =>
             if (timetable.isEmpty) {
               logger.warn(s"Timetable is empty for teacher: $name")
               Ok(s"$name ismli o'qituvchi yo'q")
@@ -187,7 +187,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           }
         }
         else {
-          (timetableManager ? Group(name)).mapTo[Seq[String]].map { timetable =>
+          (timetableManager ? TimetableForGroup(name)).mapTo[Seq[String]].map { timetable =>
             if (timetable.isEmpty) {
               logger.warn(s"Timetable is empty for group: $name")
               Ok(s"$name nomli guruh yo'q")

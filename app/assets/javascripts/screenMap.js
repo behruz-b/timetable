@@ -3,21 +3,20 @@ $(document).ready(function () {
   var element = document.getElementById("html-page");
 
   var getCanvas;
-
-  $("#btn-Preview-Image").on('click', function () {
+  setTimeout(function(){
     html2canvas(element, {
       onrendered: function (canvas) {
-        $("#previewImage").append(canvas);
+        // $("#previewImage").append(canvas);
         getCanvas = canvas;
       }
     });
-  });
+  }, 500);
 
   $("#btn-Convert-toImage").on('click', function () {
-    var imgageData =
+    var imageData =
       getCanvas.toDataURL("image/png");
 
-    var newData = imgageData.replace(
+    var newData = imageData.replace(
       /^data:image\/png/, "data:application/octet-stream");
     if (document.getElementById("floor").innerText === "1-qavat") {
       $("#btn-Convert-toImage").attr(

@@ -1,0 +1,24 @@
+@this(webJarsUtil: org.webjars.play.WebJarsUtil)
+@(logged: Boolean)
+  @import views.html.main
+@main("TimeTable - Map", webJarsUtil) {
+  @navbar(logged)
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://files.codepedia.info/files/uploads/iScripts/html2canvas.js"></script>
+  <script src="@routes.Assets.versioned("javascripts/screenMap.js")" type="text/javascript"></script>
+  <div class="container">
+    <div>
+      <input id="btn-Preview-Image" type="button"
+      value="Preview" />
+
+      <a id="btn-Convert-toImage" href="#">
+        Download
+      </a>
+
+      <br/>
+
+      <div id="previewImage"></div>
+
+    </div>
+  </div>
+}
