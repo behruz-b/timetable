@@ -7,6 +7,12 @@ body {
 .border-bottom-dark {
   border-bottom:2px solid black
 }
+.border-bottom-gray {
+  border-bottom: 1px solid #dee2e6;
+}
+.border-left-gray {
+  border-left: 1px solid #dee2e6;
+}
 .border-top-dark {
   border-top:2px solid black
 }
@@ -20,4 +26,19 @@ body {
   word-break: break-all;
 /*// word-wrap: break-word;*/
 /*// overflow-wrap: break-word;*/
+}
+
+.table td, .table th {
+   padding: 0;
+}
+.rotated {
+  text-align: center;
+  writing-mode: tb-rl;
+  transform: rotate(-180deg);
+}
+.rotate {
+  margin: auto;
+  position: relative;
+  writing-mode: tb-rl;
+  transform: rotate(-180deg);
 }
