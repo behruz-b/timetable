@@ -34,12 +34,10 @@ $ ->
       console.log('groups:', vm.groups())
 
   vm.getT = (group, weekday) ->
-    console.log(group, weekday)
     tt = ko.observableArray([])
     for t in vm.timetableList()
       if t.weekDay is weekday && t.groups is group
         tt.push(t)
-      console.log('eee',tt())
     tt
 
 
