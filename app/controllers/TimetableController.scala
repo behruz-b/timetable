@@ -10,8 +10,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc._
-import protocols.TeacherProtocol.DeleteTeacher
-import protocols.TimetableProtocol._
+import protocols.TimetableProtocol.{TimetableOwner, _}
 import views.html._
 
 import scala.concurrent.ExecutionContext
@@ -143,70 +142,51 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val when = data.reverse.tail.head
     val name = data.last
     logger.warn(s"${convertToStrDate(new Date)}: $data")
+    def getTimetableWithDate(whom: TimetableWithDateOwner, errorText: String) = {
+      (timetableManager ? whom).mapTo[Seq[String]].map { timetable =>
+        if (timetable.isEmpty) {
+          Ok(s"$errorText")
+        } else {
+          Ok(timetable.mkString("\n"))
+        }
+      }
+    }
+    def getTimetable(whom: TimetableOwner, errorText: String) = {
+      (timetableManager ? whom).mapTo[Seq[String]].map { timetable =>
+        if (timetable.isEmpty) {
+          Ok(s"$errorText")
+        } else {
+          Ok(timetable.mkString("\n"))
+        }
+      }
+    }
+
     whoIsClient match {
       case "O'qituvchi" =>
         if (when == "Bugun") {
-          (timetableManager ? GetTimetableForTeacher(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
-            if (timetable.isEmpty) {
-              logger.warn(s"Timetable is empty for teacher: $name")
-              Ok(s"Bugun $name ismli o'qituvchini darsi yo'q")
-            } else {
-              Ok(timetable.mkString("\n"))
-            }
-          }
+          getTimetableWithDate(GetTimetableForTeacher(GetText(convertToStrDate(new Date), name)), s"Bugun $name ismli o'qituvchini darsi yo'q")
         }
         else {
-          (timetableManager ? GetTTeacher(name)).mapTo[Seq[String]].map { timetable =>
-            if (timetable.isEmpty) {
-              logger.warn(s"Timetable is empty for teacher: $name")
-              Ok(s"$name ismli o'qituvchi yo'q")
-            } else {
-              Ok(timetable.mkString("\n"))
-            }
-          }
+          getTimetable(GetTTeacher(name), s"$name ismli o'qituvchi yo'q")
         }
       case _ =>
         if (when == "Bugun") {
-          (timetableManager ? GetTimetableByGroup(GetText(convertToStrDate(new Date), name))).mapTo[Seq[String]].map { timetable =>
-            if (timetable.isEmpty) {
-              logger.warn(s"Timetable is empty for group: $name")
-              Ok(s"Bugun $name guruhga dars yo'q")
-            } else {
-              Ok(timetable.mkString("\n"))
-            }
-          }
+          getTimetableWithDate(GetTimetableByGroup(GetText(convertToStrDate(new Date), name)), s"Bugun $name guruhga dars yo'q")
         }
         else if (when == "Ertaga") {
-          (timetableManager ? GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name))).mapTo[Seq[String]].map { timetable =>
-            if (timetable.isEmpty) {
-              logger.warn(s"Timetable is empty for group: $name")
-              Ok(s"Ertaga $name guruhga dars yo'q")
-            } else {
-              Ok(timetable.mkString("\n"))
-            }
-          }
+          getTimetableWithDate(GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name)), s"Ertaga $name guruhga dars yo'q")
         }
         else {
-          (timetableManager ? TimetableForGroup(name)).mapTo[Seq[String]].map { timetable =>
-            if (timetable.isEmpty) {
-              logger.warn(s"Timetable is empty for group: $name")
-              Ok(s"$name nomli guruh yo'q")
-            } else {
-              Ok(timetable.mkString("\n"))
-            }
-          }
+          getTimetable(TimetableForGroup(name), s"$name nomli guruh yo'q")
         }
     }
-  }
-  }
-
+  }}
 
   def test = Action(parse.json) { implicit request => {
     val test = (request.body \ "number").as[Int]
     logger.info(s"number: $test")
     Ok(Json.obj("response" -> test))
-  }
-  }
+  }}
 
   def getTeacherTimetable = Action.async(parse.json) { implicit request => {
     val name = (request.body \ "teacherName").as[String]
@@ -226,8 +206,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       }
     }
 
-  }
-  }
+  }}
 
   def getGroupTimetable = Action.async(parse.json) { implicit request => {
     val groupName = (request.body \ "groupNumber").as[String]

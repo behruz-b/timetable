@@ -16,16 +16,16 @@ object TimetableProtocol {
 
   implicit val getTimetableByGrFormat: OFormat[GetTimetableByGr] = Json.format[GetTimetableByGr]
 
-  sealed trait TimetableOwner {
+  sealed trait TimetableWithDateOwner {
     def apply(text: GetText): Any = {
       GetText(text.weekDay, text.group)
     }
 
   }
 
-  case class GetTimetableByGroup(getText: GetText) extends TimetableOwner
+  case class GetTimetableByGroup(getText: GetText) extends TimetableWithDateOwner
 
-  case class GetTimetableForTeacher(getText: GetText) extends TimetableOwner
+  case class GetTimetableForTeacher(getText: GetText) extends TimetableWithDateOwner
 
   case class GetText(weekDay: String, group: String)
 
@@ -35,11 +35,17 @@ object TimetableProtocol {
 
   implicit val TeacherNameFormat: OFormat[TeacherName] = Json.format[TeacherName]
 
-  case class GetTTeacher(teacher: String)
+  sealed trait TimetableOwner{
+    def apply(str: String): Any = {
+      str
+    }
+  }
+
+  case class GetTTeacher(teacher: String) extends TimetableOwner
 
   implicit val GetTTeacherFormat: OFormat[TeacherName] = Json.format[TeacherName]
 
-  case class TimetableForGroup(teacher: String)
+  case class TimetableForGroup(group: String) extends TimetableOwner
 
   implicit val TimetableForGroupFormat: OFormat[TimetableForGroup] = Json.format[TimetableForGroup]
 

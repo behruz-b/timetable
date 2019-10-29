@@ -33,17 +33,17 @@ class TimetableManager @Inject()(val environment: Environment,
     case DeleteTimetable(id) =>
       deleteTimetable(id).pipeTo(sender())
 
-    case GetTimetableByGroup(getText) =>
-      getTimetableByGroup(getText).pipeTo(sender())
+    case t: GetTimetableByGroup =>
+      getTimetableByGroup(t.getText).pipeTo(sender())
 
-    case GetTimetableForTeacher(getText) =>
-      getTimetableForTeacher(getText).pipeTo(sender())
+    case t: GetTimetableForTeacher =>
+      getTimetableForTeacher(t.getText).pipeTo(sender())
 
     case GetTimetableByGr(getText) =>
       getTimetableByGr(getText).pipeTo(sender())
 
-    case TimetableForGroup(group) =>
-      timetableForGroup(group).pipeTo(sender())
+    case t: TimetableForGroup =>
+      timetableForGroup(t.group).pipeTo(sender())
 
     case GetEmptyRoomByCouple(presentCouple) =>
       GetEmptyRoomByCouple(presentCouple).pipeTo(sender())
@@ -51,8 +51,8 @@ class TimetableManager @Inject()(val environment: Environment,
     case TeacherName(name) =>
       teacherName(name).pipeTo(sender())
 
-    case GetTTeacher(name) =>
-      getTTeacher(name).pipeTo(sender())
+    case t: GetTTeacher =>
+      getTTeacher(t.teacher).pipeTo(sender())
 
     case _ => log.info(s"received unknown message")
 
