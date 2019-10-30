@@ -7,6 +7,12 @@ body {
 .border-bottom-dark {
   border-bottom:2px solid black
 }
+.border-bottom-gray {
+  border-bottom: 1px solid #dee2e6;
+}
+.border-left-gray {
+  border-left: 1px solid #dee2e6;
+}
 .border-top-dark {
   border-top:2px solid black
 }
@@ -20,4 +26,38 @@ body {
   word-break: break-all;
 /*// word-wrap: break-word;*/
 /*// overflow-wrap: break-word;*/
+}
+
+#real td, #real th {
+   padding: 0;
+}
+.rotated {
+  margin: auto;
+  text-align: center;
+  writing-mode: tb-rl;
+  transform: rotate(-180deg);
+}
+.rotate {
+  -moz-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  -webkit-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  transform:  translateX(-50%) translateY(-50%) rotate(-90deg);
+  margin: auto;
+}
+.pt-50 {
+  padding-top: 50%;
+}
+.h-120p {
+  height: 120px;
+}
+
+
+.outer {
+  position: relative;
+}
+
+.inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
 }
