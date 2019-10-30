@@ -28,22 +28,11 @@
             </tr>
             <tr>
               <td>
-                @*<ul data-bind="foreach: {data: $root.vm.getT(group, 'Monday'), as: 'timetable'}" style="list-style-type: none;*@
-                @*padding-inline-start: 0;" >*@
-                @*<li>*@
-                @*<div class="border-bottom-gray border-left-gray couple-box">*@
-                @*s*@
-                @*<small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;*@
-                @*<small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;*@
-                @*<small data-bind="text: timetable.numberRoom"></small>*@
-                @*</div>*@
-                @*</li>*@
-                @*</ul>*@
                 <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Monday'), as: 'timetable'}" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
                       <div class="col-md-2 pt-4">
-                        <small class="rotated" data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
+                        <small class="inner rotate" data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
                       </div>
                       <div class="col-md-10 h-120p border-left-gray">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
@@ -55,11 +44,10 @@
                 </div>
               </td>
               <td>
-                <div  class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Tuesday'), as: 'timetable'}" style="list-style-type: none;
+                <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Tuesday'), as: 'timetable'}" style="list-style-type: none;
                   padding-inline-start: 0;" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-
                       <div class="col-md-12 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
@@ -72,9 +60,8 @@
               <td>
                 <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Wednesday'), as: 'timetable'}" style="list-style-type: none;
                   padding-inline-start: 0;" >
-                 <div class="col-md-12 border-bottom-gray">
+                  <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-
                       <div class="col-md-12 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
@@ -89,7 +76,6 @@
                   padding-inline-start: 0;" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-
                       <div class="col-md-10 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
@@ -104,7 +90,6 @@
                   padding-inline-start: 0;" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-
                       <div class="col-md-12 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
@@ -128,42 +113,6 @@
                 </div>
               </td>
             </tr>
-            @*
-            <!-- ko foreach: {data: $root.vm.getT(group, 'Tuesday'), as: 'timetable'} -->
-            <tr>
-            <td data-bind="text: timetable.couple"></td>
-            <td data-bind="text: timetable.weekDay"></td>
-            <td data-bind="text: timetable.numberRoom"></td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko foreach: {data: $root.vm.getT(group, 'Wednesday'), as: 'timetable'} -->
-            <tr>
-            <td data-bind="text: timetable.couple"></td>
-            <td data-bind="text: timetable.weekDay"></td>
-            <td data-bind="text: timetable.numberRoom"></td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko foreach: {data: $root.vm.getT(group, 'Thursday'), as: 'timetable'} -->
-            <tr>
-            <td data-bind="text: timetable.couple"></td>
-            <td data-bind="text: timetable.weekDay"></td>
-            <td data-bind="text: timetable.numberRoom"></td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko foreach: {data: $root.vm.getT(group, 'Friday'), as: 'timetable'} -->
-            <tr>
-            <td data-bind="text: timetable.couple"></td>
-            <td data-bind="text: timetable.weekDay"></td>
-            <td data-bind="text: timetable.numberRoom"></td>
-            </tr>
-            <!-- /ko -->
-            <!-- ko foreach: {data: $root.vm.getT(group, 'Saturday'), as: 'timetable'} -->
-            <tr>
-            <td data-bind="text: timetable.couple"></td>
-            <td data-bind="text: timetable.weekDay"></td>
-            <td data-bind="text: timetable.numberRoom"></td>
-            </tr>
-            <!-- /ko -->*@
           </tbody>
             <!-- /ko -->
         </table>
