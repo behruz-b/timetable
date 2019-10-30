@@ -9,7 +9,7 @@
       <br><br><br><br><br>
       <h1>Timetable Dashboard</h1>
       <div class="table-responsive text-center">
-        <table class="table table-bordered">
+        <table id="real" class="table table-bordered">
           <thead>
             <tr>
               <th class="" width="4">Guruh</th>
@@ -24,7 +24,7 @@
             <!-- ko foreach: {data: vm.groups(), as: 'group'} -->
           <tbody>
             <tr>
-              <td rowspan="2" ><div class="rotate" data-bind="text: group"></div></td>
+              <td rowspan="2" class="outer" ><div class="rotate inner" style=" vertical-align: center" data-bind="text: group"></div></td>
             </tr>
             <tr>
               <td>
@@ -45,7 +45,7 @@
                       <div class="col-md-2 pt-4">
                         <small class="rotated" data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
                       </div>
-                      <div class="col-md-10 border-left-gray">
+                      <div class="col-md-10 h-120p border-left-gray">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
                         <small data-bind="text: timetable.numberRoom"></small>
@@ -59,10 +59,8 @@
                   padding-inline-start: 0;" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-                      <div class="col-md-2 couple-box">
-                        <small data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
-                      </div>
-                      <div class="col-md-10 border-left-gray">
+
+                      <div class="col-md-12 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
                         <small data-bind="text: timetable.numberRoom"></small>
@@ -76,10 +74,8 @@
                   padding-inline-start: 0;" >
                  <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-                      <div class="col-md-2 couple-box">
-                        <small data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
-                      </div>
-                      <div class="col-md-10 border-left-gray">
+
+                      <div class="col-md-12 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
                         <small data-bind="text: timetable.numberRoom"></small>
@@ -93,10 +89,8 @@
                   padding-inline-start: 0;" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-                      <div class="col-md-2 couple-box">
-                        <small data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
-                      </div>
-                      <div class="col-md-10 border-left-gray">
+
+                      <div class="col-md-10 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
                         <small data-bind="text: timetable.numberRoom"></small>
@@ -110,10 +104,8 @@
                   padding-inline-start: 0;" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-                      <div class="col-md-2 couple-box">
-                        <small data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
-                      </div>
-                      <div class="col-md-10 border-left-gray">
+
+                      <div class="col-md-12 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
                         <small data-bind="text: timetable.numberRoom"></small>
@@ -126,10 +118,7 @@
                 <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Saturday'), as: 'timetable'}" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
-                      <div class="col-md-2 couple-box">
-                        <small data-bind="text: timetable.couple"></small> &nbsp;&nbsp;
-                      </div>
-                      <div class="col-md-10 border-left-gray">
+                      <div class="col-md-12 h-120p">
                         <small data-bind="text: timetable.specPart"></small> &nbsp;&nbsp;
                         <small data-bind="text: timetable.teachers"></small> &nbsp;&nbsp;<br>
                         <small data-bind="text: timetable.numberRoom"></small>

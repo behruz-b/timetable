@@ -28,17 +28,36 @@ body {
 /*// overflow-wrap: break-word;*/
 }
 
-.table td, .table th {
+#real td, #real th {
    padding: 0;
 }
 .rotated {
+  margin: auto;
   text-align: center;
   writing-mode: tb-rl;
   transform: rotate(-180deg);
 }
 .rotate {
+  -moz-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  -webkit-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  transform:  translateX(-50%) translateY(-50%) rotate(-90deg);
   margin: auto;
+}
+.pt-50 {
+  padding-top: 50%;
+}
+.h-120p {
+  height: 120px;
+}
+
+
+.outer {
   position: relative;
-  writing-mode: tb-rl;
-  transform: rotate(-180deg);
+}
+
+.inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
 }
