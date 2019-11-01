@@ -160,19 +160,7 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Lecture" => "Ma'ruza"
       }
       val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
-      "<pre>" +
-        "----------------|-------------------\n" +
-        "Hafta kuni:     | " + timetableMapped.weekDay.toString + "\n" +
-        "----------------|-------------------\n" +
-        "Guruh:          | " + timetableMapped.groups.toString + "\n" +
-        "O'qish vaqti:   | " + timetableMapped.studyShift.toString + "\n" +
-        "Juftlik:        | " + timetableMapped.couple.toString + "\n" +
-        "Fan:            | " + timetableMapped.specPart.toString.substring(5).replace(')', ' ') + "\n" +
-        "Mashg'ulot turi | " + timetableMapped.typeOfLesson.toString + "\n" +
-        "O'qituvchi:     | " + timetableMapped.teachers.toString + "\n" +
-        "Dars xonasi:    | " + timetableMapped.numberRoom.toString + "\n" +
-        "----------------|-------------------" +
-        "</pre>"
+      timetableMapped
 
     }
   }

@@ -28,7 +28,8 @@ POST    /delete/teacher             @controllers.TeacherController.delete
 
 GET     /                           @controllers.TimetableController.realDashboard
 GET     /timetable                  @controllers.TimetableController.index
-GET     /this-day                   @controllers.TimetableController.thisDay
+GET     /today/student              @controllers.TimetableController.todayStudent
+GET     /today/teacher              @controllers.TimetableController.todayTeacher
 GET     /timetable/dashboard        @controllers.TimetableController.dashboard
 GET     /get-timetable              @controllers.TimetableController.getReportTimetable
 GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom

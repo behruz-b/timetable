@@ -13,7 +13,7 @@ import play.api.mvc._
 import protocols.TimetableProtocol.{TimetableOwner, _}
 import views.html._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 @Singleton
@@ -23,6 +23,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
                                     timetableDTemplate: timetable.timetable_dashboard,
                                     realTemplate: timetable.realTimetable,
                                     todayT: timetable.timetableforBot.this_day,
+                                    todayTT: timetable.timetableforBot.forTeachertoday,
                                    )
                                    (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -38,8 +39,13 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       Unauthorized
     }
   }
-  def thisDay: Action[AnyContent] = Action {
-      Ok(todayT(false))
+
+  def todayStudent: Action[AnyContent] = Action {
+    Ok(todayT(false))
+  }
+
+  def todayTeacher: Action[AnyContent] = Action {
+    Ok(todayTT(false))
   }
 
   def dashboard: Action[AnyContent] = Action {
@@ -132,6 +138,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   implicit val gtWrites = Json.writes[GT]
 
+  case class TT(teacher: Set[String], timetables: Seq[Timetable])
+
+  implicit val ttWrites = Json.writes[TT]
+
   def grouppedTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
@@ -146,17 +156,25 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val when = data.reverse.tail.head
     val name = data.last
     logger.warn(s"${convertToStrDate(new Date)}: $data")
+
     def getTimetableWithDate(whom: TimetableWithDateOwner, errorText: String) = {
       (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
-//        if (timetable.isEmpty) {
-//          Ok(s"$errorText")
-//        } else {
-          val grouped = timetable.map(_.groups).sorted.toSet
-          Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
-//          Ok(timetable.mkString("\n"))
-//        }
+        //        if (timetable.isEmpty) {
+        //          Ok(s"$errorText")
+        //        } else {
+        val grouped = timetable.map(_.groups).sorted.toSet
+        Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
+        //          Ok(timetable.mkString("\n"))
+        //        }
       }
     }
+    def getTimetableWithDateTeacher(whom: TimetableWithDateOwner, errorText: String) = {
+      (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
+        val grouped = timetable.map(_.teachers).sorted.toSet
+        Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
+      }
+    }
+
     def getTimetable(whom: TimetableOwner, errorText: String) = {
       (timetableManager ? whom).mapTo[Seq[String]].map { timetable =>
         if (timetable.isEmpty) {
@@ -170,7 +188,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     whoIsClient match {
       case "O'qituvchi" =>
         if (when == "Bugun") {
-          getTimetableWithDate(GetTimetableForTeacher(GetText(convertToStrDate(new Date), name)), s"Bugun $name ismli o'qituvchini darsi yo'q")
+          logger.warn("is here")
+          getTimetableWithDateTeacher(GetTimetableForTeacher(GetText(convertToStrDate(new Date), name)), s"Bugun $name ismli o'qituvchini darsi yo'q")
         }
         else {
           getTimetable(GetTTeacher(name), s"$name ismli o'qituvchi yo'q")
@@ -186,13 +205,15 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           getTimetable(TimetableForGroup(name), s"$name nomli guruh yo'q")
         }
     }
-  }}
+  }
+  }
 
   def test = Action(parse.json) { implicit request => {
     val test = (request.body \ "number").as[Int]
     logger.info(s"number: $test")
     Ok(Json.obj("response" -> test))
-  }}
+  }
+  }
 
   def getTeacherTimetable = Action.async(parse.json) { implicit request => {
     val name = (request.body \ "teacherName").as[String]
@@ -212,7 +233,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       }
     }
 
-  }}
+  }
+  }
 
   def getGroupTimetable = Action.async(parse.json) { implicit request => {
     val groupName = (request.body \ "groupNumber").as[String]
@@ -269,7 +291,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
-  def today =  Action {
+  def today = Action {
     Ok(Json.toJson(translateWeekday(convertToStrDate(new Date))))
   }
 
