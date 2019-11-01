@@ -13,15 +13,16 @@ import play.api.mvc._
 import protocols.TimetableProtocol.{TimetableOwner, _}
 import views.html._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
 
 @Singleton
 class TimetableController @Inject()(val controllerComponents: ControllerComponents,
                                     @Named("timetable-manager") val timetableManager: ActorRef,
-                                    timeTableTemplate: timetable.timeTable,
-                                    timeTableDTemplate: timetable.timetable_dashboard,
+                                    timetableTemplate: timetable.timeTable,
+                                    timetableDTemplate: timetable.timetable_dashboard,
                                     realTemplate: timetable.realTimetable,
+                                    todayT: timetable.timetableforBot.this_day,
                                    )
                                    (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -32,16 +33,19 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def index: Action[AnyContent] = Action { implicit request =>
     request.session.get(LoginSessionKey).map { _ =>
-      Ok(timeTableTemplate(true))
+      Ok(timetableTemplate(true))
     }.getOrElse {
       Unauthorized
     }
+  }
+  def thisDay: Action[AnyContent] = Action {
+      Ok(todayT(false))
   }
 
   def dashboard: Action[AnyContent] = Action {
     implicit request =>
       request.session.get(LoginSessionKey).map { _ =>
-        Ok(timeTableDTemplate(true))
+        Ok(timetableDTemplate(true))
       }.getOrElse {
         Unauthorized
       }
@@ -131,8 +135,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def grouppedTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
       timetable =>
-        val grouped = timetable.map(_.groups).toSet
-        Ok(Json.toJson(GT(grouped, timetable)))
+        val grouped = timetable.map(_.groups).sorted.toSet
+        Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
     }
   }
 
@@ -143,12 +147,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val name = data.last
     logger.warn(s"${convertToStrDate(new Date)}: $data")
     def getTimetableWithDate(whom: TimetableWithDateOwner, errorText: String) = {
-      (timetableManager ? whom).mapTo[Seq[String]].map { timetable =>
-        if (timetable.isEmpty) {
-          Ok(s"$errorText")
-        } else {
-          Ok(timetable.mkString("\n"))
-        }
+      (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
+//        if (timetable.isEmpty) {
+//          Ok(s"$errorText")
+//        } else {
+          val grouped = timetable.map(_.groups).sorted.toSet
+          Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
+//          Ok(timetable.mkString("\n"))
+//        }
       }
     }
     def getTimetable(whom: TimetableOwner, errorText: String) = {
@@ -263,6 +269,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
+  def today =  Action {
+    Ok(Json.toJson(translateWeekday(convertToStrDate(new Date))))
+  }
+
   private def convertToStrDate(date: Date)
   = {
     new SimpleDateFormat("EEEE").format(date)
@@ -277,6 +287,17 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       case "Friday" => "Saturday"
       case "Saturday" => "Sunday"
       case "Sunday" => "Monday"
+    }
+  }
+
+  private def translateWeekday(weekday: String) = {
+    weekday match {
+      case "Monday" => "Dushanba"
+      case "Tuesday" => "Seshanba"
+      case "Wednesday" => "Chorshanba"
+      case "Thursday" => "Payshanba"
+      case "Friday" => "Juma"
+      case "Saturday" => "Shanba"
     }
   }
 
