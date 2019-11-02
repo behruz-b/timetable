@@ -40,10 +40,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
-  def todayStudent(group: String) = Action {
-    val data = group.split("_").toList
-    val studentGroup = data.last
-    Ok(todayT(logged = false, studentGroup))
+  def todayStudent(requiredData: String) = Action {
+    Ok(todayT(logged = false, requiredData))
   }
 
   def todayTeacher: Action[AnyContent] = Action {
@@ -153,7 +151,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def hasGroup = Action.async(parse.json) { implicit request => {
-    val data = (request.body \ "group").as[String].toString.split("/").toList
+    val data = (request.body \ "requiredData").as[String].toString.split("_").toList
     val whoIsClient = data.head
     val when = data.reverse.tail.head
     val name = data.last

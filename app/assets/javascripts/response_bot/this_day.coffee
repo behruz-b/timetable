@@ -13,7 +13,7 @@ $ ->
     timetable: []
     weekday: []
     thisDay: ''
-    studentGroup: Glob.studentGroup
+    requiredData: Glob.requiredData
 
   getDay = ->
     $.ajax
@@ -31,9 +31,8 @@ $ ->
       toastr.error('Something went wrong! Please try again.')
 
   vm.getTable = ->
-    console.log('studentGroup: ',vm.studentGroup())
     data =
-      group: "O'quvchi/Bugun/#{vm.studentGroup()}"
+      requiredData: vm.requiredData()
     $.ajax
       url: apiUrl.getGroupedTimetable
       type: 'POST'
