@@ -40,11 +40,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
   }
 
-  def todayStudent = Action(parse.json) { implicit request => {
-    val data = (request.body \ "group").as[String].toString.split("/").toList
+  def todayStudent(group: String) = Action {
+    val data = group.toString.split("/").toList
     val studentGroup = data.last
     Ok(todayT(logged = false, studentGroup))
-  }}
+  }
 
   def todayTeacher: Action[AnyContent] = Action {
     Ok(todayTT(false))
