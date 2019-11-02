@@ -5,24 +5,13 @@ $ ->
 
   apiUrl =
     getGroupedTimetable: '/text'
-    todayTimetable: '/today-timetable'
 
   vm = ko.mapping.fromJS
     timetableList: []
     teachers: []
     timetable: []
     weekday: []
-    thisDay: ''
     requiredData: Glob.requiredData
-
-  getDay = ->
-    $.ajax
-      url: apiUrl.todayTimetable
-      type: 'GET'
-    .fail handleError
-    .done (response) ->
-      vm.thisDay(response)
-  getDay()
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -53,7 +42,6 @@ $ ->
       if t.weekDay is weekday && t.teachers is teacher
         tt.push(t)
     tt
-
 
   vm.getTable()
 

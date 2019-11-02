@@ -22,8 +22,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
                                     timetableTemplate: timetable.timeTable,
                                     timetableDTemplate: timetable.timetable_dashboard,
                                     realTemplate: timetable.realTimetable,
-                                    todayT: timetable.timetableforBot.this_day,
-                                    todayTT: timetable.timetableforBot.forTeachertoday,
+                                    todayST: timetable.timetableforBot.forStudentToday,
+                                    todayTT: timetable.timetableforBot.forTeacherToday,
+                                    weekTT: timetable.timetableforBot.forTeacherWeek,
+                                    tomorrowST: timetable.timetableforBot.forStudentTomorrow,
+                                    weekST: timetable.timetableforBot.forStudentWeek,
                                    )
                                    (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -41,11 +44,23 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def todayStudent(requiredData: String) = Action {
-    Ok(todayT(logged = false, requiredData))
+    Ok(todayST(logged = false, requiredData))
   }
 
-  def todayTeacher: Action[AnyContent] = Action {
-    Ok(todayTT(false))
+  def todayTeacher(requiredData: String) = Action {
+    Ok(todayTT(logged = false, requiredData))
+  }
+
+  def weekTeacher(requiredData: String) = Action {
+    Ok(weekTT(logged = false, requiredData))
+  }
+
+  def tomorrowStudent(requiredData: String) = Action {
+    Ok(tomorrowST(logged = false, requiredData))
+  }
+
+  def weekStudent(requiredData: String) = Action {
+    Ok(weekST(logged = false, requiredData))
   }
 
   def dashboard: Action[AnyContent] = Action {
@@ -117,23 +132,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   case class WeekdayT(weekday: String, timetable: Seq[Timetable])
 
-  //  implicit val groupTFormat = Json.format[GroupT]
-  //  implicit val weekdayTFormat = Json.format[WeekdayT]
   implicit val groupTWrites: OWrites[GroupT] = Json.writes[GroupT]
 
-
-  //  def grouppedTimetable = Action.async {
-  //    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
-  //      timetable =>
-  //        val grouped = timetable.groupBy(_.groups).map { g =>
-  //          val weekdays = g._2.filter(_.groups == g._1).groupBy(_.weekDay).map {w =>
-  //            WeekdayT(w._1, w._2)
-  //          }.toSeq
-  //          GroupT(g._1, weekdays)
-  //        }
-  //        Ok(Json.toJson(grouped))
-  //    }
-  //  }
   case class GT(groups: Set[String], timetables: Seq[Timetable])
 
   implicit val gtWrites = Json.writes[GT]
@@ -159,13 +159,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
     def getTimetableWithDate(whom: TimetableWithDateOwner, errorText: String) = {
       (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
-        //        if (timetable.isEmpty) {
-        //          Ok(s"$errorText")
-        //        } else {
         val grouped = timetable.map(_.groups).sorted.toSet
         Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
-        //          Ok(timetable.mkString("\n"))
-        //        }
       }
     }
     def getTimetableWithDateTeacher(whom: TimetableWithDateOwner, errorText: String) = {
@@ -176,29 +171,32 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     }
 
     def getTimetable(whom: TimetableOwner, errorText: String) = {
-      (timetableManager ? whom).mapTo[Seq[String]].map { timetable =>
+      (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
         if (timetable.isEmpty) {
           Ok(s"$errorText")
         } else {
-          Ok(timetable.mkString("\n"))
+
+          val grouped = timetable.map(_.teachers).sorted.toSet
+          logger.warn(s"dwdaw: $grouped")
+          Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
         }
       }
     }
 
     whoIsClient match {
-      case "O'qituvchi" =>
-        if (when == "Bugun") {
-          logger.warn("is here")
+      case "teacher" =>
+        if (when == "today") {
           getTimetableWithDateTeacher(GetTimetableForTeacher(GetText(convertToStrDate(new Date), name)), s"Bugun $name ismli o'qituvchini darsi yo'q")
         }
         else {
+          logger.warn("is here")
           getTimetable(GetTTeacher(name), s"$name ismli o'qituvchi yo'q")
         }
       case _ =>
-        if (when == "Bugun") {
+        if (when == "today") {
           getTimetableWithDate(GetTimetableByGroup(GetText(convertToStrDate(new Date), name)), s"Bugun $name guruhga dars yo'q")
         }
-        else if (when == "Ertaga") {
+        else if (when == "tomorrow") {
           getTimetableWithDate(GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name)), s"Ertaga $name guruhga dars yo'q")
         }
         else {

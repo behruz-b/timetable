@@ -7,9 +7,10 @@ $ ->
     getGroupedTimetable: '/text'
     todayTimetable: '/today-timetable'
 
+
   vm = ko.mapping.fromJS
     timetableList: []
-    teachers: []
+    groups: []
     timetable: []
     weekday: []
     thisDay: ''

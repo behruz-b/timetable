@@ -7,9 +7,10 @@ $ ->
     getGroupedTimetable: '/text'
     todayTimetable: '/today-timetable'
 
+
   vm = ko.mapping.fromJS
     timetableList: []
-    teachers: []
+    groups: []
     timetable: []
     weekday: []
     thisDay: ''
@@ -33,6 +34,7 @@ $ ->
   vm.getTable = ->
     data =
       requiredData: vm.requiredData()
+    $.ajax
     $.ajax
       url: apiUrl.getGroupedTimetable
       type: 'POST'

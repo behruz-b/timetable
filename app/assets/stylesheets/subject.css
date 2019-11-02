@@ -36,7 +36,7 @@ body {
   /*// overflow-wrap: break-word;*/
 }
 
-#real td, #real th {
+.real td, .real th {
   padding: 0;
 }
 
