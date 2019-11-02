@@ -3,8 +3,9 @@ package actors
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern.pipe
 import akka.util.Timeout
-import dao.TimetableDao
+import dao.{GroupDao, TimetableDao}
 import javax.inject.Inject
+import org.checkerframework.checker.units.qual.s
 import play.api.Environment
 import protocols.SubjectProtocol._
 import protocols.TimetableProtocol._
@@ -13,7 +14,8 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
 
 class TimetableManager @Inject()(val environment: Environment,
-                                 timetableDao: TimetableDao
+                                 timetableDao: TimetableDao,
+                                 groupDao: GroupDao
                                 )
                                 (implicit val ec: ExecutionContext)
   extends Actor with ActorLogging {
@@ -101,6 +103,7 @@ class TimetableManager @Inject()(val environment: Environment,
   }
 
   private def getTimetableByGroup(getText: GetText) = {
+    updateCount(getText.group)
     for {
       response <- timetableDao.getTimetableByGroup(getText.weekDay, getText.group)
     } yield response.map { timetable =>
@@ -217,11 +220,20 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Practice" => "Amaliyot"
         case "Lecture" => "Ma'ruza"
       }
-      val timetableMapped = timetable.copy(weekDay = trNameDay,studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
       log.warning(s"timetable: $timetableMapped")
       timetableMapped
 
     }
+  }
+
+  private def updateCount(group: String) = {
+    for {
+      selectedGroup <- groupDao.getGroupByName(group)
+      countSearched = selectedGroup.get.count + 1
+      updatedGroup = selectedGroup.get.copy(count = countSearched)
+      response <- groupDao.update(updatedGroup)
+    } yield response
   }
 
   private def getTimetableByGr(group: String) = {
