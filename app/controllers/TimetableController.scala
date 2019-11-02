@@ -166,6 +166,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     def getTimetableWithDateTeacher(whom: TimetableWithDateOwner, errorText: String) = {
       (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
         val grouped = timetable.map(_.teachers).sorted.toSet
+        logger.warn(s"tim: $timetable")
         Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
       }
     }
@@ -300,6 +301,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     Ok(Json.toJson(translateWeekday(convertToStrDate(new Date))))
   }
 
+
+  def tomorrow = Action {
+    Ok(Json.toJson(translateWeekday(nextday(convertToStrDate(new Date)))))
+  }
+
   private def convertToStrDate(date: Date)
   = {
     new SimpleDateFormat("EEEE").format(date)
@@ -312,7 +318,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       case "Wednesday" => "Thursday"
       case "Thursday" => "Friday"
       case "Friday" => "Saturday"
-      case "Saturday" => "Sunday"
+      case "Saturday" => "Monday"
       case "Sunday" => "Monday"
     }
   }

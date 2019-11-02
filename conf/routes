@@ -38,6 +38,7 @@ GET     /get-timetable                      @controllers.TimetableController.get
 GET     /get-emptyrooms                     @controllers.TimetableController.emptyRoom
 GET     /groupped-timetable                 @controllers.TimetableController.grouppedTimetable
 GET     /today-timetable                    @controllers.TimetableController.today
+GET     /tomorrow-timetable                 @controllers.TimetableController.tomorrow
 POST    /get-Ttimetable                     @controllers.TimetableController.getTeacherTimetable
 POST    /get-GroupTimetable                 @controllers.TimetableController.getGroupTimetable
 POST    /send-timetable                     @controllers.TimetableController.addTimetable

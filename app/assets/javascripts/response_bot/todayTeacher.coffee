@@ -41,6 +41,7 @@ $ ->
       contentType: 'application/json'
     .fail handleError
     .done (response) ->
+      console.log(response)
       for k,v of response
         if k is 'teacher'
           vm.teachers(v)
@@ -48,6 +49,7 @@ $ ->
           vm.timetableList(v)
 
   vm.getT = (teacher, weekday) ->
+    console.log(teacher, weekday)
     tt = ko.observableArray([])
     for t in vm.timetableList()
       if t.weekDay is weekday && t.teachers is teacher

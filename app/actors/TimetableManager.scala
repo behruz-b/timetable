@@ -104,6 +104,14 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTimetableByGroup(getText.weekDay, getText.group)
     } yield response.map { timetable =>
+      val trNameDay = timetable.weekDay match {
+        case "Monday" => "Dushanba"
+        case "Tuesday" => "Seshanba"
+        case "Wednesday" => "Chorshanba"
+        case "Thursday" => "Payshanba"
+        case "Friday" => "Juma"
+        case "Saturday" => "Shanba"
+      }
       val trStudyShift = timetable.studyShift match {
         case "Afternoon" => "2 - Smena"
         case "Morning" => "1 - Smena"
@@ -119,7 +127,7 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Practice" => "Amaliyot"
         case "Lecture" => "Ma'ruza"
       }
-      val timetableMapped = timetable.copy(studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
       timetableMapped
     }
   }
@@ -128,6 +136,14 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTByTeacherAndWeekday(getText.weekDay, getText.group)
     } yield response.map { timetable =>
+      val trNameDay = timetable.weekDay match {
+        case "Monday" => "Dushanba"
+        case "Tuesday" => "Seshanba"
+        case "Wednesday" => "Chorshanba"
+        case "Thursday" => "Payshanba"
+        case "Friday" => "Juma"
+        case "Saturday" => "Shanba"
+      }
       val trStudyShift = timetable.studyShift match {
         case "Afternoon" => "2 - Smena"
         case "Morning" => "1 - Smena"
@@ -143,7 +159,7 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Practice" => "Amaliyot"
         case "Lecture" => "Ma'ruza"
       }
-      val timetableMapped = timetable.copy(studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
       timetableMapped
 
     }
@@ -178,7 +194,14 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTimetablesByTeacher(teacher)
     } yield response.map { timetable =>
-
+      val trNameDay = timetable.weekDay match {
+        case "Monday" => "Dushanba"
+        case "Tuesday" => "Seshanba"
+        case "Wednesday" => "Chorshanba"
+        case "Thursday" => "Payshanba"
+        case "Friday" => "Juma"
+        case "Saturday" => "Shanba"
+      }
       val trStudyShift = timetable.studyShift match {
         case "Afternoon" => "2 - Smena"
         case "Morning" => "1 - Smena"
@@ -194,7 +217,7 @@ class TimetableManager @Inject()(val environment: Environment,
         case "Practice" => "Amaliyot"
         case "Lecture" => "Ma'ruza"
       }
-      val timetableMapped = timetable.copy(studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(weekDay = trNameDay,studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
       log.warning(s"timetable: $timetableMapped")
       timetableMapped
 

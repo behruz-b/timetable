@@ -5,7 +5,7 @@ $ ->
 
   apiUrl =
     getGroupedTimetable: '/text'
-    todayTimetable: '/today-timetable'
+    tomorrowTimetable: '/tomorrow-timetable'
 
 
   vm = ko.mapping.fromJS
@@ -13,16 +13,16 @@ $ ->
     groups: []
     timetable: []
     weekday: []
-    thisDay: ''
+    nextDay: ''
     requiredData: Glob.requiredData
 
   getDay = ->
     $.ajax
-      url: apiUrl.todayTimetable
+      url: apiUrl.tomorrowTimetable
       type: 'GET'
     .fail handleError
     .done (response) ->
-      vm.thisDay(response)
+      vm.nextDay(response)
   getDay()
 
   handleError = (error) ->
@@ -43,15 +43,15 @@ $ ->
     .fail handleError
     .done (response) ->
       for k,v of response
-        if k is 'teacher'
-          vm.teachers(v)
+        if k is 'groups'
+          vm.groups(v)
         if k is 'timetables'
           vm.timetableList(v)
 
-  vm.getT = (teacher, weekday) ->
+  vm.getT = (group, weekday) ->
     tt = ko.observableArray([])
     for t in vm.timetableList()
-      if t.weekDay is weekday && t.teachers is teacher
+      if t.weekDay is weekday && t.groups is group
         tt.push(t)
     tt
 

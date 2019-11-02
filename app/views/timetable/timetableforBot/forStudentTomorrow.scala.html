@@ -14,21 +14,21 @@
       <br><br><br><br><br>
       <h1>Timetable Dashboard</h1>
       <div class="table-responsive text-center row">
-        <table id="capture-border" class="table table-bordered bg-dark real text-white col-md-3 offset-md-5">
+        <table id="capture-border" class="table table-bordered col-md-3 offset-md-5 bg-dark text-white real">
           <thead>
             <tr>
-              <th class="">Teacher</th>
-              <th class="" data-bind="text: vm.thisDay()"></th>
+              <th class="">Guruh</th>
+              <th class="" data-bind="text: vm.nextDay()"></th>
             </tr>
           </thead>
-            <!-- ko foreach: {data: vm.teachers(), as: 'teacher'} -->
+            <!-- ko foreach: {data: vm.groups(), as: 'group'} -->
           <tbody>
             <tr>
-              <td rowspan="2" class="outer" ><div class="rotate inner" data-bind="text: teacher"></div></td>
+              <td rowspan="2" class="outer" ><div class="rotate inner"  data-bind="text: group"></div></td>
             </tr>
             <tr>
               <td>
-                <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(teacher, $root.vm.thisDay()), as: 'timetable'}" >
+                <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, $root.vm.nextDay()), as: 'timetable'}" >
                   <div class="col-md-12 border-bottom-gray">
                     <div class="row">
                       <div class="col-md-2 pt-4">
