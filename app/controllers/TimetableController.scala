@@ -175,10 +175,18 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
         if (timetable.isEmpty) {
           Ok(s"$errorText")
         } else {
-
           val grouped = timetable.map(_.teachers).sorted.toSet
-          logger.warn(s"dwdaw: $grouped")
           Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
+        }
+      }
+    }
+    def getTimetableStudent(whom: TimetableOwner, errorText: String) = {
+      (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
+        if (timetable.isEmpty) {
+          Ok(s"$errorText")
+        } else {
+          val grouped = timetable.map(_.groups).sorted.toSet
+          Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
         }
       }
     }
@@ -189,7 +197,6 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           getTimetableWithDateTeacher(GetTimetableForTeacher(GetText(convertToStrDate(new Date), name)), s"Bugun $name ismli o'qituvchini darsi yo'q")
         }
         else {
-          logger.warn("is here")
           getTimetable(GetTTeacher(name), s"$name ismli o'qituvchi yo'q")
         }
       case _ =>
@@ -200,7 +207,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           getTimetableWithDate(GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name)), s"Ertaga $name guruhga dars yo'q")
         }
         else {
-          getTimetable(TimetableForGroup(name), s"$name nomli guruh yo'q")
+          getTimetableStudent(TimetableForGroup(name), s"$name nomli guruh yo'q")
         }
     }
   }

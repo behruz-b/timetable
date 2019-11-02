@@ -32,7 +32,7 @@ GET     /today/student/:requiredData        @controllers.TimetableController.tod
 GET     /today/teacher/:requiredData        @controllers.TimetableController.todayTeacher(requiredData: String)
 GET     /tomorrow/student/:requiredData     @controllers.TimetableController.tomorrowStudent(requiredData: String)
 GET     /week/teacher/:requiredData         @controllers.TimetableController.weekTeacher(requiredData: String)
-GET     /week/student/:requiredData         @controllers.TimetableController.weekTeacher(requiredData: String)
+GET     /week/student/:requiredData         @controllers.TimetableController.weekStudent(requiredData: String)
 GET     /timetable/dashboard                @controllers.TimetableController.dashboard
 GET     /get-timetable                      @controllers.TimetableController.getReportTimetable
 GET     /get-emptyrooms                     @controllers.TimetableController.emptyRoom
