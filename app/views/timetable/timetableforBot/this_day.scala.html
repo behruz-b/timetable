@@ -4,6 +4,11 @@
 @main("TimeTable - Dashboard", webJarsUtil) {
   <script src="@routes.Assets.versioned("javascripts/response_bot/this_day.js")" type="text/javascript"></script>
   @navbar(logged)
+  <script >
+          var Glob = {
+            studentGroup: '@studentGroup'
+          };
+  </script>
   <div class="container-fluid">
     <div class="text-center">
       <br><br><br><br><br>

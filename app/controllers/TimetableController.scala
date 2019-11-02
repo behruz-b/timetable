@@ -41,9 +41,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def todayStudent(group: String) = Action {
-    val data = group.toString.split("_").toList
-    val studentGroup = data.last
-    Ok(todayT(logged = false, studentGroup))
+    Ok(todayT(logged = false, group))
   }
 
   def todayTeacher: Action[AnyContent] = Action {

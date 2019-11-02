@@ -13,7 +13,7 @@ $ ->
     timetable: []
     weekday: []
     thisDay: ''
-    studentGroup: ''
+    studentGroup: Glob.studentGroup
 
   getDay = ->
     $.ajax
