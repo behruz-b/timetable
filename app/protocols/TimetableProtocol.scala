@@ -8,13 +8,24 @@ object TimetableProtocol {
 
   case class AddTimetable(timetable: Timetable)
 
+  case class DeleteTimetable(id: Int)
+
   case class UpdateTimetable(timetable: Timetable)
 
   case class GetTimetableByGr(group: String)
 
   implicit val getTimetableByGrFormat: OFormat[GetTimetableByGr] = Json.format[GetTimetableByGr]
 
-  case class GetTimetableByGroup(getText: GetText)
+  sealed trait TimetableWithDateOwner {
+    def apply(text: GetText): Any = {
+      GetText(text.weekDay, text.group)
+    }
+
+  }
+
+  case class GetTimetableByGroup(getText: GetText) extends TimetableWithDateOwner
+
+  case class GetTimetableForTeacher(getText: GetText) extends TimetableWithDateOwner
 
   case class GetText(weekDay: String, group: String)
 
@@ -23,6 +34,20 @@ object TimetableProtocol {
   case class TeacherName(teacher: String)
 
   implicit val TeacherNameFormat: OFormat[TeacherName] = Json.format[TeacherName]
+
+  sealed trait TimetableOwner{
+    def apply(str: String): Any = {
+      str
+    }
+  }
+
+  case class GetTTeacher(teacher: String) extends TimetableOwner
+
+  implicit val GetTTeacherFormat: OFormat[TeacherName] = Json.format[TeacherName]
+
+  case class TimetableForGroup(group: String) extends TimetableOwner
+
+  implicit val TimetableForGroupFormat: OFormat[TimetableForGroup] = Json.format[TimetableForGroup]
 
   case class GetEmptyRoomByCouple(getCouple: GetEmptyRoom)
 
@@ -39,7 +64,7 @@ object TimetableProtocol {
                        divorce: String,
                        subjectId: Int,
                        teachers: String,
-                       numberRoom: Int,
+                       numberRoom: String,
                        specPart: Option[String] = None
                       )
 

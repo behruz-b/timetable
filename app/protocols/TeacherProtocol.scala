@@ -10,6 +10,8 @@ object TeacherProtocol {
 
   case class UpdateTeacher(teacher: Teacher)
 
+  case class DeleteTeacher(id: Int)
+
   case object GetTeacherList
 
   case class Department(id: Int, department: String)

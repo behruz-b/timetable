@@ -1,23 +1,115 @@
 body {
   font-family: "Apple Color Emoji";
+  background-image: url("../images/bg.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
 }
+
+.form-control {
+  background-color: transparent;
+  color: white;
+  border: 0;
+  border-bottom: 2px solid rgba(255, 5, 32, 0.92);
+  border-bottom-left-radius: 15px;
+
+}
+
+.form-control:hover {
+  background-color: transparent;
+  color: white;
+}
+
+.form-control:active {
+  background-color: transparent;
+  color: white;
+}
+
+.form-control:focus {
+  background-color: transparent;
+  color: white;
+  border: 0;
+  border-bottom: 2px solid rgba(0, 255, 106, 0.92);
+  box-shadow: 0 0 0 0;
+
+}
+
+.form-control::placeholder {
+  color: white;
+}
+
 .border-2 {
   border: 2px solid black;
 }
+
 .border-bottom-dark {
-  border-bottom:2px solid black
+  border-bottom: 2px solid black
 }
+
+.border-bottom-gray {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.border-left-gray {
+  border-left: 1px solid #dee2e6;
+}
+
 .border-top-dark {
-  border-top:2px solid black
+  border-top: 2px solid black
 }
+
 .border-left-dark {
-  border-left:2px solid black
+  border-left: 2px solid black
 }
+
 .border-right-dark {
-  border-right:2px solid black
+  border-right: 2px solid black
 }
+
 .word-wrap {
   word-break: break-all;
-/*// word-wrap: break-word;*/
-/*// overflow-wrap: break-word;*/
+  /*// word-wrap: break-word;*/
+  /*// overflow-wrap: break-word;*/
+}
+
+th, td {
+  padding: 1em;
+  background: rgba(11, 11, 11, 0.83);
+  border-bottom: 2px solid white;
+  color: white;
+}
+
+.real td, .real th {
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-radius: 1em;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.rotate {
+  -moz-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  -webkit-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  margin: auto;
+}
+
+.h-120p {
+  height: 120px;
+  font-size: 18px;
+}
+
+.outer {
+  position: relative;
+}
+
+.inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
 }

@@ -8,7 +8,7 @@ import javax.inject.Inject
 import play.api.Environment
 import protocols.SuggestionProtocol._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.DurationInt
 
 class SuggestionManager @Inject()(val environment: Environment,
@@ -23,6 +23,9 @@ class SuggestionManager @Inject()(val environment: Environment,
     case AddSuggestion(suggestion) =>
       addSuggestion(suggestion).pipeTo(sender())
 
+    case DeleteSuggestion(id) =>
+      deleteSuggestion(id).pipeTo(sender())
+
     case GetSuggestionList =>
       getSuggestionList.pipeTo(sender())
 
@@ -30,8 +33,13 @@ class SuggestionManager @Inject()(val environment: Environment,
 
   }
 
-  private def addSuggestion(suggestionData: Suggestion) = {
+  private def addSuggestion(suggestionData: Suggestion): Future[Int] = {
     suggestionDao.addSuggestion(suggestionData)
+  }
+
+
+  private def deleteSuggestion(id: Int): Future[Int] = {
+    suggestionDao.delete(id)
   }
 
   private def getSuggestionList = {

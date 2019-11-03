@@ -52,9 +52,18 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   }
 
   def update: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
     val name = (request.body \ "name").as[String]
-    (subjectManager ? UpdateSubject(Subject(None, name))).mapTo[Int].map { pr =>
+    (subjectManager ? UpdateSubject(Subject(Option(id), name))).mapTo[Int].map { pr =>
       Ok(Json.toJson(s"$pr"))
+    }
+  }
+  }
+
+  def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
+    val id = (request.body \ "id").as[String].toInt
+    (subjectManager ? DeleteSubject(id)).mapTo[Int].map { id =>
+      Ok(Json.toJson(s"$id"))
     }
   }
   }
@@ -64,7 +73,7 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
     (subjectManager ? GetSubjectList).mapTo[Seq[Subject]].map {
       subject =>
         request.session.get(LoginSessionKey).map { _ =>
-          Ok(Json.toJson(subject.sortBy(_.id)))
+          Ok(Json.toJson(subject.sortBy(_.name)))
         }.getOrElse {
           Unauthorized
         }
