@@ -157,58 +157,58 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val name = data.last
     logger.warn(s"${convertToStrDate(new Date)}: $data")
 
-    def getTimetableWithDate(whom: TimetableWithDateOwner, errorText: String) = {
+    def getTimetableWithDate(whom: TimetableWithDateOwner, who: String) = {
       (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
-        val grouped = timetable.map(_.groups).sorted.toSet
-        Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
-      }
-    }
-    def getTimetableWithDateTeacher(whom: TimetableWithDateOwner, errorText: String) = {
-      (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
-        val grouped = timetable.map(_.teachers).sorted.toSet
-        logger.warn(s"tim: $timetable")
-        Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
+        if (timetable.isEmpty) {
+          Ok(s"No")
+        } else {
+          if (who == "student") {
+            val grouped = timetable.map(_.groups).sorted.toSet
+            Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
+          }
+          else {
+            val grouped = timetable.map(_.teachers).sorted.toSet
+            Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
+          }
+        }
       }
     }
 
-    def getTimetable(whom: TimetableOwner, errorText: String) = {
+    def getTimetable(whom: TimetableOwner, who: String) = {
       (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
         if (timetable.isEmpty) {
-          Ok(s"$errorText")
+          Ok(s"No")
         } else {
-          val grouped = timetable.map(_.teachers).sorted.toSet
-          Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
+          if (who == "student") {
+            val grouped = timetable.map(_.groups).sorted.toSet
+            Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
+          }
+          else {
+            val grouped = timetable.map(_.teachers).sorted.toSet
+            Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
+          }
         }
       }
     }
-    def getTimetableStudent(whom: TimetableOwner, errorText: String) = {
-      (timetableManager ? whom).mapTo[Seq[Timetable]].map { timetable =>
-        if (timetable.isEmpty) {
-          Ok(s"$errorText")
-        } else {
-          val grouped = timetable.map(_.groups).sorted.toSet
-          Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
-        }
-      }
-    }
+
 
     whoIsClient match {
       case "teacher" =>
         if (when == "today") {
-          getTimetableWithDateTeacher(GetTimetableForTeacher(GetText(convertToStrDate(new Date), name)), s"Bugun $name ismli o'qituvchini darsi yo'q")
+          getTimetableWithDate(GetTimetableForTeacher(GetText(convertToStrDate(new Date), name)), s"teacher")
         }
         else {
-          getTimetable(GetTTeacher(name), s"$name ismli o'qituvchi yo'q")
+          getTimetable(GetTTeacher(name), s"teacher")
         }
       case _ =>
         if (when == "today") {
-          getTimetableWithDate(GetTimetableByGroup(GetText(convertToStrDate(new Date), name)), s"Bugun $name guruhga dars yo'q")
+          getTimetableWithDate(GetTimetableByGroup(GetText(convertToStrDate(new Date), name)), s"student")
         }
         else if (when == "tomorrow") {
-          getTimetableWithDate(GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name)), s"Ertaga $name guruhga dars yo'q")
+          getTimetableWithDate(GetTimetableByGroup(GetText(nextday(convertToStrDate(new Date)), name)), s"student")
         }
         else {
-          getTimetableStudent(TimetableForGroup(name), s"$name nomli guruh yo'q")
+          getTimetable(TimetableForGroup(name), s"student")
         }
     }
   }
@@ -338,6 +338,4 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   = {
     new SimpleDateFormat("HH:mm:ss").format(date)
   }
-
-
 }
