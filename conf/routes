@@ -5,12 +5,15 @@ GET     /get-subjects               @controllers.SubjectController.getSubjects
 POST    /subjects                   @controllers.SubjectController.getSortedSubject
 GET     /get-rooms                  @controllers.SubjectController.getRooms
 POST    /send-subject               @controllers.SubjectController.subjectPost
+POST    /update/subject             @controllers.SubjectController.update
+POST    /delete/subject             @controllers.SubjectController.delete
 
 
 GET     /suggestion                 @controllers.SuggestionController.index
 GET     /suggestion/dashboard       @controllers.SuggestionController.dashboard
 POST    /get-suggestion             @controllers.SuggestionController.getSortedSuggestion
 POST    /suggestionPost             @controllers.SuggestionController.addSuggestion
+POST    /delete/suggestion          @controllers.SuggestionController.delete
 
 
 GET     /teacher                    @controllers.TeacherController.index
@@ -19,17 +22,29 @@ GET     /get-teacher                @controllers.TeacherController.getReportTeac
 POST    /get-tBySubject             @controllers.TeacherController.getReportTeacherByTS
 GET     /get-department             @controllers.TeacherController.getDepartment
 POST    /send-teacher               @controllers.TeacherController.addTeacher
+POST    /update/teacher             @controllers.TeacherController.update
+POST    /delete/teacher             @controllers.TeacherController.delete
 
 
-GET     /                           @controllers.TimetableController.realDashboard
-GET     /timetable                  @controllers.TimetableController.index
-GET     /timetable/dashboard        @controllers.TimetableController.dashboard
-GET     /get-timetable              @controllers.TimetableController.getReportTimetable
-GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
-POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
-POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTimetable
-POST    /send-timetable             @controllers.TimetableController.addTimetable
-GET     /groupped-timetable         @controllers.TimetableController.grouppedTimetable
+GET     /                                   @controllers.TimetableController.realDashboard
+GET     /timetable                          @controllers.TimetableController.index
+GET     /today/student/:requiredData        @controllers.TimetableController.todayStudent(requiredData: String)
+GET     /today/teacher/:requiredData        @controllers.TimetableController.todayTeacher(requiredData: String)
+GET     /tomorrow/student/:requiredData     @controllers.TimetableController.tomorrowStudent(requiredData: String)
+GET     /week/teacher/:requiredData         @controllers.TimetableController.weekTeacher(requiredData: String)
+GET     /week/student/:requiredData         @controllers.TimetableController.weekStudent(requiredData: String)
+GET     /timetable/dashboard                @controllers.TimetableController.dashboard
+GET     /get-timetable                      @controllers.TimetableController.getReportTimetable
+GET     /get-emptyrooms                     @controllers.TimetableController.emptyRoom
+GET     /groupped-timetable                 @controllers.TimetableController.grouppedTimetable
+GET     /today-timetable                    @controllers.TimetableController.today
+GET     /tomorrow-timetable                 @controllers.TimetableController.tomorrow
+POST    /get-Ttimetable                     @controllers.TimetableController.getTeacherTimetable
+POST    /get-GroupTimetable                 @controllers.TimetableController.getGroupTimetable
+POST    /send-timetable                     @controllers.TimetableController.addTimetable
+POST    /update/timetable                   @controllers.TimetableController.update
+POST    /delete/timetable                   @controllers.TimetableController.delete
+
 
 
 GET     /map/1-floor                 @controllers.MapController.firstFloor
@@ -48,6 +63,8 @@ GET     /group/dashboard            @controllers.GroupController.dashboard
 GET     /get-directions             @controllers.GroupController.getDirections
 GET     /get-groups                 @controllers.GroupController.getGroupsList
 POST    /send-group                 @controllers.GroupController.addGroup
+POST    /update/group               @controllers.GroupController.update
+POST    /delete/group               @controllers.GroupController.delete
 
 GET     /assets/*file        @controllers.Assets.versioned(path="/public", file)
 ->      /webjars             webjars.Routes

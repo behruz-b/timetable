@@ -2,7 +2,9 @@
 @(logged: Boolean)
   @import views.html.main
 @main("TimeTable - Dashboard", webJarsUtil) {
+  <link href="@routes.Assets.versioned("stylesheets/editTable.css")" rel="stylesheet">
   <script src="@routes.Assets.versioned("javascripts/subject_dashboard.js")" type="text/javascript"></script>
+  <script src="@routes.Assets.versioned("javascripts/editSubject.js")" type="text/javascript"></script>
   @navbar(logged)
   <div class="container-fluid">
     <div class="col-md-10 text-center offset-md-1">
@@ -22,8 +24,9 @@
               <td data-bind="text: $data.id"></td>
               <td data-bind="text: $data.name"></td>
               <td>
-                <a class="mr-3" title="Edit" data-toggle="tooltip" href=""><i class="fas fa-pen-alt"></i></a>
-                <a title="Delete" data-toggle="tooltip" href=""><i class="fas fa-trash-alt"></i></a>
+                <a class="add mr-3" title="Add" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                <a class="mr-3 edit" title="Edit" data-toggle="tooltip" ><i class="fas fa-pen-alt"></i></a>
+                <a class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a>
               </td>
             </tr>
           </tbody>

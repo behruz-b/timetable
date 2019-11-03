@@ -31,6 +31,8 @@ trait SuggestionComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
 trait SuggestionDao {
   def addSuggestion(suggestionData: Suggestion): Future[Int]
 
+  def delete(id: Int): Future[Int]
+
   def getSuggestionList: Future[Seq[Suggestion]]
 }
 
@@ -49,6 +51,10 @@ class SuggestionDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfig
     db.run {
       (Suggestions returning Suggestions.map(_.id)) += suggestionData
     }
+  }
+
+  override def delete(id: Int): Future[Int] = {
+    db.run(Suggestions.filter(_.id === id).delete)
   }
 
   override def getSuggestionList: Future[Seq[Suggestion]] = {

@@ -4,13 +4,14 @@ $ ->
   Glob = window.Glob || {}
 
   apiUrl =
-    getGroupedTimetable: '/groupped-timetable'
+    getGroupedTimetable: '/text'
 
   vm = ko.mapping.fromJS
     timetableList: []
     groups: []
     timetable: []
     weekday: []
+    requiredData: Glob.requiredData
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -19,19 +20,21 @@ $ ->
       toastr.error('Something went wrong! Please try again.')
 
   vm.getTable = ->
+    data =
+      requiredData: vm.requiredData()
     $.ajax
       url: apiUrl.getGroupedTimetable
-      type: 'GET'
+      type: 'POST'
+      data: JSON.stringify(data)
+      dataType: 'json'
+      contentType: 'application/json'
     .fail handleError
     .done (response) ->
-      console.log(response)
       for k,v of response
         if k is 'groups'
           vm.groups(v)
         if k is 'timetables'
           vm.timetableList(v)
-      console.log('timetable:', vm.timetableList())
-      console.log('groups:', vm.groups())
 
   vm.getT = (group, weekday) ->
     tt = ko.observableArray([])

@@ -38,7 +38,7 @@ trait TimetableComponent extends SubjectComponent {
 
     def teachers = column[String]("teachers")
 
-    def numberRoom = column[Int]("numberRoom")
+    def numberRoom = column[String]("numberRoom")
 
     def specPart = column[String]("specPart")
 
@@ -55,6 +55,8 @@ trait TimetableDao {
 
   def update(timetable: Timetable): Future[Int]
 
+  def delete(id: Int): Future[Int]
+
   def getTimetableById(id: Option[Int]): Future[Option[Timetable]]
 
   def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]]
@@ -62,6 +64,8 @@ trait TimetableDao {
   def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]]
 
   def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]]
+
+  def getTByTeacherAndWeekday(weekDay: String, teacher: String): Future[Seq[Timetable]]
 
   def getTimetableByGr(group: String): Future[Seq[Timetable]]
 }
@@ -89,18 +93,23 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetables: Future[Seq[Timetable]] = {
-      val query =  timetables
-        .joinLeft(subjects)
-        .on(_.subjectId === _.id)
-      db.run(query.result).map { r =>
-        r.groupBy(_._1.id).map {case (_, tuples) =>
+    val query = timetables
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map { case (_, tuples) =>
         val (t, s) = tuples.head
         t.copy(specPart = Some(s.get.name))
       }.to[Seq]
-  }}
+    }
+  }
 
   override def update(timetable: Timetable): Future[Int] = {
     db.run(timetables.filter(_.id === timetable.id).update(timetable))
+  }
+
+  override def delete(id: Int): Future[Int] = {
+    db.run(timetables.filter(_.id === id).delete)
   }
 
   override def getTimetableById(id: Option[Int]): Future[Option[Timetable]] = {
@@ -108,28 +117,30 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]] = {
-    val query =  timetables
+    val query = timetables
       .filter(data => data.teachers === teacher)
       .joinLeft(subjects)
       .on(_.subjectId === _.id)
     db.run(query.result).map { r =>
-      r.groupBy(_._1.id).map {case (_, tuples) =>
+      r.groupBy(_._1.id).map { case (_, tuples) =>
         val (t, s) = tuples.head
         t.copy(specPart = Some(s.get.name))
       }.to[Seq]
-  }}
+    }
+  }
 
   override def getTimetableByGr(group: String): Future[Seq[Timetable]] = {
-    val query =  timetables
+    val query = timetables
       .filter(_.groups === group)
       .joinLeft(subjects)
       .on(_.subjectId === _.id)
     db.run(query.result).map { r =>
-      r.groupBy(_._1.id).map {case (_, tuples) =>
+      r.groupBy(_._1.id).map { case (_, tuples) =>
         val (t, s) = tuples.head
         t.copy(specPart = Some(s.get.name))
       }.to[Seq]
-  }}
+    }
+  }
 
   override def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]] = {
     db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
@@ -142,9 +153,25 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
       .joinLeft(subjects)
       .on(_.subjectId === _.id)
     db.run(query.result).map { r =>
-      r.groupBy(_._1.id).map {case (_, tuples) =>
+      r.groupBy(_._1.id).map { case (_, tuples) =>
         val (t, s) = tuples.head
         t.copy(specPart = Some(s.get.name))
       }.to[Seq]
-    }}
+    }
+  }
+
+  override def getTByTeacherAndWeekday(weekDay: String, teacher: String): Future[Seq[Timetable]] = {
+    db.run(timetables.filter(data => data.teachers === teacher && data.weekDay === weekDay).result)
+    val query = timetables
+      .filter(data => data.teachers === teacher && data.weekDay === weekDay)
+      .joinLeft(subjects)
+      .on(_.subjectId === _.id)
+    db.run(query.result).map { r =>
+      r.groupBy(_._1.id).map { case (_, tuples) =>
+        val (t, s) = tuples.head
+        t.copy(specPart = Some(s.get.name))
+      }.to[Seq]
+    }
+  }
+
 }

@@ -1,0 +1,127 @@
+@this(webJarsUtil: org.webjars.play.WebJarsUtil)
+@(logged: Boolean, requiredData: String)
+  @import views.html.main
+  @main("TimeTable - Dashboard", webJarsUtil) {
+    <script src="@routes.Assets.versioned("javascripts/response_bot/weekStudent.js")" type="text/javascript"></script>
+    @navbar(logged)
+    <script >
+            var Glob = {
+              requiredData: '@requiredData'
+            };
+    </script>
+    <div class="container-fluid">
+      <div class="text-center">
+        <br><br><br><br><br>
+        <h1>Timetable Dashboard</h1>
+        <div class="table-responsive text-center">
+          <table id="capture-border" class="table table-bordered real">
+            <thead>
+              <tr>
+                <th class="" width="4">Guruh</th>
+                <th style="width: 16%;">Dushanba</th>
+                <th style="width: 16%;">Seshanba</th>
+                <th style="width: 16%;">Chorshanba</th>
+                <th style="width: 16%;">Payshanba</th>
+                <th style="width: 16%;">Juma</th>
+                <th style="width: 16%;">Shanba</th>
+              </tr>
+            </thead>
+              <!-- ko foreach: {data: vm.groups(), as: 'group'} -->
+            <tbody>
+              <tr>
+                <td rowspan="2" class="outer" ><div class="rotate inner" style=" vertical-align: center" data-bind="text: group"></div></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Monday'), as: 'timetable'}" >
+                    <div class="col-md-12 border-bottom-gray">
+                      <div class="row">
+                        <div class="col-md-2 pt-4">
+                          <small class="inner rotate" data-bind="text: timetable.couple"></small>
+                        </div>
+                        <div class="col-md-10 h-120p border-left-gray">
+                          <small data-bind="text: timetable.specPart"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.teachers"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.numberRoom"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Tuesday'), as: 'timetable'}" style="list-style-type: none;
+                    padding-inline-start: 0;" >
+                    <div class="col-md-12 border-bottom-gray">
+                      <div class="row">
+                        <div class="col-md-12 h-120p">
+                          <small data-bind="text: timetable.specPart"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.teachers"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.numberRoom"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Wednesday'), as: 'timetable'}" style="list-style-type: none;
+                    padding-inline-start: 0;" >
+                    <div class="col-md-12 border-bottom-gray">
+                      <div class="row">
+                        <div class="col-md-12 h-120p">
+                          <small data-bind="text: timetable.specPart"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.teachers"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.numberRoom"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Thursday'), as: 'timetable'}" style="list-style-type: none;
+                    padding-inline-start: 0;" >
+                    <div class="col-md-12 border-bottom-gray">
+                      <div class="row">
+                        <div class="col-md-10 h-120p">
+                          <small data-bind="text: timetable.specPart"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.teachers"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.numberRoom"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Friday'), as: 'timetable'}" style="list-style-type: none;
+                    padding-inline-start: 0;" >
+                    <div class="col-md-12 border-bottom-gray">
+                      <div class="row">
+                        <div class="col-md-12 h-120p">
+                          <small data-bind="text: timetable.specPart"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.teachers"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.numberRoom"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, 'Saturday'), as: 'timetable'}" >
+                    <div class="col-md-12 border-bottom-gray">
+                      <div class="row">
+                        <div class="col-md-12 h-120p">
+                          <small data-bind="text: timetable.specPart"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.teachers"></small> &nbsp;<br>
+                          <small data-bind="text: timetable.numberRoom"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+              <!-- /ko -->
+          </table>
+        </div>
+      </div>
+    </div>
+  }

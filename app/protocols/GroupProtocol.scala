@@ -9,6 +9,8 @@ object GroupProtocol {
 
   case class UpdateGroup(group: Group)
 
+  case class DeleteGroup(id: Int)
+
   case object GetGroupList
 
   case class Direction(id: Int, nameDirections: String)
@@ -26,7 +28,8 @@ object GroupProtocol {
 
   case class Group(id: Option[Int] = None,
                    name: String,
-                   direction: String
+                   direction: String,
+                   count: Int
                   )
 
   implicit val groupFormat: OFormat[Group] = Json.format[Group]
