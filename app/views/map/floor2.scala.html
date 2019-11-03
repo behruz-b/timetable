@@ -3,15 +3,12 @@
   @import views.html.main
 @main("TimeTable - Map", webJarsUtil) {
   <script src="@routes.Assets.versioned("javascripts/map.js")" type="text/javascript"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script src="https://files.codepedia.info/files/uploads/iScripts/html2canvas.js"></script>
-  <script src="@routes.Assets.versioned("javascripts/screenMap.js")" type="text/javascript"></script>
   @navbar(logged)
-  <div class="container" id="html-page">
+  <div class="container p-3" id="capture-border">
     <div class="row">
       <div class="col-md-12 text-center"><h1 id="floor">2-qavat</h1></div>
     </div>
-    <div class="row">
+    <div class="row p-3">
       <div class="col-md-4">
         <div class="row">
           <div class="col-md-5">
@@ -234,23 +231,5 @@
       </div>
     </div>
     <br>
-  </div>
-  <div class="container">
-    <div>
-      <input id="btn-Preview-Image" type="button"
-      value="Preview" />
-
-      <a id="btn-Convert-toImage" href="#">
-        Download
-      </a>
-
-      <br/>
-
-      <h3>Preview :</h3>
-
-      <div id="previewImage"></div>
-        <img id="img" alt="">
-
-    </div>
   </div>
 }

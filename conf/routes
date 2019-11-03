@@ -26,23 +26,30 @@ POST    /update/teacher             @controllers.TeacherController.update
 POST    /delete/teacher             @controllers.TeacherController.delete
 
 
-GET     /                           @controllers.TimetableController.realDashboard
-GET     /timetable                  @controllers.TimetableController.index
-GET     /timetable/dashboard        @controllers.TimetableController.dashboard
-GET     /get-timetable              @controllers.TimetableController.getReportTimetable
-GET     /get-emptyrooms             @controllers.TimetableController.emptyRoom
-POST    /get-Ttimetable             @controllers.TimetableController.getTeacherTimetable
-POST    /get-GroupTimetable         @controllers.TimetableController.getGroupTimetable
-POST    /send-timetable             @controllers.TimetableController.addTimetable
-GET     /groupped-timetable         @controllers.TimetableController.grouppedTimetable
-POST    /update/timetable           @controllers.TimetableController.update
-POST    /delete/timetable           @controllers.TimetableController.delete
+GET     /                                   @controllers.TimetableController.realDashboard
+GET     /timetable                          @controllers.TimetableController.index
+GET     /today/student/:requiredData        @controllers.TimetableController.todayStudent(requiredData: String)
+GET     /today/teacher/:requiredData        @controllers.TimetableController.todayTeacher(requiredData: String)
+GET     /tomorrow/student/:requiredData     @controllers.TimetableController.tomorrowStudent(requiredData: String)
+GET     /week/teacher/:requiredData         @controllers.TimetableController.weekTeacher(requiredData: String)
+GET     /week/student/:requiredData         @controllers.TimetableController.weekStudent(requiredData: String)
+GET     /timetable/dashboard                @controllers.TimetableController.dashboard
+GET     /get-timetable                      @controllers.TimetableController.getReportTimetable
+GET     /get-emptyrooms                     @controllers.TimetableController.emptyRoom
+GET     /groupped-timetable                 @controllers.TimetableController.grouppedTimetable
+GET     /today-timetable                    @controllers.TimetableController.today
+GET     /tomorrow-timetable                 @controllers.TimetableController.tomorrow
+POST    /get-Ttimetable                     @controllers.TimetableController.getTeacherTimetable
+POST    /get-GroupTimetable                 @controllers.TimetableController.getGroupTimetable
+POST    /send-timetable                     @controllers.TimetableController.addTimetable
+POST    /update/timetable                   @controllers.TimetableController.update
+POST    /delete/timetable                   @controllers.TimetableController.delete
+
 
 
 GET     /map/1-floor                 @controllers.MapController.firstFloor
 GET     /map/2-floor                 @controllers.MapController.secondFloor
 GET     /map/3-floor                 @controllers.MapController.thirdFloor
-GET     /screen-map                  @controllers.MapController.screen
 
 
 GET     /login                      @controllers.AuthController.index

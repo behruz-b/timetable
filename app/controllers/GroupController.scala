@@ -45,7 +45,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   def addGroup = Action.async(parse.json) { implicit request =>
     val name = (request.body \ "name").as[String]
     val direction = (request.body \ "direction").as[String]
-    (groupManager ? AddGroup(Group(None, name, direction))).mapTo[Int].map {
+    (groupManager ? AddGroup(Group(None, name, direction, 0))).mapTo[Int].map {
       id =>
         Ok(Json.toJson(s"The Group number you entered is written by this  ID: $id"))
     }
@@ -55,7 +55,8 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
     val id = (request.body \ "id").as[String].toInt
     val name = (request.body \ "name").as[String]
     val direction = (request.body \ "direction").as[String]
-    (groupManager ? UpdateGroup(Group(Option(id), name, direction))).mapTo[Int].map {
+    val count = (request.body \ "count").as[Int]
+    (groupManager ? UpdateGroup(Group(Option(id), name, direction, count))).mapTo[Int].map {
       id =>
         Ok(Json.toJson(s"ID: $id"))
     }

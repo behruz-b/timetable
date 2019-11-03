@@ -28,7 +28,8 @@ object GroupProtocol {
 
   case class Group(id: Option[Int] = None,
                    name: String,
-                   direction: String
+                   direction: String,
+                   count: Int
                   )
 
   implicit val groupFormat: OFormat[Group] = Json.format[Group]

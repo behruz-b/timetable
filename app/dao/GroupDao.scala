@@ -24,7 +24,9 @@ trait GroupComponent {
 
     def direction = column[String]("direction")
 
-    def * = (id.?, name, direction) <> (Group.tupled, Group.unapply _)
+    def count = column[Int]("count")
+
+    def * = (id.?, name, direction, count) <> (Group.tupled, Group.unapply _)
   }
 
 }
@@ -38,6 +40,8 @@ trait GroupDao {
   def delete(id: Int): Future[Int]
 
   def getGroupById(id: Option[Int]): Future[Option[Group]]
+
+  def getGroupByName(name: String): Future[Option[Group]]
 
   def getGroupList: Future[Seq[Group]]
 }
@@ -61,7 +65,9 @@ class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
   }
 
   override def update(groupData: Group): Future[Int] = {
-    db.run(groups.filter(_.id === groupData.id).update(groupData))
+    db.run{
+      groups.filter(_.id === groupData.id).update(groupData)
+    }
   }
 
   override def delete(id: Int): Future[Int] = {
@@ -70,6 +76,12 @@ class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
 
   override def getGroupById(id: Option[Int]): Future[Option[Group]] = {
     db.run(groups.filter(_.id === id).result.headOption)
+  }
+
+  override def getGroupByName(name: String): Future[Option[Group]] = {
+    db.run{
+      groups.filter(_.name === name).result.headOption
+    }
   }
 
   override def getGroupList: Future[Seq[Group]] = {

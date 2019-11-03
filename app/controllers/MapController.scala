@@ -19,7 +19,6 @@ class MapController @Inject()(val controllerComponents: ControllerComponents,
                               floor1Template: map.floor1,
                               floor2Template: map.floor2,
                               floor3Template: map.floor3,
-                              screenT: map.screenMap,
                                 )
                              (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
@@ -35,9 +34,6 @@ class MapController @Inject()(val controllerComponents: ControllerComponents,
   }}
   def thirdFloor: Action[AnyContent] = Action {implicit request: RequestHeader => {
     Ok(floor3Template(!request.session.get(LoginSessionKey).isEmpty))
-  }}
-  def screen: Action[AnyContent] = Action {implicit request: RequestHeader => {
-    Ok(screenT(!request.session.get(LoginSessionKey).isEmpty))
   }}
 
 }
