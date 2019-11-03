@@ -11,7 +11,7 @@ body {
   background-color: transparent;
   color: white;
   border: 0;
-  border-bottom: 2px solid rgba(255,5,32,0.92);
+  border-bottom: 2px solid rgba(255, 5, 32, 0.92);
   border-bottom-left-radius: 15px;
 
 }
@@ -30,7 +30,7 @@ body {
   background-color: transparent;
   color: white;
   border: 0;
-  border-bottom: 2px solid rgba(0,255,106,0.92) ;
+  border-bottom: 2px solid rgba(0, 255, 106, 0.92);
   box-shadow: 0 0 0 0;
 
 }
@@ -88,7 +88,7 @@ table {
   border-collapse: collapse;
   border-radius: 1em;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
 .rotate {
