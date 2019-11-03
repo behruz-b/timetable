@@ -21,7 +21,8 @@ object SubjectProtocol {
     Room(14, "201"), Room(15, "202"), Room(16, "206"), Room(17, "207"), Room(18, "209"), Room(19, "212"), Room(20, "213"),
     Room(21, "214"), Room(22, "215A"), Room(23, "216"), Room(24, "217"), Room(32, "219"), Room(33, "215B"),
 
-    Room(25, "102"), Room(26, "106"), Room(27, "108"), Room(28, "109"), Room(29, "114"), Room(30, "118"), Room(31, "107")
+    Room(25, "102"), Room(26, "106"), Room(27, "108"), Room(28, "109"), Room(29, "114"), Room(30, "118"), Room(31, "107"),
+    Room(32, "sport maydoni")
   )
 
   case class AddSubject(subjects: Subject)
