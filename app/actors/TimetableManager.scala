@@ -59,34 +59,26 @@ class TimetableManager @Inject()(val environment: Environment,
 
   }
 
-  private def addTimetable(timetableData: Timetable) = {
+  private def addTimetable(timetableData: Timetable): Future[String] = {
     (
-      if (timetableData.flow) {
-        for {
-          response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
-        } yield response match {
-          case Some(timetable) =>
-            if (timetable.subjectId == timetableData.subjectId && timetable.teachers == timetableData.teachers) {
-              timetableDao.addTimetable(timetableData)
-              Future.successful(timetableData.teachers)
-            }
-            else {
-              Future.successful(timetable.teachers)
-            }
-          case None =>
+      for {
+        response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+      } yield response match {
+        case Some(timetable) =>
+          if (timetable.subjectId == timetableData.subjectId &&
+            timetable.teachers == timetableData.teachers &&
+            timetableData.flow &&
+            timetableData.typeOfLesson == timetable.typeOfLesson
+          ) {
             timetableDao.addTimetable(timetableData)
             Future.successful(timetableData.teachers)
-        }
-      } else {
-        for {
-          response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
-        } yield response match {
-          case Some(timetable) =>
+          }
+          else {
             Future.successful(timetable.teachers)
-          case None =>
-            timetableDao.addTimetable(timetableData)
-            Future.successful(timetableData.teachers)
-        }
+          }
+        case None =>
+          timetableDao.addTimetable(timetableData)
+          Future.successful(timetableData.teachers)
       }
       ).flatten
   }
