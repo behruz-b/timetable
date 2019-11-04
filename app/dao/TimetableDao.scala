@@ -105,7 +105,9 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def update(timetable: Timetable): Future[Int] = {
-    db.run(timetables.filter(_.id === timetable.id).update(timetable))
+    db.run{
+      timetables.filter(_.id === timetable.id).update(timetable)
+    }
   }
 
   override def delete(id: Int): Future[Int] = {

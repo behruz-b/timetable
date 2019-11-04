@@ -72,9 +72,9 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       }
   }
 
-  def realDashboard: Action[AnyContent] = Action {
-    Ok(realTemplate(false))
-  }
+  def realDashboard: Action[AnyContent] = Action { implicit request: RequestHeader => {
+    Ok(realTemplate(!request.session.get(LoginSessionKey).isEmpty))
+  }}
 
   def addTimetable = Action.async(parse.json) { implicit request => {
     val studyShift = (request.body \ "studyShift").as[String]
@@ -112,8 +112,9 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val subject = (request.body \ "subject").as[Int]
     val teacher = (request.body \ "teacher").as[String]
     val numberRoom = (request.body \ "numberRoom").as[String]
-    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom))).mapTo[Int].map { pr =>
-      Ok(Json.toJson(s"you successful added: $pr"))
+    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom))).mapTo[Option[Int]].map { id =>
+      val pr = id.toString.replace("Some(","").replace(")","")
+      Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
     }
   }
   }

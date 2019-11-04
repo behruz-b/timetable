@@ -16,16 +16,6 @@ body {
 
 }
 
-.form-control:hover {
-  background-color: transparent;
-  color: white;
-}
-
-.form-control:active {
-  background-color: transparent;
-  color: white;
-}
-
 .form-control:focus {
   background-color: transparent;
   color: white;

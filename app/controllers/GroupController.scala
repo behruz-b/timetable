@@ -56,9 +56,10 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
     val name = (request.body \ "name").as[String]
     val direction = (request.body \ "direction").as[String]
     val count = (request.body \ "count").as[Int]
-    (groupManager ? UpdateGroup(Group(Option(id), name, direction, Some(count)))).mapTo[Int].map {
+    (groupManager ? UpdateGroup(Group(Option(id), name, direction, Some(count)))).mapTo[Option[Int]].map {
       id =>
-        Ok(Json.toJson(s"ID: $id"))
+        val pr = id.toString.replace("Some(","").replace(")","")
+        Ok(Json.toJson(s"ID: $pr"))
     }
   }
 
@@ -66,7 +67,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
     val id = (request.body \ "id").as[String].toInt
     (groupManager ? DeleteGroup(id)).mapTo[Int].map {
       id =>
-        Ok(Json.toJson(s"ID: $id"))
+        Ok(Json.toJson(s"$id raqamli guruh muvoffaqiyatli yangilandi!"))
     }
   }
 

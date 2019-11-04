@@ -58,8 +58,9 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     val fullName = (request.body \ "fullName").as[String]
     val tSubject = (request.body \ "tSubject").as[String]
     val department = (request.body \ "department").as[String]
-    (teacherManager ? UpdateTeacher(Teacher(Option(id), fullName, tSubject, department))).mapTo[Int].map { pr =>
-      Ok(Json.toJson(s" $pr"))
+    (teacherManager ? UpdateTeacher(Teacher(Option(id), fullName, tSubject, department))).mapTo[Option[Int]].map { id =>
+      val pr = id.toString.replace("Some(","").replace(")","")
+      Ok(Json.toJson(s"$pr raqamli o`qituvchi muvoffaqiyatli yangilandi!"))
     }
   }
   }

@@ -68,7 +68,7 @@ class TimetableManager @Inject()(val environment: Environment,
     timetableDao.delete(id)
   }
 
-  private def updateTimetable(timetable: Timetable): Future[Int] = {
+  private def updateTimetable(timetable: Timetable): Future[Option[Int]] = {
     for {
       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
       updatedTimetable = selectedTimetable.get.copy(
@@ -83,8 +83,12 @@ class TimetableManager @Inject()(val environment: Environment,
         teachers = timetable.teachers,
         numberRoom = timetable.numberRoom
       )
-      response <- timetableDao.update(updatedTimetable)
-    } yield response
+      update <- timetableDao.update(updatedTimetable)
+      response = selectedTimetable.get.id
+    } yield {
+      println(response)
+      response
+    }
   }
 
 

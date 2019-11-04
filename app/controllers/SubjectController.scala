@@ -54,8 +54,9 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
   def update: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val id = (request.body \ "id").as[String].toInt
     val name = (request.body \ "name").as[String]
-    (subjectManager ? UpdateSubject(Subject(Option(id), name))).mapTo[Int].map { pr =>
-      Ok(Json.toJson(s"$pr"))
+    (subjectManager ? UpdateSubject(Subject(Option(id), name))).mapTo[Option[Int]].map { id =>
+      val pr = id.toString.replace("Some(","").replace(")","")
+      Ok(Json.toJson(s"$pr raqamli fan muvoffaqiyatli yangilandi!"))
     }
   }
   }
