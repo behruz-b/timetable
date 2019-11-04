@@ -52,6 +52,7 @@ class SubjectManager @Inject()(val environment: Environment,
 
   private def deleteSubject(id: Int): Future[Int] = {
     subjectDao.delete(id)
+    Future(id)
   }
 
   private def getSubjectList: Future[Seq[Subject]] = {

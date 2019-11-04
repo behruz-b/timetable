@@ -50,6 +50,7 @@ class GroupManager @Inject()(val environment: Environment,
 
   private def deleteGroup(id: Int): Future[Int] = {
     groupDao.delete(id)
+    Future(id)
   }
 
   private def getGroupList: Future[Seq[Group]] = {

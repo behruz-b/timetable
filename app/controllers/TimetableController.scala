@@ -95,7 +95,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val id = (request.body \ "id").as[String].toInt
     (timetableManager ? DeleteTimetable(id)).mapTo[Int].map { id =>
-      Ok(Json.toJson(s"$id"))
+      Ok(Json.toJson(s"$id raqamli dars jadvali muvoffaqiyatli o'chirildi!"))
     }
   }
   }

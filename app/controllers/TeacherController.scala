@@ -68,7 +68,7 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
   def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val id = (request.body \ "id").as[String].toInt
     (teacherManager ? DeleteTeacher(id)).mapTo[Int].map { id =>
-      Ok(Json.toJson(s"$id"))
+      Ok(Json.toJson(s"$id raqamli o`qituvchi muvoffaqiyatli o'chirildi"))
     }
   }
   }

@@ -66,6 +66,7 @@ class TimetableManager @Inject()(val environment: Environment,
 
   private def deleteTimetable(id: Int): Future[Int] = {
     timetableDao.delete(id)
+    Future(id)
   }
 
   private def updateTimetable(timetable: Timetable): Future[Option[Int]] = {

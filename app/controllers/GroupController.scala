@@ -59,7 +59,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
     (groupManager ? UpdateGroup(Group(Option(id), name, direction, Some(count)))).mapTo[Option[Int]].map {
       id =>
         val pr = id.toString.replace("Some(","").replace(")","")
-        Ok(Json.toJson(s"ID: $pr"))
+        Ok(Json.toJson(s"$pr raqamli guruh muvoffaqiyatli yangilandi!"))
     }
   }
 
@@ -67,7 +67,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
     val id = (request.body \ "id").as[String].toInt
     (groupManager ? DeleteGroup(id)).mapTo[Int].map {
       id =>
-        Ok(Json.toJson(s"$id raqamli guruh muvoffaqiyatli yangilandi!"))
+        Ok(Json.toJson(s"$id raqamli guruh muvoffaqiyatli o'chirildi!"))
     }
   }
 

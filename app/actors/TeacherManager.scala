@@ -60,6 +60,7 @@ class TeacherManager @Inject()(val environment: Environment,
 
   private def deleteTeacher(id: Int): Future[Int] = {
     teacherDao.delete(id)
+    Future(id)
   }
 
   private def getTeacherList   = {
