@@ -86,8 +86,12 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val subjectId = (request.body \ "subjectId").as[Int]
     val teachers = (request.body \ "teachers").as[String]
     val numberRoom = (request.body \ "numberRoom").as[String]
-    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[Int].map { pr =>
-      Ok(Json.toJson(s"you successful added: $pr"))
+    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[String].map { pr =>
+      if(teachers == pr){
+        Ok(Json.toJson(s"$pr ismli O'qituvchi darsi dars jadvaliga qo'shildi"))
+      } else {
+        Ok(Json.toJson(s"${translateWeekday(weekDay)} kuni shu parada $pr ismli o'qituvchini $numberRoom xonada darsi bor"))
+      }
     }
   }
   }

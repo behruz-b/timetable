@@ -60,8 +60,16 @@ class TimetableManager @Inject()(val environment: Environment,
 
   }
 
-  private def addTimetable(timetableData: Timetable): Future[Int] = {
-    timetableDao.addTimetable(timetableData)
+  private def addTimetable(timetableData: Timetable) = {
+    (for {
+      response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+    } yield response match {
+      case Some(timetable) =>
+        Future.successful(timetable.teachers)
+      case None =>
+        timetableDao.addTimetable(timetableData)
+        Future.successful(timetableData.teachers)
+    }).flatten
   }
 
   private def deleteTimetable(id: Int): Future[Int] = {

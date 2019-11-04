@@ -68,6 +68,8 @@ trait TimetableDao {
   def getTByTeacherAndWeekday(weekDay: String, teacher: String): Future[Seq[Timetable]]
 
   def getTimetableByGr(group: String): Future[Seq[Timetable]]
+
+  def findConflicts(weekDay: String, couple: String, numberRoom: String): Future[Option[Timetable]]
 }
 
 
@@ -141,6 +143,12 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
         val (t, s) = tuples.head
         t.copy(specPart = Some(s.get.name))
       }.to[Seq]
+    }
+  }
+
+  override def findConflicts(weekDay: String, couple: String, numberRoom: String): Future[Option[Timetable]] = {
+    db.run{
+      timetables.filter(data => data.weekDay === weekDay && data.couple=== couple && data.numberRoom=== numberRoom).result.headOption
     }
   }
 
