@@ -65,7 +65,8 @@ object TimetableProtocol {
                        subjectId: Int,
                        teachers: String,
                        numberRoom: String,
-                       specPart: Option[String] = None
+                       specPart: Option[String] = None,
+                       flow: Boolean
                       )
 
   implicit val timetableFormat: OFormat[Timetable] = Json.format[Timetable]

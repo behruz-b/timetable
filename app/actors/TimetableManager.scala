@@ -5,7 +5,6 @@ import akka.pattern.pipe
 import akka.util.Timeout
 import dao.{GroupDao, TimetableDao}
 import javax.inject.Inject
-import org.checkerframework.checker.units.qual.s
 import play.api.Environment
 import protocols.SubjectProtocol._
 import protocols.TimetableProtocol._
@@ -61,15 +60,35 @@ class TimetableManager @Inject()(val environment: Environment,
   }
 
   private def addTimetable(timetableData: Timetable) = {
-    (for {
-      response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
-    } yield response match {
-      case Some(timetable) =>
-        Future.successful(timetable.teachers)
-      case None =>
-        timetableDao.addTimetable(timetableData)
-        Future.successful(timetableData.teachers)
-    }).flatten
+    (
+      if (timetableData.flow) {
+        for {
+          response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+        } yield response match {
+          case Some(timetable) =>
+            if (timetable.subjectId == timetableData.subjectId && timetable.teachers == timetableData.teachers) {
+              timetableDao.addTimetable(timetableData)
+              Future.successful(timetableData.teachers)
+            }
+            else {
+              Future.successful(timetable.teachers)
+            }
+          case None =>
+            timetableDao.addTimetable(timetableData)
+            Future.successful(timetableData.teachers)
+        }
+      } else {
+        for {
+          response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+        } yield response match {
+          case Some(timetable) =>
+            Future.successful(timetable.teachers)
+          case None =>
+            timetableDao.addTimetable(timetableData)
+            Future.successful(timetableData.teachers)
+        }
+      }
+      ).flatten
   }
 
   private def deleteTimetable(id: Int): Future[Int] = {
@@ -206,7 +225,7 @@ class TimetableManager @Inject()(val environment: Environment,
     }
   }
 
-  private def getTTeacher(teacher: String) = {
+  private def getTTeacher(teacher: String): Future[Seq[Timetable]] = {
     for {
       response <- timetableDao.getTimetablesByTeacher(teacher)
     } yield response.map { timetable =>

@@ -86,7 +86,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val subjectId = (request.body \ "subjectId").as[Int]
     val teachers = (request.body \ "teachers").as[String]
     val numberRoom = (request.body \ "numberRoom").as[String]
-    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom))).mapTo[String].map { pr =>
+    val flow = (request.body \ "flow").as[Boolean]
+    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, None,flow))).mapTo[String].map { pr =>
       if(teachers == pr){
         Ok(Json.toJson(s"$pr ismli O'qituvchi darsi dars jadvaliga qo'shildi"))
       } else {
@@ -116,7 +117,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val subject = (request.body \ "subject").as[Int]
     val teacher = (request.body \ "teacher").as[String]
     val numberRoom = (request.body \ "numberRoom").as[String]
-    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom))).mapTo[Option[Int]].map { id =>
+    val flow = (request.body \ "flow").as[Boolean]
+    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow))).mapTo[Option[Int]].map { id =>
       val pr = id.toString.replace("Some(","").replace(")","")
       Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
     }

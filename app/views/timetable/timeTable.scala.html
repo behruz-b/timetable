@@ -57,6 +57,10 @@
                 optionsValue: 'name', value: vm.selectedGroup, optionsCaption: 'Select number group' ">
             </select>
           </div>
+          <div class="form-group col-sm-6 offset-md-3 offset-0 col-12" data-bind="visible: vm.selectedType() == 'Laboratory' || vm.selectedType() == 'Lecture' || vm.selectedType() == 'Practice' " >
+            <input type="checkbox" name="" id="multi">
+            <label for="multi">Dars potochnimi?</label>
+          </div>
           <div class="col-sm-4 offset-sm-4 text-center offset-0 col-12">
             <button type="submit" class="btn btn-outline-success" data-bind="click: vm.onSubmit">Submit</button>
           </div>

@@ -42,7 +42,9 @@ trait TimetableComponent extends SubjectComponent {
 
     def specPart = column[String]("specPart")
 
-    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, specPart.?) <> (Timetable.tupled, Timetable.unapply _)
+    def flow = column[Boolean]("flow")
+
+    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, specPart.?, flow) <> (Timetable.tupled, Timetable.unapply _)
   }
 
 }

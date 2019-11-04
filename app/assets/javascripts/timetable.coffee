@@ -27,6 +27,7 @@ $ ->
     selectedSubject: ''
     listTeachers: []
     selectedTeacher: ''
+    checkedValue: false
 
   get = ->
     vm.studyShift([{id: 1, shift: "Morning"}, {id: 2, shift: "Afternoon"}])
@@ -76,6 +77,13 @@ $ ->
 
   vm.selectedType.subscribe (type) ->
     vm.selectedType(type)
+
+
+  $("#multi").change ->
+    if (vm.checkedValue())
+      vm.checkedValue false
+    else
+      vm.checkedValue true
 
   vm.selectedSubject.subscribe (subjectId) ->
     if subjectId is undefined
@@ -134,6 +142,7 @@ $ ->
         subjectId: vm.selectedSubject()
         teachers: vm.selectedTeacher()
         numberRoom: vm.selectedRoom()
+        flow: vm.checkedValue()
 
     else
       data =
@@ -146,6 +155,7 @@ $ ->
         subjectId: vm.selectedSubject()
         teachers: vm.selectedTeacher()
         numberRoom: vm.selectedRoom()
+        flow: vm.checkedValue()
 
     $.ajax
       url: apiUrl.send

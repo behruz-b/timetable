@@ -18,7 +18,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
                                 @Named("group-manager") val groupManager: ActorRef,
                                 groupTemplate: group.group,
                                 dashboardTemplate: group.group_dashboard,
-                                )
+                               )
                                (implicit val ec: ExecutionContext)
   extends BaseController with LazyLogging {
 
@@ -27,7 +27,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   val LoginSessionKey = "login.key"
 
   def index: Action[AnyContent] = Action { implicit request =>
-    request.session.get(LoginSessionKey).map{ _ =>
+    request.session.get(LoginSessionKey).map { _ =>
       Ok(groupTemplate(true))
     }.getOrElse {
       Unauthorized
@@ -35,11 +35,11 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
-  request.session.get(LoginSessionKey).map{ _ =>
-    Ok(dashboardTemplate(true))
-  }.getOrElse {
-    Unauthorized
-  }
+    request.session.get(LoginSessionKey).map { _ =>
+      Ok(dashboardTemplate(true))
+    }.getOrElse {
+      Unauthorized
+    }
   }
 
   def addGroup = Action.async(parse.json) { implicit request =>
@@ -58,7 +58,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
     val count = (request.body \ "count").as[Int]
     (groupManager ? UpdateGroup(Group(Option(id), name, direction, Some(count)))).mapTo[Option[Int]].map {
       id =>
-        val pr = id.toString.replace("Some(","").replace(")","")
+        val pr = id.toString.replace("Some(", "").replace(")", "")
         Ok(Json.toJson(s"$pr raqamli guruh muvoffaqiyatli yangilandi!"))
     }
   }
@@ -72,7 +72,7 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   }
 
   def getDirections = Action { implicit request => {
-    request.session.get(LoginSessionKey).map{ session =>
+    request.session.get(LoginSessionKey).map { session =>
       Ok(Json.toJson(directionsList))
     }.getOrElse {
       Unauthorized
@@ -83,15 +83,13 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   def getGroupsList = Action.async { implicit request =>
     (groupManager ? GetGroupList).mapTo[Seq[Group]].map {
       group =>
-        request.session.get(LoginSessionKey).map{ session =>
+        request.session.get(LoginSessionKey).map { session =>
           Ok(Json.toJson(group))
         }.getOrElse {
           Unauthorized
         }
     }
   }
-
-
 
 
 }
