@@ -91,6 +91,7 @@ table {
 .h-120p {
   height: 120px;
   font-size: 18px;
+  padding: 5px;
 }
 
 .outer {
@@ -102,4 +103,46 @@ table {
   top: 50%;
   left: 50%;
   width: 80px;
+}
+
+.col-10, .col-md-10, .col-2, .col-12, .col-md-12, .col-md-2 {
+  padding-right: 0;
+}
+
+.w-16 {
+  width: 350px;
+}
+
+.w-4 {
+  width: 60px;
+}
+
+.width-table {
+  width: 1800px;
+}
+@media (min-width: 768px) {
+  .inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+  }
+
+  .outer {
+    position: relative;
+  }
+
+
+  .w-16 {
+    width: 16%;
+  }
+
+  .w-4 {
+    width: 4%;
+  }
+
+  .width-table {
+    width: 100%;
+  }
+
 }
