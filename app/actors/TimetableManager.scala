@@ -230,8 +230,8 @@ class TimetableManager @Inject()(val environment: Environment,
   private def updateCount(group: String) = {
     for {
       selectedGroup <- groupDao.getGroupByName(group)
-      countSearched = selectedGroup.get.count + 1
-      updatedGroup = selectedGroup.get.copy(count = countSearched)
+      countSearched = selectedGroup.get.count.getOrElse(0) + 1
+      updatedGroup = selectedGroup.get.copy(count = Some(countSearched))
       response <- groupDao.update(updatedGroup)
     } yield response
   }

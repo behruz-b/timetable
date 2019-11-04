@@ -26,7 +26,7 @@ trait GroupComponent {
 
     def count = column[Int]("count")
 
-    def * = (id.?, name, direction, count) <> (Group.tupled, Group.unapply _)
+    def * = (id.?, name, direction, count.?) <> (Group.tupled, Group.unapply _)
   }
 
 }
