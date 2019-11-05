@@ -29,7 +29,6 @@ $(document).ready(function () {
       type: 'GET',
       success: function (data) {
         subjects = data;
-        console.log(subjects)
       },
       error: function (errMsg) {
         alert(JSON.stringify(errMsg));

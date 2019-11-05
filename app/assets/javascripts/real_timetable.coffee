@@ -24,14 +24,11 @@ $ ->
       type: 'GET'
     .fail handleError
     .done (response) ->
-      console.log(response)
       for k,v of response
         if k is 'groups'
           vm.groups(v)
         if k is 'timetables'
           vm.timetableList(v)
-      console.log('timetable:', vm.timetableList())
-      console.log('groups:', vm.groups())
 
   vm.getT = (group, weekday) ->
     tt = ko.observableArray([])

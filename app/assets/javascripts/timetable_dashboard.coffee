@@ -34,8 +34,8 @@ $ ->
   vm.getTable()
 
   vm.teacherName.subscribe (name) ->
-    vm.groups = []
-    console.log(vm.groups.length)
+    vm.groups.removeAll()
+    console.log(vm.groups().length)
     data =
       teacherName: name
     $.ajax
@@ -52,6 +52,8 @@ $ ->
 
 
   vm.groupNumber.subscribe (number) ->
+    vm.groups.removeAll()
+    console.log(vm.groups().length)
     data =
       groupNumber: number
     $.ajax
