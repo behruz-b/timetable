@@ -27,7 +27,10 @@ $ ->
     selectedSubject: ''
     listTeachers: []
     selectedTeacher: ''
-    checkedValue: false
+    alternationType: []
+    selectedAlternation:''
+    multiValue: false
+    alternationValue: false
 
   get = ->
     vm.studyShift([{id: 1, shift: "Morning"}, {id: 2, shift: "Afternoon"}])
@@ -36,6 +39,7 @@ $ ->
     vm.lCouple([{id: 1, couple: "couple 1"}, {id: 2, couple: "couple 2"}, {id: 3, couple: "couple 3"},
       {id: 4, couple: "couple 4"}])
     vm.typeLesson([{id: 1, type: "Laboratory"}, {id: 2, type: "Practice"}, {id: 3, type: "Lecture"}])
+    vm.alternationType([{id: 1, type: "even"}, {id: 2, type: "odd"}])
 
   get()
 
@@ -80,10 +84,28 @@ $ ->
 
 
   $("#multi").change ->
-    if (vm.checkedValue())
-      vm.checkedValue false
+    if (vm.alternationValue())
+      $("#alternation").prop('checked', false);
+    if (vm.multiValue())
+      vm.multiValue false
+      vm.alternationValue false
     else
-      vm.checkedValue true
+      vm.multiValue true
+      vm.alternationValue false
+
+  $("#alternation").change ->
+    if (vm.multiValue())
+      $("#multi").prop('checked', false);
+    if (vm.alternationValue())
+      vm.multiValue false
+      vm.alternationValue false
+    else
+      vm.multiValue false
+      vm.alternationValue true
+
+  vm.selectedAlternation.subscribe (type) ->
+    if type is undefined
+      vm.selectedAlternation("")
 
   vm.selectedSubject.subscribe (subjectId) ->
     if subjectId is undefined
@@ -143,6 +165,8 @@ $ ->
         teachers: vm.selectedTeacher()
         numberRoom: vm.selectedRoom()
         flow: vm.checkedValue()
+        alternation: vm.selectedAlternation()
+
 
     else
       data =
@@ -156,6 +180,7 @@ $ ->
         teachers: vm.selectedTeacher()
         numberRoom: vm.selectedRoom()
         flow: vm.checkedValue()
+        alternation: vm.selectedAlternation()
 
     $.ajax
       url: apiUrl.send
