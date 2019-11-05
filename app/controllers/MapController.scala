@@ -27,13 +27,13 @@ class MapController @Inject()(val controllerComponents: ControllerComponents,
   implicit val defaultTimeout: Timeout = Timeout(60.seconds)
 
   def firstFloor: Action[AnyContent] = Action {implicit request: RequestHeader => {
-      Ok(floor1Template(!request.session.get(LoginSessionKey).isEmpty))
+      Ok(floor1Template(request.session.get(LoginSessionKey).isDefined))
   }}
   def secondFloor: Action[AnyContent] = Action {implicit request: RequestHeader => {
-    Ok(floor2Template(!request.session.get(LoginSessionKey).isEmpty))
+    Ok(floor2Template(request.session.get(LoginSessionKey).isDefined))
   }}
   def thirdFloor: Action[AnyContent] = Action {implicit request: RequestHeader => {
-    Ok(floor3Template(!request.session.get(LoginSessionKey).isEmpty))
+    Ok(floor3Template(request.session.get(LoginSessionKey).isDefined))
   }}
 
 }
