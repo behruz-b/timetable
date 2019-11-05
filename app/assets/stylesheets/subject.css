@@ -93,6 +93,11 @@ table {
   font-size: 18px;
   padding: 5px;
 }
+.h-60p {
+  height: 60px;
+  font-size: 14px;
+  padding: 5px;
+}
 
 .outer {
   position: relative;
