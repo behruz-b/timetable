@@ -1,7 +1,5 @@
 package actors
 
-import java.io
-
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern.pipe
 import akka.util.Timeout
@@ -72,6 +70,7 @@ class TimetableManager @Inject()(val environment: Environment,
             case Some(timetable) =>
               if (timetable.subjectId == timetableData.subjectId &&
                 timetable.teachers == timetableData.teachers &&
+                timetableData.flow == timetable.flow &&
                 timetableData.flow &&
                 timetableData.typeOfLesson == timetable.typeOfLesson
               ) {
@@ -82,6 +81,7 @@ class TimetableManager @Inject()(val environment: Environment,
                 Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers +
                   " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
               }
+
             case None =>
               timetableDao.addTimetable(timetableData)
               Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
@@ -96,8 +96,8 @@ class TimetableManager @Inject()(val environment: Environment,
                 Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers +
                   " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
               } else {
-                Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni "+
-                  translateAlternation(timetable.alternation) +" haftada shu parada " +
+                Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                  translateAlternation(timetable.alternation) + " haftada shu parada " +
                   timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
               }
             case None =>

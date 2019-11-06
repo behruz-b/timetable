@@ -268,7 +268,9 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def emptyRoom = Action.async {
-    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom(convertToStrDate(new Date), momentCouple(momentHourAndMinute(new Date)), momentStudyShift(momentHourAndMinute(new Date))))).mapTo[Seq[String]].map {
+    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom(convertToStrDate(new Date),
+      momentCouple(momentHourAndMinute(new Date)),
+      momentStudyShift(momentHourAndMinute(new Date))))).mapTo[Seq[String]].map {
       rooms =>
         Ok(Json.toJson(rooms))
     }
