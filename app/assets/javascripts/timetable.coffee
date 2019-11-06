@@ -29,6 +29,7 @@ $ ->
     selectedTeacher: ''
     alternationType: []
     selectedAlternation:''
+    result: []
     multiValue: false
     alternationValue: false
 
@@ -186,6 +187,13 @@ $ ->
       contentType: 'application/json'
     .fail handleError
     .done (response) ->
-      toastr.success(response)
+      vm.result response.split(" ")
+      s = "qo'shildi"
+      console.log(vm.result().pop(), " #{s}")
+      if vm.result().pop().toString() is "qo'shildi"
+
+        toastr.success(response)
+      else
+        toastr.error(response)
 
   ko.applyBindings {vm}
