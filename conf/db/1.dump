@@ -1,0 +1,1227 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.10 (Ubuntu 10.10-1.pgdg18.04+1)
+-- Dumped by pg_dump version 11.5 (Ubuntu 11.5-3.pgdg18.04+1)
+
+-- Started on 2019-11-06 09:12:38 +05
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+ALTER TABLE ONLY public."Timetables" DROP CONSTRAINT "timetablesFkSubjectId";
+ALTER TABLE ONLY public.play_evolutions DROP CONSTRAINT play_evolutions_pkey;
+ALTER TABLE ONLY public."Timetables" DROP CONSTRAINT "Timetables_pkey";
+ALTER TABLE ONLY public."Teachers" DROP CONSTRAINT "Teachers_pkey";
+ALTER TABLE ONLY public."Suggestion" DROP CONSTRAINT "Suggestion_pkey";
+ALTER TABLE ONLY public."Subjects" DROP CONSTRAINT "Subjects_pkey";
+ALTER TABLE ONLY public."Groups" DROP CONSTRAINT "Groups_pkey";
+ALTER TABLE public."Timetables" ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public."Teachers" ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public."Suggestion" ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public."Subjects" ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public."Groups" ALTER COLUMN id DROP DEFAULT;
+DROP TABLE public.play_evolutions;
+DROP SEQUENCE public."Timetables_id_seq";
+DROP TABLE public."Timetables";
+DROP SEQUENCE public."Teachers_id_seq";
+DROP TABLE public."Teachers";
+DROP SEQUENCE public."Suggestion_id_seq";
+DROP TABLE public."Suggestion";
+DROP SEQUENCE public."Subjects_id_seq";
+DROP TABLE public."Subjects";
+DROP SEQUENCE public."Groups_id_seq";
+DROP TABLE public."Groups";
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 196 (class 1259 OID 289140)
+-- Name: Groups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."Groups" (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    direction character varying NOT NULL,
+    count integer
+);
+
+
+--
+-- TOC entry 197 (class 1259 OID 289146)
+-- Name: Groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."Groups_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2974 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: Groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."Groups_id_seq" OWNED BY public."Groups".id;
+
+
+--
+-- TOC entry 198 (class 1259 OID 289148)
+-- Name: Subjects; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."Subjects" (
+    id integer NOT NULL,
+    name character varying NOT NULL
+);
+
+
+--
+-- TOC entry 199 (class 1259 OID 289154)
+-- Name: Subjects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."Subjects_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2975 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: Subjects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."Subjects_id_seq" OWNED BY public."Subjects".id;
+
+
+--
+-- TOC entry 200 (class 1259 OID 289156)
+-- Name: Suggestion; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."Suggestion" (
+    id integer NOT NULL,
+    "teacherName" character varying NOT NULL,
+    suggestion character varying NOT NULL
+);
+
+
+--
+-- TOC entry 201 (class 1259 OID 289162)
+-- Name: Suggestion_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."Suggestion_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2976 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: Suggestion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."Suggestion_id_seq" OWNED BY public."Suggestion".id;
+
+
+--
+-- TOC entry 202 (class 1259 OID 289164)
+-- Name: Teachers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."Teachers" (
+    id integer NOT NULL,
+    "fullName" character varying NOT NULL,
+    "tSubject" character varying NOT NULL,
+    department character varying NOT NULL
+);
+
+
+--
+-- TOC entry 203 (class 1259 OID 289170)
+-- Name: Teachers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."Teachers_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2977 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: Teachers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."Teachers_id_seq" OWNED BY public."Teachers".id;
+
+
+--
+-- TOC entry 204 (class 1259 OID 289172)
+-- Name: Timetables; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."Timetables" (
+    id integer NOT NULL,
+    "studyShift" character varying NOT NULL,
+    "weekDay" character varying NOT NULL,
+    couple character varying NOT NULL,
+    "typeOfLesson" character varying NOT NULL,
+    groups character varying NOT NULL,
+    divorce character varying,
+    "subjectId" integer,
+    teachers character varying NOT NULL,
+    "numberRoom" character varying NOT NULL,
+    "specPart" character varying,
+    flow boolean DEFAULT false NOT NULL,
+    alternation character varying
+);
+
+
+--
+-- TOC entry 205 (class 1259 OID 289179)
+-- Name: Timetables_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."Timetables_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2978 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: Timetables_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."Timetables_id_seq" OWNED BY public."Timetables".id;
+
+
+--
+-- TOC entry 206 (class 1259 OID 289181)
+-- Name: play_evolutions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.play_evolutions (
+    id integer NOT NULL,
+    hash character varying(255) NOT NULL,
+    applied_at timestamp without time zone NOT NULL,
+    apply_script text,
+    revert_script text,
+    state character varying(255),
+    last_problem text
+);
+
+
+--
+-- TOC entry 2818 (class 2604 OID 289187)
+-- Name: Groups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Groups" ALTER COLUMN id SET DEFAULT nextval('public."Groups_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2819 (class 2604 OID 289188)
+-- Name: Subjects id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Subjects" ALTER COLUMN id SET DEFAULT nextval('public."Subjects_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2820 (class 2604 OID 289189)
+-- Name: Suggestion id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Suggestion" ALTER COLUMN id SET DEFAULT nextval('public."Suggestion_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2821 (class 2604 OID 289190)
+-- Name: Teachers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Teachers" ALTER COLUMN id SET DEFAULT nextval('public."Teachers_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2823 (class 2604 OID 289191)
+-- Name: Timetables id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Timetables" ALTER COLUMN id SET DEFAULT nextval('public."Timetables_id_seq"'::regclass);
+
+
+--
+-- TOC entry 2958 (class 0 OID 289140)
+-- Dependencies: 196
+-- Data for Name: Groups; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."Groups" (id, name, direction, count) FROM stdin;
+1	932-13	Telekommunikatsiya	\N
+2	911-17	Kompyuter Injeneringi	\N
+3	912-17	Kompyuter Injeneringi	\N
+4	913-17	Kompyuter Injeneringi	\N
+5	914-17	Kompyuter Injeneringi	\N
+7	941-17	Dasturiy Injineringi	\N
+8	942-17	Dasturiy Injineringi	\N
+9	921-17	Kasb-Ta`limi	\N
+10	931-17	Telekommunikatsiya	\N
+11	932-17	Telekommunikatsiya	\N
+12	952-17	Axborot Xavfsizligi	\N
+13	943-17	Dasturiy Injineringi	\N
+14	943-17	Dasturiy Injineringi	\N
+15	922-17	Kasb-Ta`limi	\N
+16	933-17	Telekommunikatsiya	\N
+17	911-16	Kompyuter Injeneringi	\N
+18	912-16	Kompyuter Injeneringi	\N
+19	913-16	AT-Servise	\N
+20	951-16	Axborot Xavfsizligi	\N
+21	941-16	Dasturiy Injineringi	\N
+22	921-16	Kasb-Ta`limi	\N
+23	931-16	Telekommunikatsiya	\N
+24	914-16	AT-Servise	\N
+25	952-16	Axborot Xavfsizligi	\N
+26	942-16	Dasturiy Injineringi	\N
+27	922-16	Kasb-Ta`limi	\N
+28	932-16	Telekommunikatsiya	\N
+29	911-19	Kompyuter Injeneringi	\N
+31	913-19	AT-Servise	\N
+33	951-19	Axborot Xavfsizligi	\N
+34	921-19	Kasb-Ta`limi	\N
+35	941-19	Dasturiy Injineringi	\N
+36	942-19	Dasturiy Injineringi	\N
+37	943-19	Dasturiy Injineringi	\N
+38	931-19	Telekommunikatsiya	\N
+39	932-19	Telekommunikatsiya	\N
+40	913-19	Kompyuter Injeneringi	\N
+41	915-19	AT-Servise	\N
+42	952-19	Axborot Xavfsizligi	\N
+43	922-19	Kasb-Ta`limi	\N
+44	933-19	Telekommunikatsiya	\N
+46	911-18	Kompyuter Injeneringi	\N
+47	912-18	Kompyuter Injeneringi	\N
+48	913-18	Kompyuter Injeneringi	\N
+49	914-18	AT-Servise	\N
+50	916-18	Kompyuter Injeneringi	\N
+51	951-18	Axborot Xavfsizligi	\N
+52	941-18	Dasturiy Injineringi	\N
+53	942-18	Dasturiy Injineringi	\N
+54	943-18	Dasturiy Injineringi	\N
+55	921-18	Kasb-Ta`limi	\N
+56	931-18	Telekommunikatsiya	\N
+57	932-18	Telekommunikatsiya	\N
+58	915-18	AT-Servise	\N
+59	952-18	Axborot Xavfsizligi	\N
+61	922-18	Kasb-Ta`limi	\N
+62	933-18	Telekommunikatsiya	\N
+6	951-17	Axborot Xavfsizligi	5
+30	912-19	Kompyuter Injeneringi	2
+32	914-19	AT-Servise	6
+45	944-19	Dasturiy Injineringi	4
+60	944-18	Dasturiy Injineringi	1
+\.
+
+
+--
+-- TOC entry 2960 (class 0 OID 289148)
+-- Dependencies: 198
+-- Data for Name: Subjects; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."Subjects" (id, name) FROM stdin;
+2	Hisob (ma'ruza)
+3	Jismoniy tarbiya
+4	Xorijiy til
+5	O'zbekiston tarixi (seminar)
+6	Dasturlash (tajriba)
+7	Hisob (amaliyot)
+8	Fizika (ma'ruza)
+9	Dasturlash (ma'ruza)
+12	Hisob (amaliyot)
+13	Murabbiylik soati
+15	O'zbekiston tarixi (ma'ruza)
+16	Ish yozuvi (seminar)
+17	Ma'lumotlar tuzilmasi va algoritmi (tajriba)
+18	Biznes boshqaruv asoslari (amaliyot)
+19	Elektronika va sxemalar (ma'ruza)
+20	Ma'lumotlar bazasi (tajriba)
+21	Elektronika va sxemalar (tajriba)
+22	Kiberxavfsizlik asoslari (ma'ruza)
+23	Ma'lumotlar tuzilmasi va algoritmi (ma'ruza)
+24	Kiberxavfsizlik asoslari (amaliyot)
+25	Biznes boshqaruv asoslari (ma'ruza)
+28	O'rnatilgan tizimlar (tajriba)
+29	Web ilovalarni yaratish (amaliyot)
+30	Sonli usullar va dasturlash, modellashtirish (tajriba)
+31	Kompyuter tarmoqlari (tajriba)
+32	O'rnatilgan tizimlar (amaliyot)
+33	Kompyuter tarmoqlari (amaliyot)
+34	Geoaxborot tizimlar (tajriba)
+35	O'rnatilgan tizimlar (ma'ruza)
+36	Fuqarolik jamiyati (ma'ruza)
+37	Ma'lumotlar bazasi (ma'ruza)
+38	Geoaxborot tizimlar (ma'ruza)
+39	Sonli usullar va dasturlash, modellashtirish (ma'ruza)
+40	Web ilovalarni yaratish (ma'ruza)
+41	Fuqarolik jamiyati (seminar)
+42	Sonli usullar va dasturlash, modellashtirish (amaliyot)
+43	Web ilovalarni yaratish (tajriba)
+44	Geoaxborot tizimlar (amaliyot)
+45	Cyber Security injiniringi (ma'ruza)
+46	Ma'lumotlar bazasi xavfsizligi (ma'ruza)
+47	Axborot nazariyasi va kodlash (ma'ruza)
+48	Tizimli dasturlash (tajriba)
+49	Python tilida dasturlash (tajriba)
+50	Zararli dasturlar (amaliyot)
+51	Tizimli dasturlash (ma'ruza)
+52	Zararli dasturlar (tajriba)
+53	Dasturiy loyihalarni boshqarish (amaliyot)
+54	Tizimli dasturlash (amaliyot)
+56	Ma'lumotlar bazasi xavfsizligi (tajriba)
+58	Ma'lumotlar bazasi xavfsizligi (amaliyot)
+59	Operatsion tizimlar (tajriba)
+61	Tarmoq xavfsizligi (tajriba)
+62	Tarmoq xavfsizligi (ma'ruza)
+64	Python tilida dasturlash (ma'ruza)
+65	Operatsion tizimlar (amaliyot)
+66	Zararli dasturlar (ma'ruza)
+67	Cyber Security injiniringi (amaliyot)
+68	Cyber Security injiniringi (tajriba)
+69	Tarmoq xavfsizligi (amaliyot)
+70	Operatsion tizimlar (ma'ruza)
+71	Axborot nazariyasi va kodlash (amaliyot)
+72	Telekommunikatsiyada dasturlash strukturalari (ma'ruza)
+73	Informatika ixtisosligi fanlarini o'qitish metodikasi (tajriba)
+74	Telekommunikatsiya tarmoqlari (ma'ruza)
+75	Ta'limda axborot texnologiyalari (amaliyot)
+76	Pedagogik dasturiy vositalar va pedagogik web dizayn (ma'ruza)
+77	Ta'lim tizimlari va ularning qiyosiy tahlili (seminar)
+78	Signallarga raqamli ishlov berish (amaliyot)
+79	Telekommunikatsiya tarmoqlari (tajriba)
+80	Telekommunikatsiyada operatsion tizimlar (amaliyot)
+81	Informatika ixtisosligi fanlarini o'qitish metodikasi (ma'ruza)
+82	Signallarga raqamli ishlov berish (ma'ruza)
+83	Kompyuter tarmoqlari (ma'ruza)
+84	Simsiz aloqa tizimlari (amaliyot)
+85	Simsiz aloqa tizimlari (tajriba)
+86	Bulutli texnologiyalari (amaliyot)
+87	Axborotlarni uzatish muhitlari va qurilmalari (tajriba)
+88	Ta'limda axborot texnologiyalari (tajriba)
+89	Telekommunikatsiyada operatsion tizimlar (ma'ruza)
+90	Bulutli texnologiyalari (ma'ruza)
+92	Informatika ixtisosligi fanlarini o'qitish metodikasi (amaliyot)
+94	Telekommunikatsiya tarmoqlari (amaliyot)
+95	Ta'limda axborot texnologiyalari (ma'ruza)
+96	Telekommunikatsiyada dasturlash strukturalari (amaliyot)
+97	Pedagogik dasturiy vositalar va pedagogik web dizayn (amaliyot)
+98	Pedagogik dasturiy vositalar va pedagogik web dizayn (tajriba)
+99	Mikroprosessor (ma'ruza)
+100	Mikroprosessor (amaliyot)
+101	Mikroprosessor (tajriba)
+102	Simsiz aloqa tizimlari (ma'ruza)
+103	Ta'lim tizimlari va ularning qiyosiy tahlili (ma'ruza)
+104	Boshqarish nazariyasi (tajriba)
+105	Boshqarish nazariyasi (ma'ruza)
+106	Real vaqt tizimlari (amaliyot)
+107	Texnologiyalarni boshqarish (ma'ruza)
+108	E-biznes asoslari mobil e-biznes (tajriba)
+109	Muammo tahlili va yechimi (ma'ruza)
+110	Insonga yo'naltirilgan dasturiy ta'minot dizayni (amaliyot)
+111	Parallel kompyuterlarning arxitekturasi va dasturlash (amaliyot)
+112	Milliy g'oya asosiy tushuncha va tamoyillari (seminar)
+11	Akademik nutq (seminar)
+14	Fizika (tajriba)
+10	Fizika (amaliyot)
+63	Web ilovalarni ishlab chiqish (amaliyot)
+57	Web ilovalarni ishlab chiqish (ma'ruza)
+113	O'rnatilgan tizimlarning dasturiy ta'minotini ishlab chiqish (ma'ruza)
+114	Sun'iy intellekt (amaliyot)
+115	Real vaqt tizimlari (ma'ruza)
+116	Internet reklama (tajriba)
+117	O'rnatilgan tizimlarning dasturiy ta'minotini ishlab chiqish (amaliyot)
+118	Parallel kompyuterlarning arxitekturasi va dasturlash (tajriba)
+119	Parallel kompyuterlarning arxitekturasi va dasturlash (ma'ruza)
+120	Dasturni tekshirishning formal usullari (amaliyot)
+121	Sun'iy intellekt (ma'ruza)
+122	Muammo tahlili va yechimi (amaliyot)
+123	Muammo tahlili va yechimi (tajriba)
+124	Dasturni tekshirishning formal usullari (ma'ruza)
+125	Milliy g'oya asosiy tushuncha va tamoyillari (ma'ruza)
+126	Texnologiyalarni boshqarish (amaliyot)
+127	Internet reklama (ma'ruza)
+128	Insonga yo'naltirilgan dasturiy ta'minot dizayni (ma'ruza)
+129	E-biznes asoslari mobil e-biznes (ma'ruza)
+130	Kriptografiya usullari (ma'ruza)
+131	Dasturiy ta'minot iqtisodiyoti (amaliyot)
+132	Ta'limda loyiha faoliyatini boshqarish (ma'ruza)
+133	Taqsimlangan tizimlar (tajriba)
+134	Axborot tizimlarini auditlash (ma'ruza)
+135	Dasturiy ta'minot arxitekturasi. Dasturiy ta'minot qurilishi va kodlashtirish (amaliyot)
+136	Maxsus fanlarni o'qitish metodikasi (amaliyot)
+137	Keng polosali tarmoqlar (amaliyot)
+138	Mobil qurilmalar uchun dasturiy ta'minot vositalari (ma'ruza)
+139	Maxsus fanlarni o'qitish metodikasi (ma'ruza)
+140	Tarmoqni dasturlash asoslari (ma'ruza)
+141	Ta'limda multimedia ilovalari (amaliyot)
+142	Tarmoq protokollari (ma'ruza)
+143	Ta'lim texnologiyalari (ma'ruza)
+144	Mobil qurilmalar uchun dasturiy ta'minot vositalari (amaliyot)
+145	Tizimli taxlil va talablar (ma'ruza)
+146	Taqsimlangan tizimlar (ma'ruza)
+147	Tizimli taxlil va talablar (amaliyot)
+148	Axborot tizimlarini auditlash (amaliyot)
+149	Axborot xavfsizligi va xavf xatarlarni boshqarish (amaliyot)
+150	Dasturiy loyihalarni boshqarish (ma'ruza)
+151	Elektron ta'lim resurslarini yaratish texnologiyasi (ma'ruza)
+152	Tarmoqni dasturlash asoslari (amaliyot)
+153	Dasturiy konfiguratsiyalanadigan tarmoqlar (amaliyot)
+155	Informatika va axborot texnologiyalari fanini o'qitish metodikasi (ma'ruza)
+156	Axborot xavfsizligi va xavf xatarlarni boshqarish (ma'ruza)
+157	Qiyosiy ta'lim (ma'ruza)
+158	Ta'limda multimedia ilovalari (tajriba)
+159	Qiyosiy ta'lim (amaliyot)
+160	Mobil qurilmalar uchun dasturiy ta'minot vositalari (tajriba)
+161	Kriptografiya usullari (tajriba)
+163	Real vaqt tizimlari va  tashqi tizimlar (ma'ruza)
+164	Informatika va axborot texnologiyalari fanini o'qitish metodikasi (amliyot)
+165	Informatika va axborot texnologiyalari fanini o'qitish metodikasi (tajriba)
+166	Kriptografiya usullari (amaliyot)
+167	Ta'lim texnologiyalari (seminar)
+168	Dasturiy ta'minot arxitekturasi. Dasturiy ta'minot qurilishi va kodlashtirish (ma'ruza)
+169	Dasturiy loyihalarni boshqarish (tajriba)
+170	Multimediaga kirish (tajriba)
+171	Elektron ta'lim resurslarini yaratish texnologiyasi (amaliyot)
+172	Tarmoq protokollari (tajriba)
+173	Keng polosali tarmoqlar (ma'ruza)
+174	Ta'limda multimedia ilovalari (ma'ruza)
+175	Multimediaga kirish (ma'ruza)
+176	Tarmoqni dasturlash asoslari (tajriba)
+177	Real vaqt tizimlari va tashqi tizimlar (amaliyot)
+178	Dasturiy konfiguratsiyalanadigan tarmoqlar (ma'ruza)
+179	Dasturiy ta'minot iqtisodiyoti (ma'ruza)
+180	Ishlab chiqish metodologiyasi va amaliyoti (ma'ruza)
+181	Ta'limda loyiha faoliyatini boshqarish (amaliyot)
+182	Elektron ta'lim resurslarini yaratish texnologiyasi (tajriba)
+183	Telekommunikatsiya tarmog'ini boshqarish asoslari (ma'ruza)
+185	Telekommunikatsiya tarmog'ini boshqarish asoslari (amalyot)
+186	Ta'lim texnologiyalari  (amaliyot)
+187	Simsiz aloqa tizimlari va  dasturlari (tajriba)
+188	Ishlab chiqish metodologiyasi va amaliyoti (tajriba)
+\.
+
+
+--
+-- TOC entry 2962 (class 0 OID 289156)
+-- Dependencies: 200
+-- Data for Name: Suggestion; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."Suggestion" (id, "teacherName", suggestion) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2964 (class 0 OID 289164)
+-- Dependencies: 202
+-- Data for Name: Teachers; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."Teachers" (id, "fullName", "tSubject", department) FROM stdin;
+5	Matyazova N	Akademik nutq 3 (seminar)	Akademik nutq 3 (seminar)
+6	Rajabov A	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+7	Atamuratov A	Fizika1 ma`ruza	Fizika1 ma`ruza
+8	Jumaniyazov N	Hisob (amaliyot)	Hisob (amaliyot)
+9	O'razmetova Sh	Hisob (amaliyot)	Hisob (amaliyot)
+10	Aminov Sh	Dasturlash (tajriba)	Dasturlash (tajriba)
+11	Adambayeva Feruza	Xorijiy til	Xorijiy til
+12	Ibragimov Muhiddin	Dasturlash (tajriba)	Dasturlash (tajriba)
+13	Otamuratov S	Dasturlash (tajriba)	Dasturlash (tajriba)
+14	Quramboyev A	Dasturlash (tajriba)	Dasturlash (tajriba)
+15	Jabborov D	Dasturlash (tajriba)	Dasturlash (tajriba)
+16	Xusainov Islom	Hisob (amaliyot)	Hisob (amaliyot)
+17	Ibragimov Dilshod	O'zbekiston tarixi (seminar)	O'zbekiston tarixi (seminar)
+18	Sapayeva Feruza	Xorijiy til	Xorijiy til
+19	Bobojonov Komiljon	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+20	Bobojonov Komiljon	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+21	Bobojonov Komiljon	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+22	Bobojonov Komiljon	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+23	Bobojonov Komiljon	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+24	Bobojonov Komiljon	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+25	Jumaniyozov Fazliddin	O'zbekiston tarixi (seminar)	O'zbekiston tarixi (seminar)
+26	Axmedov G'ulom	O'zbekiston tarixi (seminar)	O'zbekiston tarixi (seminar)
+27	Matyazova N	Ish yozuvi (seminar)	Ish yozuvi (seminar)
+28	Eschanov U	Dasturlash (tajriba)	Dasturlash (tajriba)
+29	Bazarboyev M	Dasturlash (tajriba)	Dasturlash (tajriba)
+30	O'razmetova Shoira	Hisob (amaliyot)	Hisob (amaliyot)
+31	Qilicheva Nargiza	Xorijiy til	Xorijiy til
+32	Kazakov Otabek	Dasturlash (ma'ruza)	Dasturlash (ma'ruza)
+33	Saidov Dilmurod	Fizika1 (amaliyot)	Fizika1 (amaliyot)
+34	Xalliyev J	Xorijiy til	Xorijiy til
+35	Saidov Dilmurod	Fizika1 (tajriba)	Fizika1 (tajriba)
+36	Jumaniyazov N	Hisob (ma'ruza)	Hisob (ma'ruza)
+37	Xajiyeva Iroda	Akademik nutq 3 (seminar)	Akademik nutq 3 (seminar)
+38	Shamuratova Iroda	Ma'lumotlar tuzilmasi va algoritmi (tajriba)	Ma'lumotlar tuzilmasi va algoritmi (tajriba)
+39	Polvonov Bozarvoy	Ma'lumotlar tuzilmasi va algoritmi (tajriba)	Ma'lumotlar tuzilmasi va algoritmi (tajriba)
+40	Sharipova Z	Biznes boshqaruv asoslari (amaliyot)	Biznes boshqaruv asoslari (amaliyot)
+41	Ismailov Sh	Elektronika va sxemalar (ma'ruza)	Elektronika va sxemalar (ma'ruza)
+42	Matkarimova Intizor	Biznes boshqaruv asoslari (amaliyot)	Biznes boshqaruv asoslari (amaliyot)
+43	Xojiboyev Jonibek	Malumotlar bazasi (tajriba)	Malumotlar bazasi (tajriba)
+44	Nurmetova Bonura	Malumotlar bazasi (tajriba)	Malumotlar bazasi (tajriba)
+45	Setmetov Nemat	Elektronika va sxemalar (ma'ruza)	Elektronika va sxemalar (ma'ruza)
+46	Kuchqarov V	Elektronika va sxemalar (tajriba)	Elektronika va sxemalar (tajriba)
+47	Xusainov X	Ma'lumotlar tuzilmasi va algoritmi (tajriba)	Ma'lumotlar tuzilmasi va algoritmi (tajriba)
+48	Iskandarov I 	Ma'lumotlar tuzilmasi va algoritmi (tajriba)	Ma'lumotlar tuzilmasi va algoritmi (tajriba)
+49	Xudayberganov Temur	Kiberxavfsizlik asoslari (ma'ruza)	Kiberxavfsizlik asoslari (ma'ruza)
+50	Yusupov Firnafas	Dasturlash (ma'ruza)	Dasturlash (ma'ruza)
+51	Raximboyev X	Ma'lumotlar bazasi (ma'ruza)	Ma'lumotlar bazasi (ma'ruza)
+52	Xo'janiyazova Go`zal	Xorijiy til	Xorijiy til
+53	Quzibayev Xudoshukur	Malumotlar bazasi (tajriba)	Malumotlar bazasi (tajriba)
+54	Zaripov Usmon	Malumotlar bazasi (tajriba)	Malumotlar bazasi (tajriba)
+55	Polvonov Bozarvoy	Ma'lumotlar tuzilmasi va algoritmi (ma'ruza)	Ma'lumotlar tuzilmasi va algoritmi (ma'ruza)
+56	Allayarov M	Elektronika va sxemalar (tajriba)	Elektronika va sxemalar (tajriba)
+57	Xojiboyev Jonibek	Kiberxavfsizlik asoslari (amaliyot)	Kiberxavfsizlik asoslari (amaliyot)
+58	Xojiboyev Jonibek	Kiberxavfsizlik asoslari (amaliyot)	Kiberxavfsizlik asoslari (amaliyot)
+59	Shamuratova Iroda	Ma'lumotlar tuzilmasi va algoritmi (ma'ruza)	Ma'lumotlar tuzilmasi va algoritmi (ma'ruza)
+60	Ismailov Sh	Elektronika va sxemalar (tajriba)	Elektronika va sxemalar (tajriba)
+61	Ismailov Sh	Elektronika va sxemalar (ma'ruza)	Elektronika va sxemalar (ma'ruza)
+62	Abrarov Renat	Dasturlash (tajriba)	Dasturlash (tajriba)
+63	Sobirov Bohram	Kiberxavfsizlik asoslari (amaliyot)	Kiberxavfsizlik asoslari (amaliyot)
+64	Kuchqarov V	Elektronika va sxemalar (tajriba)	Elektronika va sxemalar (tajriba)
+65	Yaxshimuratov A	Hisob (ma'ruza)	Hisob (ma'ruza)
+66	Xudayberganov Temur	Kiberxavfsizlik asoslari (amaliyot)	Kiberxavfsizlik asoslari (amaliyot)
+67	Matyazova N	Ish yozuvi (seminar)	Ish yozuvi (seminar)
+68	Xayitbayev Q	Elektronika va sxemalar (ma'ruza)	Elektronika va sxemalar (ma'ruza)
+69	Sodiqov Mahmudjon	Ma'lumotlar bazasi (tajriba)	Ma'lumotlar bazasi (tajriba)
+70	Otamuratov Xurmat	Ma'lumotlar tuzilmasi va algoritmi (tajriba)	Ma'lumotlar tuzilmasi va algoritmi (tajriba)
+71	Karimova I	Ma'lumotlar bazasi (tajriba)	Axborot texnologiyalari kafedrasi 
+72	Allayarov M	Elektronika va sxemalar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+73	Raximboyev X	Ma'lumotlar bazasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+74	Samandarov B	Elektronika va sxemalar (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+75	Samandarov B	Elektronika va sxemalar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+76	Xayitbayev Q	Elektronika va sxemalar (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+77	Jumaniyazova A	Elektronika va sxemalar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+78	Yangibayeva Madina	Kompyuter tarmoqlari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+4	Xusinov Shahzod	Dasturlash (tajriba)	Dasturlash (tajriba)
+79	Sodiqov Mahmudjon	Cyber Security injiniringi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+80	Aliyev Oybek	Tizimli dasturlash (tajriba)	Dasturiy injiniring kafedrasi 
+81	Matyaqubov M	Tizimli dasturlash (tajriba)	Dasturiy injiniring kafedrasi 
+82	Kazakov Otabek	Sonli usullar va dasturlash, modellashtirish (tajriba)	Dasturiy injiniring kafedrasi 
+83	Ibragimov Muhiddin	Sonli usullar va dasturlash, modellashtirish (tajriba)	Dasturiy injiniring kafedrasi 
+84	Quramboyev A	Python tilida dasturlash (tajriba)	Dasturiy injiniring kafedrasi 
+85	Xo'jamuratov Bekmurod	Python tilida dasturlash (tajriba)	Dasturiy injiniring kafedrasi 
+86	Ibragimov Dilshod	Fuqarolik jamiyati (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+87	Nurmetova Bonura	O'rnatilgan tizimlar (tajriba)	Axborot texnologiyalari kafedrasi 
+88	O'razmetov Tohir	O'rnatilgan tizimlar (tajriba)	Axborot texnologiyalari kafedrasi 
+89	Xasanov Usmon	Web ilovalarni yaratish (amaliyot)	Dasturiy injiniring kafedrasi 
+90	Quzibayev X	Ma'lumotlar bazasi xavfsizligi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+91	Sobirov Bazarboy	Sonli usullar va dasturlash, modellashtirish (ma'ruza)	Dasturiy injiniring kafedrasi 
+92	Ashirova A	Informatika ixtisosligi fanlarini o'qitish metodikasi (tajriba)	Tabiiy va umumkasbiy fanlar kafedrasi 
+93	Qutliboyev T	Telekommunikatsiyada dasturlash strukturalari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+94	Bobojanov Suhrob	Kompyuter tarmoqlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+95	Sobirov Bozorboy	Sonli usullar va dasturlash, modellashtirish (amaliyot)	Dasturiy injiniring kafedrasi 
+96	Ibragimov Dilshod	Fuqarolik jamiyati (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+97	Matyokubov O’tkir	Telekommunikatsiya tarmoqlari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+98	Yusupova Sh	Pedagogik dasturiy vositalar va pedagogik web dizayn (ma'ruza)	Axborot texnologiyalari kafedrasi 
+99	Djumanazarov Odamboy	O'rnatilgan tizimlar (amaliyot)	Axborot texnologiyalari kafedrasi 
+100	Artikov Muzaffar	Web ilovalarni yaratish (tajriba)	Dasturiy injiniring kafedrasi 
+101	Xasanov Usmon	Web ilovalarni yaratish (tajriba)	Dasturiy injiniring kafedrasi 
+102	Yangibayeva Madina	Kompyuter tarmoqlari (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+103	Kim Tatiana	Zararli dasturlar (amaliyot)	Axborot texnologiyalari kafedrasi 
+104	Aliyev Oybek	Tizimli dasturlash (ma'ruza)	Dasturiy injiniring kafedrasi 
+105	Raximov Temur	Signallarga raqamli ishlov berish (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+106	Allamov Oybek	Geoaxborot tizimlar (tajriba)	Dasturiy injiniring kafedrasi 
+107	Nurmetova Bonura	Geoaxborot tizimlar (tajriba)	Axborot texnologiyalari kafedrasi 
+108	Karimova I	Zararli dasturlar (tajriba)	Axborot texnologiyalari kafedrasi 
+109	Allaberganova M	Ta'lim tizimlari va ularning qiyosiy tahlili (seminar)	Axborot texnologiyalari kafedrasi 
+110	Masharipov O	Telekommunikatsiya tarmoqlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+111	Matyokubov O`tkir	Telekommunikatsiya tarmoqlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+112	Djumanazarov Odamboy	O'rnatilgan tizimlar (ma'ruza)	Axborot texnologiyalari kafedrasi 
+113	Quramboyev A	Python tilida dasturlash (tajriba)	Dasturiy injiniring kafedrasi 
+114	Sadullayev N	Dasturiy loyihalarni boshqarish (amaliyot)	Dasturiy injiniring kafedrasi 
+115	Sapayev O'	Maxsus fanlarni o'qitish metodikasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+116	Xo'jayev O	Sun'iy intellekt (amaliyot)	Dasturiy injiniring kafedrasi 
+117	Bobojanov S	Telekommunikatsiya tarmog'ini boshqarish asoslari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+118	Allaberganova  M	Elektron ta'lim resurslarini yaratish texnologiyasi (tajriba)	Tabiiy va umumkasbiy fanlar kafedrasi 
+119	Sobirov B	Dasturiy ta'minot iqtisodiyoti (ma'ruza)	Dasturiy injiniring kafedrasi 
+120	 Karimova  I	Tarmoq xavfsizligi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+121	Samandarov B	Telekommunikatsiyada operatsion tizimlar (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+122	Matqurbanov T	Taqsimlangan tizimlar (tajriba)	Axborot texnologiyalari kafedrasi 
+123	Madaminov O'	Elektron ta'lim resurslarini yaratish texnologiyasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+124	Allamov Oybek	Geoaxborot tizimlar (amaliyot)	Dasturiy injiniring kafedrasi 
+125	Kuryazov D	Dasturiy ta'minot arxitekturasi. Dasturiy ta'minot qurilishi va kodlashtirish (ma'ruza)	Dasturiy injiniring kafedrasi 
+126	Jumaniyozov F	Milliy g'oya asosiy tushuncha va tamoyillari (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+127	Yangibayeva Madina	Kompyuter tarmoqlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+128	Sobirov Bozarboy	Sonli usullar va dasturlash, modellashtirish (amaliyot)	Dasturiy injiniring kafedrasi 
+129	Xo'jayev O	Sun'iy intellekt (amaliyot)	Gumanitar va ijtimoiy fanlar kafedrasi
+130	Abdullayeva G	Texnologiyalarni boshqarish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+131	Matyaqubov M	Tizimli dasturlash (amaliyot)	Dasturiy injiniring kafedrasi 
+132	Bekimetov A	Dasturiy konfiguratsiyalanadigan tarmoqlar (ma'ruza)	Dasturiy injiniring kafedrasi 
+133	Xo'jamuratov Bekmurod	Dasturiy loyihalarni boshqarish (tajriba)	Dasturiy injiniring kafedrasi 
+134	Yusupova Sh	Pedagogik dasturiy vositalar va pedagogik web dizayn (ma'ruza)	Dasturiy injiniring kafedrasi 
+135	Ashirova A	Informatika ixtisosligi fanlarini o'qitish metodikasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+136	Kuryazov D	Dasturiy ta'minot arxitekturasi. Dasturiy ta'minot qurilishi va kodlashtirish (ma'ruza)	Dasturiy injiniring kafedrasi 
+137	Aliyev O	Ishlab chiqish metodologiyasi va amaliyoti (ma'ruza)	Dasturiy injiniring kafedrasi 
+138	Raximov Temur	Signallarga raqamli ishlov berish (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+139	Xusainov X	Axborot tizimlarini auditlash (amaliyot)	Axborot texnologiyalari kafedrasi 
+140	Quzibayev X	Ma'lumotlar bazasi xavfsizligi (tajriba)	Axborot texnologiyalari kafedrasi 
+141	Matyokubov O’tkir	Telekommunikatsiya tarmog'ini boshqarish asoslari (amalyot)	Telekommunikatsiya injiniringi kafedrasi
+142	Madaminov O'	Ta'limda loyiha faoliyatini boshqarish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+143	Jabborov D	Dasturiy loyihalarni boshqarish (tajriba)	Dasturiy injiniring kafedrasi 
+144	O'razmetov Tohir	Ma'lumotlar bazasi xavfsizligi (tajriba)	Axborot texnologiyalari kafedrasi 
+145	Artikov Muzaffar	Veb ilovalarni ishlab chiqish (ma'ruza)	Dasturiy injiniring kafedrasi 
+146	Abdullayeva G	Texnologiyalarni boshqarish (amaliyot)	Axborot texnologiyalari kafedrasi 
+147	Bobojanov Suhrob	Simsiz aloqa tizimlari (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+148	Bobojanov Suhrob	Simsiz aloqa tizimlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+149	Bekimetov A	Simsiz aloqa tizimlari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+150	Matqurbanov T	Simsiz aloqa tizimlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+151	Qutliyev S	Ta'limda loyiha faoliyatini boshqarish (amaliyot)	Axborot texnologiyalari kafedrasi 
+152	Jumaniyozov Fazliddin	Fuqarolik jamiyati (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+153	Otamuratov X	Real vaqt tizimlari va tashqi tizimlar (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+154	Ibragimov  D	Milliy g'oya asosiy tushuncha va tamoyillari (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+155	Polvonov Bozarboy	Ma'lumotlar bazasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+156	Abdullayeva G	Tarmoq xavfsizligi (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+157	Allaberganova M	Bulutli texnologiyalari (amaliyot)	Axborot texnologiyalari kafedrasi 
+158	Masharipov O	Axborotlarni uzatish muhitlari va qurilmalari (tajriba)	Axborot texnologiyalari kafedrasi 
+159	Matqurbanov T	Axborotlarni uzatish muhitlari va qurilmalari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+160	Bekimetov A	Dasturiy konfiguratsiyalanadigan tarmoqlar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+161	Allamov Oybek	Geoaxborot tizimlar (ma'ruza)	Dasturiy injiniring kafedrasi 
+162	Xajiyeva  I	Ta'lim texnologiyalari (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+163	Eschanov U	Dasturiy loyihalarni boshqarish (ma'ruza)	Dasturiy injiniring kafedrasi 
+164	Qutliyev S	Ta'limda axborot texnologiyalari (tajriba)	Axborot texnologiyalari kafedrasi 
+165	Xajiyeva  I	Ta'lim texnologiyalari  (amaliyot)	Gumanitar va ijtimoiy fanlar kafedrasi
+166	Kuryazov D	Dasturiy ta'minot arxitekturasi. Dasturiy ta'minot qurilishi va kodlashtirish (ma'ruza)	Dasturiy injiniring kafedrasi 
+167	Samandarov B	Telekommunikatsiyada operatsion tizimlar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+168	Karimova  I	Tarmoq xavfsizligi (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+169	Xo'janiyazova G	Xorijiy til	Gumanitar va ijtimoiy fanlar kafedrasi
+170	Qutliboyev T	Tarmoqni dasturlash asoslari (tajriba)	Dasturiy injiniring kafedrasi 
+171	Samandarov B	Tarmoqni dasturlash asoslari (tajriba)	Dasturiy injiniring kafedrasi 
+172	Abdullayev A	Ta'limda multimedia ilovalari (ma'ruza)	Axborot texnologiyalari kafedrasi 
+173	Abdullayeva G	Multimediaga kirish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+174	Yusupov Firnafas	Sonli usullar va dasturlash, modellashtirish (ma'ruza)	Dasturiy injiniring kafedrasi 
+175	Sodiqov  M	Axborot xavfsizligi va xavf xatarlarni boshqarish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+176	dots. Xo'jayev O	Bulutli texnologiyalari (ma'ruza)	Axborot texnologiyalari kafedrasi 
+177	Madaminov O'	Informatika ixtisosligi fanlarini o'qitish metodikasi (amaliyot)	Axborot texnologiyalari kafedrasi 
+178	Djumanazarov Odamboy	O'rnatilgan tizimlar (tajriba)	Axborot texnologiyalari kafedrasi 
+179	Yusupov  F	Tizimli taxlil va talablar (amaliyot)	Axborot texnologiyalari kafedrasi 
+180	Sadullayev  N	Mobil qurilmalar uchun dasturiy ta'minot vositalari (tajriba)	Dasturiy injiniring kafedrasi 
+181	Xo'jayev O	Sun'iy intellekt (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+182	Bekimetov  A	Tarmoq protokollari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+183	Matyokubov  O'	Tarmoq protokollari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+184	Allaberganova M	Elektron ta'lim resurslarini yaratish texnologiyasi (amaliyot)	Axborot texnologiyalari kafedrasi 
+185	Nurmetova B	Multimediaga kirish (tajriba)	Axborot texnologiyalari kafedrasi 
+186	Abdullayeva G	Multimediaga kirish (tajriba)	Axborot texnologiyalari kafedrasi 
+187	Jabborov D	Dasturiy loyihalarni boshqarish (tajriba)	Dasturiy injiniring kafedrasi 
+188	Bekimetov A	Simsiz aloqa tizimlari va  dasturlari (tajriba)	Dasturiy injiniring kafedrasi 
+189	Abdullayev A	Ta'limda multimedia ilovalari (tajriba)	Axborot texnologiyalari kafedrasi 
+190	Yusupova Sh	Qiyosiy ta'lim (ma'ruza)	Axborot texnologiyalari kafedrasi 
+191	Sobirov B	Dasturiy ta'minot iqtisodiyoti (ma'ruza)	Dasturiy injiniring kafedrasi 
+192	Sodiqov  M	Axborot xavfsizligi va xavf xatarlarni boshqarish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+193	O'razmetov T	Ma'lumotlar bazasi xavfsizligi (tajriba)	Axborot texnologiyalari kafedrasi 
+194	Bobojanov  S	Keng polosali tarmoqlar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+195	Xajiyeva I	Ta'lim texnologiyalari (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+196	Kuryazov D	Dasturiy ta'minot arxitekturasi. Dasturiy ta'minot qurilishi va kodlashtirish (ma'ruza)	Dasturiy injiniring kafedrasi 
+197	Kim Tatiana	Kriptografiya usullari (amaliyot)	Axborot texnologiyalari kafedrasi 
+198	Karimova  I	Tarmoq xavfsizligi (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+199	Masharipov Sanat	Malumotlar bazasi (tajriba)	Axborot texnologiyalari kafedrasi 
+200	Xojiboyev J	Tarmoq xavfsizligi (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+201	Shamuratova Inobat	Operatsion tizimlar (tajriba)	Axborot texnologiyalari kafedrasi 
+202	Ibragimov D	Fuqarolik jamiyati (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+203	Xasanov Usmon	Web ilovalarni yaratish (ma'ruza)	Dasturiy injiniring kafedrasi 
+204	Artikov Muzaffar	Veb ilovalarni ishlab chiqish (amaliyot)	Dasturiy injiniring kafedrasi 
+205	Raximov B	Kompyuter tarmoqlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+206	Jabborov Dilshod	Sonli usullar va dasturlash, modellashtirish (tajriba)	Dasturiy injiniring kafedrasi 
+207	Xojiboyev J	Tarmoq xavfsizligi (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+208	Karimova I	Tarmoq xavfsizligi (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+209	Abrarov Renat	Python tilida dasturlash (ma'ruza)	Dasturiy injiniring kafedrasi 
+210	Jumaniyozov Fazliddin	Fuqarolik jamiyati (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+211	ass. Kim T	Zararli dasturlar (tajriba)	Axborot texnologiyalari kafedrasi 
+212	Madaminov O'	Pedagogik dasturiy vositalar va pedagogik web dizayn (amaliyot)	Axborot texnologiyalari kafedrasi 
+213	Madaminov O'	Pedagogik dasturiy vositalar va pedagogik web dizayn (tajriba)	Axborot texnologiyalari kafedrasi 
+214	Artikov Muzaffar	Web ilovalarni yaratish (tajriba)	Dasturiy injiniring kafedrasi 
+215	kat.o’q. Setmetov Nemat	Mikroprosessor (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+216	Samandarov B	Mikroprosessor (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+217	Sadullayev N	Dasturiy loyihalarni boshqarish (tajriba)	Dasturiy injiniring kafedrasi 
+218	Xo'jamuratov Bekmurod	Dasturiy loyihalarni boshqarish (tajriba)	Dasturiy injiniring kafedrasi 
+219	kat.o’q. Setmetov Nemat	Mikroprosessor (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+220	ass.Samandarov B	Mikroprosessor (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+221	ass.Xojiboyev J	Tarmoq xavfsizligi (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+222	ass. Shamuratova I	Operatsion tizimlar (ma'ruza)	Axborot texnologiyalari kafedrasi 
+223	ass.Xojiboyev J	Tarmoq xavfsizligi (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+224	ass. Qutliboyev T	Telekommunikatsiyada dasturlash strukturalari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+225	ass.Otamuratov X	Real vaqt tizimlari (amaliyot)	Axborot texnologiyalari kafedrasi 
+226	Abdullayeva G	Texnologiyalarni boshqarish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+227	Kat.o'qt. Xudayberganov Temur	Elektron ta'lim resurslarini yaratish texnologiyasi (tajriba)	Axborot texnologiyalari kafedrasi 
+228	ass.Quramboyev A	Parallel kompyuterlarning arxitekturasi va dasturlash (amaliyot)	Axborot texnologiyalari kafedrasi 
+229	Ibragimov Dilshod	Milliy g'oya asosiy tushuncha va tamoyillari (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+230	ass.Matyaqubov M	Insonga yo'naltirilgan dasturiy ta'minot dizayni (amaliyot)	Dasturiy injiniring kafedrasi 
+231	ass. Adinayev X	Muammo tahlili va yechimi (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+232	ass.Eschanov U	Dasturiy loyihalarni boshqarish (ma'ruza)	Dasturiy injiniring kafedrasi 
+233	ass. Xojiboyev J	Internet reklama (tajriba)	Axborot texnologiyalari kafedrasi 
+234	dots.Yusupov Firnafas	Boshqarish nazariyasi (ma'ruza)	Dasturiy injiniring kafedrasi 
+235	dots.Yusupov Firnafas	Boshqarish nazariyasi (tajriba)	Dasturiy injiniring kafedrasi 
+236	ass. Matqurbanov T	Simsiz aloqa tizimlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+237	ass.Quramboyev A	O'rnatilgan tizimlarning dasturiy ta'minotini ishlab chiqish (amaliyot)	Axborot texnologiyalari kafedrasi 
+238	Allaberganova M	Bulutli texnologiyalari (amaliyot)	Axborot texnologiyalari kafedrasi 
+239	Kat.o'qt. Xudayberganov T	E-biznes asoslari mobil e-biznes (tajriba)	Axborot texnologiyalari kafedrasi 
+240	ass.Aliyev Oybek	Operatsion tizimlar (tajriba)	Dasturiy injiniring kafedrasi 
+241	ass. Matqurbanov T	Axborotlarni uzatish muhitlari va qurilmalari (tajriba)	Axborot texnologiyalari kafedrasi 
+242	ass.Quramboyev A	Dasturni tekshirishning formal usullari (amaliyot)	Dasturiy injiniring kafedrasi 
+243	dots. Xo'jayev O	Sun'iy intellekt (amaliyot)	Axborot texnologiyalari kafedrasi 
+244	ass. Adinayev Xushnud	Muammo tahlili va yechimi (tajriba)	Axborot texnologiyalari kafedrasi 
+245	prof. Qutliyev U.O	Mikroprosessor (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+246	dots.Xajiyeva Iroda	Milliy g'oya asosiy tushuncha va tamoyillari (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+247	dots. Raximov B	Signallarga raqamli ishlov berish (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+248	ass.Matyaqubov M	Insonga yo'naltirilgan dasturiy ta'minot dizayni (ma'ruza)	Axborot texnologiyalari kafedrasi 
+249	dots. Raximov B	Signallarga raqamli ishlov berish (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+250	kat.o'qt.Abdullayeva G	Texnologiyalarni boshqarish (amaliyot)	Axborot texnologiyalari kafedrasi 
+251	ass.O'razmetov Tohir	Ma'lumotlar bazasi xavfsizligi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+252	ass. Matqurbanov T	Kompyuter tarmoqlari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+253	ass.Quramboyev A	Dasturni tekshirishning formal usullari (amaliyot)	Dasturiy injiniring kafedrasi 
+254	kat.o'qt. Yusupova Sh	Ta'lim tizimlari va ularning qiyosiy tahlili (ma'ruza)	Dasturiy injiniring kafedrasi 
+255	ass. Kim T	Kriptografiya usullari (ma'ruza)	Axborot texnologiyalari kafedrasi 
+256	dots.Sobirov Bozorvoy	Dasturiy ta'minot iqtisodiyoti (amaliyot)	Dasturiy injiniring kafedrasi 
+257	ass. Qutliyev S	Ta'limda loyiha faoliyatini boshqarish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+258	ass.Jumaniyozov Fazliddin	Milliy g'oya asosiy tushuncha va tamoyillari (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+259	ass.Aliyev Oybek	Ishlab chiqish metodologiyasi va amaliyoti (ma'ruza)	Dasturiy injiniring kafedrasi 
+260	ass.Aliyev Oybek	Ishlab chiqish metodologiyasi va amaliyoti (tajriba)	Dasturiy injiniring kafedrasi 
+261	ass. Allaberganova M	Qiyosiy ta'lim (amaliyot)	Axborot texnologiyalari kafedrasi 
+262	ass.Jumaniyozov Fazliddin	Milliy g'oya asosiy tushuncha va tamoyillari (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+263	ass. Xusainov X	Axborot tizimlarini auditlash (ma'ruza)	Axborot texnologiyalari kafedrasi 
+264	dots. Kuryazov Dilshod	Dasturiy ta'minot arxitekturasi. Dasturiy ta'minot qurilishi va kodlashtirish (amaliyot)	Dasturiy injiniring kafedrasi 
+265	kat.o'qt. Sapayev O`	Maxsus fanlarni o'qitish metodikasi (amaliyot)	Axborot texnologiyalari kafedrasi 
+266	ass. Bobojanov Suhrob	Keng polosali tarmoqlar (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+267	ass. Sodiqov M	Axborot xavfsizligi va xavf xatarlarni boshqarish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+268	ass. Sodiqov M	Axborot xavfsizligi va xavf xatarlarni boshqarish (amaliyot)	Axborot texnologiyalari kafedrasi 
+269	ass. Madaminov O`	Elektron ta'lim resurslarini yaratish texnologiyasi (tajriba)	Axborot texnologiyalari kafedrasi 
+270	ass. Matqurbanov T	Taqsimlangan tizimlar (ma'ruza)	Axborot texnologiyalari kafedrasi 
+271	ass.Sadullayev N	Mobil qurilmalar uchun dasturiy ta'minot vositalari (ma'ruza)	Dasturiy injiniring kafedrasi 
+272	kat.o'qt. Sapayev O`	Maxsus fanlarni o'qitish metodikasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+273	ass. Matqurbanov T	Taqsimlangan tizimlar (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+274	kat.o'qt. Masharipov O	Taqsimlangan tizimlar (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+275	ass. Qutliboyev T	Taqsimlangan tizimlar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+276	dots.Xajiyeva I	Ta'lim texnologiyalari  (amaliyot)	Axborot texnologiyalari kafedrasi 
+277	ass. Bekimetov A	Dasturiy konfiguratsiyalanadigan tarmoqlar (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+278	ass. Abdullayev A	Ta'limda multimedia ilovalari (amaliyot)	Axborot texnologiyalari kafedrasi 
+279	dots.Xajiyeva I	Ta'lim texnologiyalari (ma'ruza)	Axborot texnologiyalari kafedrasi 
+280	ass. Bekimetov A	Tarmoq protokollari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+281	dots.Yusupov Firnafas	Tizimli taxlil va talablar (ma'ruza)	Dasturiy injiniring kafedrasi 
+282	ass. Madaminov O`	Ta'limda loyiha faoliyatini boshqarish (amaliyot)	Axborot texnologiyalari kafedrasi 
+283	ass. Qutliboyev T	Tarmoqni dasturlash asoslari (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+284	kat.o'qt.Abdullayeva G	Multimediaga kirish (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+285	ass. Xusainov X	Axborot tizimlarini auditlash (amaliyot)	Axborot texnologiyalari kafedrasi 
+286	dots.Yusupov Firnafas	Tizimli taxlil va talablar (amaliyot)	Dasturiy injiniring kafedrasi 
+287	ass. Madaminov O`	Pedagogik dasturiy vositalar va pedagogik web dizayn (amaliyot)	Axborot texnologiyalari kafedrasi 
+288	kat.o'qt.Abdullayeva G	Multimediaga kirish (ma'ruza)	Axborot texnologiyalari kafedrasi 
+289	ass. Abdullayev A	Ta'limda multimedia ilovalari (ma'ruza)	Axborot texnologiyalari kafedrasi 
+290	kat.o’q. Matyokubov O’	Keng polosali tarmoqlar (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+291	dots.Xajiyeva Iroda	Milliy g'oya asosiy tushuncha va tamoyillari (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+292	ass. Kim T	Kriptografiya usullari (tajriba)	Axborot texnologiyalari kafedrasi 
+293	ass. Kim T	Kriptografiya usullari (amaliyot)	Axborot texnologiyalari kafedrasi 
+294	ass.Jabborov Dilshod	Dasturiy loyihalarni boshqarish (ma'ruza)	Dasturiy injiniring kafedrasi 
+295	kat.o'qt. Sapayev O'	Maxsus fanlarni o'qitish metodikasi (amaliyot)	Axborot texnologiyalari kafedrasi 
+296	ass. Qutliboyev T	Tarmoqni dasturlash asoslari (amaliyot)	Telekommunikatsiya injiniringi kafedrasi
+297	ass. Qutliboyev T	Tarmoqni dasturlash asoslari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+298	ass. Allaberganova M	Elektron ta'lim resurslarini yaratish texnologiyasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+299	ass. Ibragimov Dilshod	Milliy g'oya asosiy tushuncha va tamoyillari (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+300	ass. Adinayev Xushnud	Muammo tahlili va yechimi (amaliyot)	Axborot texnologiyalari kafedrasi 
+301	ass. Adinayev Xushnud	Mobil qurilmalar uchun dasturiy ta'minot vositalari (tajriba)	Axborot texnologiyalari kafedrasi 
+302	dots. Ashirova A	Informatika va axborot texnologiyalari fanini o'qitish metodikasi (ma'ruza)	Axborot texnologiyalari kafedrasi 
+303	kat.o'qt. Yusupova Sh	Qiyosiy ta'lim (ma'ruza)	Axborot texnologiyalari kafedrasi 
+304	kat.o'qt.Abdullayeva G	Multimediaga kirish (tajriba)	Axborot texnologiyalari kafedrasi 
+305	ass.Nurmetova Bonura	Multimediaga kirish (tajriba)	Axborot texnologiyalari kafedrasi 
+306	ass. Allaberganova M	Elektron ta'lim resurslarini yaratish texnologiyasi (amaliyot)	Axborot texnologiyalari kafedrasi 
+307	ass. Bekimetov A	Tarmoq protokollari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+308	kat.o’q. Matyokubov O’	Tarmoq protokollari (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+309	ass. Bekimetov A	Dasturiy konfiguratsiyalanadigan tarmoqlar (ma'ruza)	Telekommunikatsiya injiniringi kafedrasi
+310	kat.o'qt.Abdullayeva G	Tarmoq xavfsizligi (tajriba)	Telekommunikatsiya injiniringi kafedrasi
+311	dots.Mamedov Qudrat	Hisob (ma'ruza)	Tabiiy va umumkasbiy fanlar kafedrasi 
+344	ass. To`liyeva Z.	Jismoniy tarbiya	Gumanitar va ijtimoiy fanlar kafedrasi
+345	dots. Mamedov Q	Hisob (amaliyot)	Tabiiy va umumkasbiy fanlar kafedrasi 
+346	kat. o'qt. Bobojonov K	Fizika (ma'ruza)	Tabiiy va umumkasbiy fanlar kafedrasi 
+347	kat. o'qt. Bobojonov K	Fizika (amaliyot)	Tabiiy va umumkasbiy fanlar kafedrasi 
+348	kat. o'qt. Matyazova N	Akademik nutq (seminar)	Gumanitar va ijtimoiy fanlar kafedrasi
+349	ass. Rajabov A	Fizika (tajriba)	Tabiiy va umumkasbiy fanlar kafedrasi 
+350	Ibragimov Dilshod	O'zbekiston tarixi (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+351	kat. o'qt Bobojonov K	Fizika (tajriba)	Tabiiy va umumkasbiy fanlar kafedrasi 
+352	ass. Rajabov A	Fizika (amaliyot)	Tabiiy va umumkasbiy fanlar kafedrasi 
+353	dots. Saidov D	Fizika (amaliyot)	Tabiiy va umumkasbiy fanlar kafedrasi 
+354	dots. Saidov D	Fizika (ma'ruza)	Tabiiy va umumkasbiy fanlar kafedrasi 
+355	ass Axmedov G'	O'zbekiston tarixi (ma'ruza)	Gumanitar va ijtimoiy fanlar kafedrasi
+356	dots. Atamuratov A	Fizika (ma'ruza)	Tabiiy va umumkasbiy fanlar kafedrasi 
+357	dots. Atamuratov A	Fizika (amaliyot)	Tabiiy va umumkasbiy fanlar kafedrasi 
+358	dots. Saidov D	Fizika (tajriba)	Tabiiy va umumkasbiy fanlar kafedrasi 
+\.
+
+
+--
+-- TOC entry 2966 (class 0 OID 289172)
+-- Dependencies: 204
+-- Data for Name: Timetables; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."Timetables" (id, "studyShift", "weekDay", couple, "typeOfLesson", groups, divorce, "subjectId", teachers, "numberRoom", "specPart", flow, alternation) FROM stdin;
+5	Afternoon	Monday	couple 1	Lecture	951-17		45	Sodiqov Mahmudjon	213	\N	f	\N
+10	Morning	Monday	couple 1	Lecture	911-19		2	dots.Mamedov Qudrat	313	\N	f	\N
+11	Morning	Monday	couple 1	Lecture	912-19		2	dots.Mamedov Qudrat	313	\N	f	\N
+12	Morning	Monday	couple 1	Lecture	914-19		2	dots.Mamedov Qudrat	313	\N	f	\N
+13	Morning	Monday	couple 2	Practice	911-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+14	Morning	Monday	couple 3	Practice	911-19		4	Adambayeva Feruza	219	\N	f	\N
+15	Morning	Tuesday	couple 1	Practice	911-19		5	Ibragimov Dilshod	213	\N	f	\N
+16	Morning	Tuesday	couple 2	Laboratory	911-19	half	6	Aminov Sh	216	\N	f	\N
+17	Morning	Tuesday	couple 2	Laboratory	911-19	half	6	Xusinov Shahzod	118	\N	f	\N
+18	Morning	Tuesday	couple 3	Practice	911-19		12	dots. Mamedov Q	213	\N	f	\N
+19	Morning	Wednesday	couple 1	Lecture	911-19		8	kat. o'qt. Bobojonov K	214	\N	f	\N
+20	Morning	Wednesday	couple 2	Lecture	911-19		9	Kazakov Otabek	214	\N	f	\N
+21	Morning	Wednesday	couple 3	Practice	911-19		10	kat. o'qt. Bobojonov K	114	\N	f	\N
+22	Morning	Thursday	couple 1	Practice	911-19		4	Adambayeva Feruza	219	\N	f	\N
+23	Morning	Thursday	couple 2	Lecture	911-19		2	dots.Mamedov Qudrat	214	\N	f	\N
+24	Morning	Thursday	couple 3	Practice	911-19		11	kat. o'qt. Matyazova N	308	\N	f	\N
+26	Morning	Friday	couple 3	Laboratory	911-19	half	14	ass. Rajabov A	215A	\N	f	\N
+27	Morning	Saturday	couple 1	Lecture	911-19		15	Ibragimov Dilshod	214	\N	f	\N
+28	Morning	Saturday	couple 2	Laboratory	911-19	half	6	Aminov Sh	321	\N	f	\N
+29	Morning	Saturday	couple 2	Laboratory	911-19	half	6	Xusinov Shahzod	325	\N	f	\N
+30	Morning	Monday	couple 2	Practice	912-19		7	dots. Mamedov Q	312	\N	f	\N
+31	Morning	Monday	couple 3	Laboratory	912-19	half	6	Aminov Sh	114	\N	f	\N
+32	Morning	Tuesday	couple 1	Practice	912-19		4	Sapayeva Feruza	201	\N	f	\N
+33	Morning	Tuesday	couple 2	Practice	912-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+34	Morning	Tuesday	couple 3	Practice	912-19		5	Ibragimov Dilshod	209	\N	f	\N
+35	Morning	Wednesday	couple 1	Lecture	912-19		8	kat. o'qt. Bobojonov K	214	\N	f	\N
+36	Morning	Wednesday	couple 2	Lecture	912-19		9	Kazakov Otabek	214	\N	f	\N
+37	Morning	Wednesday	couple 3	Laboratory	912-19	half	6	Aminov Sh	118	\N	f	\N
+38	Morning	Wednesday	couple 3	Laboratory	912-19	half	6	Xusinov Shahzod	108	\N	f	\N
+39	Morning	Thursday	couple 1	Laboratory	912-19	half	14	ass. Rajabov A	215A	\N	f	\N
+40	Morning	Thursday	couple 2	Lecture	912-19		2	dots.Mamedov Qudrat	214	\N	f	\N
+41	Morning	Thursday	couple 3	Practice	912-19		12	dots. Mamedov Q	212	\N	f	\N
+42	Morning	Friday	couple 1	Practice	912-19		4	Sapayeva Feruza	209	\N	f	\N
+43	Morning	Friday	couple 3	Practice	912-19		10	kat. o'qt. Bobojonov K	215A	\N	f	\N
+44	Morning	Saturday	couple 1	Lecture	912-19		15	Ibragimov Dilshod	214	\N	f	\N
+45	Morning	Saturday	couple 2	Practice	912-19		11	kat. o'qt. Matyazova N	303	\N	f	\N
+46	Morning	Monday	couple 2	Laboratory	914-19	half	6	Aminov Sh	314	\N	f	\N
+47	Morning	Monday	couple 2	Laboratory	914-19	half	6	Xusinov Shahzod	325	\N	f	\N
+49	Morning	Tuesday	couple 1	Laboratory	914-19	half	14	ass. Rajabov A	215A	\N	f	\N
+50	Morning	Tuesday	couple 1	Laboratory	914-19	half	14	kat. o'qt Bobojonov K	215B	\N	f	\N
+51	Morning	Tuesday	couple 2	Practice	914-19		5	Ibragimov Dilshod	314	\N	f	\N
+53	Morning	Tuesday	couple 3	Practice	914-19		4	Adambayeva Feruza	219	\N	f	\N
+52	Morning	Tuesday	couple 3	Practice	914-19		4	Qilicheva Nargiza	313	\N	f	\N
+54	Morning	Wednesday	couple 1	Lecture	914-19		8	kat. o'qt. Bobojonov K	214	\N	f	\N
+55	Morning	Wednesday	couple 2	Lecture	914-19		9	Kazakov Otabek	214	\N	f	\N
+56	Morning	Wednesday	couple 3	Practice	914-19		10	ass. Rajabov A	315	\N	f	\N
+57	Morning	Thursday	couple 1	Practice	914-19		11	kat. o'qt. Matyazova N	311	\N	f	\N
+58	Morning	Thursday	couple 2	Lecture	914-19		2	dots.Mamedov Qudrat	214	\N	f	\N
+59	Morning	Thursday	couple 3	Practice	914-19		4	Qilicheva Nargiza	209	\N	f	\N
+60	Morning	Thursday	couple 3	Practice	914-19		4	Adambayeva Feruza	219	\N	f	\N
+61	Morning	Friday	couple 1	Laboratory	914-19	half	6	Aminov Sh	108	\N	f	\N
+62	Morning	Friday	couple 1	Laboratory	914-19	half	6	Xusinov Shahzod	109	\N	f	\N
+63	Morning	Saturday	couple 1	Lecture	914-19		15	Ibragimov Dilshod	214	\N	f	\N
+64	Morning	Saturday	couple 2	Practice	914-19		12	dots. Mamedov Q	216	\N	f	\N
+65	Morning	Saturday	couple 3	Practice	914-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+48	Morning	Monday	couple 3	Practice	914-19		7	dots. Mamedov Q	215	\N	f	\N
+25	Morning	Friday	couple 1	Practice	911-19		7	dots. Mamedov Q	215	\N	f	\N
+66	Morning	Monday	couple 1	Practice	951-19		11	kat. o'qt. Matyazova N	107	\N	f	\N
+67	Morning	Monday	couple 2	Practice	951-19		4	Adambayeva Feruza	219	\N	f	\N
+68	Morning	Monday	couple 3	Practice	951-19		10	dots. Saidov D	215A	\N	f	\N
+69	Morning	Tuesday	couple 1	Lecture	951-19		15	Axmedov G'ulom	312	\N	f	\N
+70	Morning	Tuesday	couple 2	Practice	951-19		5	Axmedov G'ulom	315	\N	f	\N
+71	Morning	Tuesday	couple 3	Laboratory	951-19	half	14	ass. Rajabov A	114	\N	f	\N
+72	Morning	Wednesday	couple 1	Laboratory	951-19	half	6	Aminov Sh	106	\N	f	\N
+73	Morning	Wednesday	couple 1	Laboratory	951-19	half	6	Xusinov Shahzod	107	\N	f	\N
+74	Morning	Wednesday	couple 2	Practice	951-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+75	Morning	Wednesday	couple 3	Practice	951-19		12	Jumaniyazov N	314	\N	f	\N
+76	Morning	Thursday	couple 1	Lecture	951-19		2	Jumaniyazov N	212	\N	f	\N
+77	Morning	Thursday	couple 2	Lecture	951-19		9	Kazakov Otabek	215	\N	f	\N
+78	Morning	Thursday	couple 3	Lecture	951-19		8	dots. Saidov D	215	\N	f	\N
+79	Morning	Friday	couple 1	Practice	951-19		4	Adambayeva Feruza	219	\N	f	\N
+80	Morning	Saturday	couple 1	Lecture	951-19		2	Jumaniyazov N	212	\N	f	\N
+81	Morning	Saturday	couple 2	Practice	951-19		12	Jumaniyazov N	118	\N	f	\N
+82	Morning	Saturday	couple 3	Laboratory	951-19	half	6	Aminov Sh	302	\N	f	\N
+83	Morning	Saturday	couple 3	Laboratory	951-19	half	6	Xusinov Shahzod	308	\N	f	\N
+84	Morning	Monday	couple 1	Practice	921-19		10	ass. Rajabov A	114	\N	f	\N
+85	Morning	Monday	couple 2	Laboratory	921-19	half	6	Ibragimov Muhiddin	114	\N	f	\N
+86	Morning	Monday	couple 2	Laboratory	921-19	half	6	Otamuratov S	321	\N	f	\N
+87	Morning	Monday	couple 3	Practice	921-19		12	Jumaniyazov N	314	\N	f	\N
+88	Morning	Tuesday	couple 1	Lecture	921-19		15	ass Axmedov G'	312	\N	f	\N
+89	Morning	Tuesday	couple 2	Practice	921-19		16	Matyazova N	209	\N	f	\N
+90	Morning	Wednesday	couple 1	Practice	921-19		12	Jumaniyazov N	213	\N	f	\N
+91	Morning	Wednesday	couple 2	Laboratory	921-19	half	6	Ibragimov Muhiddin	321	\N	f	\N
+92	Morning	Wednesday	couple 2	Laboratory	921-19	half	6	Otamuratov S	325	\N	f	\N
+93	Morning	Wednesday	couple 3	Practice	921-19		5	Axmedov G'ulom	313	\N	f	\N
+94	Morning	Thursday	couple 1	Lecture	921-19		2	Jumaniyazov N	212	\N	f	\N
+95	Morning	Thursday	couple 2	Lecture	921-19		9	Kazakov Otabek	215	\N	f	\N
+96	Morning	Thursday	couple 3	Lecture	921-19		8	dots. Saidov D	215	\N	f	\N
+97	Morning	Friday	couple 1	Practice	921-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+98	Morning	Friday	couple 3	Practice	921-19		4	Xalliyev J	209	\N	f	\N
+99	Morning	Friday	couple 3	Practice	921-19		4	Qilicheva Nargiza	213	\N	f	\N
+100	Morning	Saturday	couple 1	Lecture	921-19		2	Jumaniyazov N	212	\N	f	\N
+101	Morning	Saturday	couple 2	Practice	921-19		4	Xalliyev J	213	\N	f	\N
+102	Morning	Saturday	couple 2	Practice	921-19		4	Qilicheva Nargiza	214	\N	f	\N
+103	Morning	Saturday	couple 3	Laboratory	921-19	half	14	ass. Rajabov A	215A	\N	f	\N
+104	Morning	Monday	couple 1	Lecture	941-19		8	dots. Atamuratov A	315	\N	f	\N
+105	Morning	Monday	couple 2	Laboratory	941-19	half	6	Quramboyev A	316	\N	f	\N
+106	Morning	Monday	couple 2	Laboratory	941-19	half	6	Jabborov D	319	\N	f	\N
+107	Morning	Monday	couple 3	Practice	941-19		12	Xusainov Islom	315	\N	f	\N
+108	Morning	Tuesday	couple 1	Lecture	941-19		2	dots.Mamedov Qudrat	212	\N	f	\N
+109	Morning	Tuesday	couple 2	Practice	941-19		4	Sapayeva Feruza	201	\N	f	\N
+110	Morning	Tuesday	couple 3	Lecture	941-19		9	Kazakov Otabek	214	\N	f	\N
+111	Morning	Wednesday	couple 1	Laboratory	941-19	half	6	Quramboyev A	108	\N	f	\N
+112	Morning	Wednesday	couple 1	Laboratory	941-19	half	6	Jabborov D	109	\N	f	\N
+113	Morning	Wednesday	couple 2	Practice	941-19		11	kat. o'qt. Matyazova N	315	\N	f	\N
+114	Morning	Wednesday	couple 3	Practice	941-19		7	Xusainov Islom	215	\N	f	\N
+115	Morning	Thursday	couple 1	Lecture	941-19		2	dots.Mamedov Qudrat	214	\N	f	\N
+116	Morning	Thursday	couple 2	Lecture	941-19		15	Ibragimov Dilshod	212	\N	f	\N
+117	Morning	Thursday	couple 3	Practice	941-19		4	Sapayeva Feruza	201	\N	f	\N
+118	Morning	Friday	couple 1	Laboratory	941-19	half	14	ass. Rajabov A	215A	\N	f	\N
+119	Morning	Friday	couple 1	Laboratory	941-19	half	14	kat. o'qt Bobojonov K	215B	\N	f	\N
+120	Morning	Friday	couple 3	Practice	941-19		10	dots. Atamuratov A	214	\N	f	\N
+121	Morning	Saturday	couple 1	Practice	941-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+122	Morning	Saturday	couple 2	Practice	941-19		5	Ibragimov Dilshod	316	\N	f	\N
+123	Morning	Monday	couple 1	Lecture	942-19		8	dots. Atamuratov A	315	\N	f	\N
+124	Morning	Monday	couple 2	Practice	942-19		12	Xusainov Islom	214	\N	f	\N
+125	Morning	Monday	couple 3	Practice	942-19		10	ass. Rajabov A	212	\N	f	\N
+126	Morning	Tuesday	couple 1	Lecture	942-19		2	dots.Mamedov Qudrat	212	\N	f	\N
+129	Morning	Tuesday	couple 2	Lecture	942-19		9	Kazakov Otabek	214	\N	f	\N
+128	Morning	Tuesday	couple 3	Laboratory	942-19	half	6	Jabborov D	109	\N	f	\N
+127	Morning	Tuesday	couple 3	Laboratory	942-19	half	6	Ibragimov Muhiddin	108	\N	f	\N
+130	Morning	Wednesday	couple 1	Practice	942-19		5	Ibragimov Dilshod	215	\N	f	\N
+131	Morning	Wednesday	couple 2	Practice	942-19		12	Xusainov Islom	314	\N	f	\N
+132	Morning	Wednesday	couple 3	Practice	942-19		11	kat. o'qt. Matyazova N	214	\N	f	\N
+133	Morning	Thursday	couple 1	Lecture	942-19		2	dots.Mamedov Qudrat	214	\N	f	\N
+134	Morning	Thursday	couple 2	Lecture	942-19		15	Ibragimov Dilshod	212	\N	f	\N
+135	Morning	Friday	couple 1	Practice	942-19		4	Xalliyev J	201	\N	f	\N
+136	Morning	Friday	couple 3	Practice	942-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+137	Morning	Saturday	couple 1	Practice	942-19		4	Xalliyev J	213	\N	f	\N
+138	Morning	Saturday	couple 2	Laboratory	942-19	half	14	ass. Rajabov A	215A	\N	f	\N
+139	Morning	Saturday	couple 2	Laboratory	942-19	half	14	kat. o'qt Bobojonov K	215B	\N	f	\N
+140	Morning	Saturday	couple 3	Laboratory	942-19	half	6	Ibragimov Muhiddin	315	\N	f	\N
+141	Morning	Saturday	couple 3	Laboratory	942-19	half	6	Jabborov D	316	\N	f	\N
+142	Morning	Monday	couple 1	Lecture	943-19		8	dots. Atamuratov A	315	\N	f	\N
+143	Morning	Monday	couple 2	Practice	943-19		5	Ibragimov Dilshod	303	\N	f	\N
+144	Morning	Monday	couple 3	Laboratory	943-19	half	6	Ibragimov Muhiddin	108	\N	f	\N
+145	Morning	Monday	couple 3	Laboratory	943-19	half	6	Jabborov D	109	\N	f	\N
+146	Morning	Tuesday	couple 1	Lecture	943-19		2	dots.Mamedov Qudrat	212	\N	f	\N
+147	Morning	Tuesday	couple 2	Practice	943-19		10	ass. Rajabov A	114	\N	f	\N
+148	Morning	Tuesday	couple 3	Lecture	943-19		9	Kazakov Otabek	214	\N	f	\N
+149	Morning	Wednesday	couple 1	Practice	943-19		12	Xusainov Islom	313	\N	f	\N
+150	Morning	Wednesday	couple 2	Practice	943-19		4	Adambayeva Feruza	219	\N	f	\N
+151	Morning	Wednesday	couple 3	Practice	943-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+152	Morning	Thursday	couple 1	Lecture	943-19		2	dots.Mamedov Qudrat	214	\N	f	\N
+153	Morning	Thursday	couple 2	Lecture	943-19		15	Ibragimov Dilshod	212	\N	f	\N
+154	Morning	Friday	couple 1	Practice	943-19		12	Xusainov Islom	214	\N	f	\N
+155	Morning	Friday	couple 3	Practice	943-19		11	kat. o'qt. Matyazova N	312	\N	f	\N
+156	Morning	Saturday	couple 1	Laboratory	943-19	half	14	ass. Rajabov A	215A	\N	f	\N
+157	Morning	Saturday	couple 1	Laboratory	943-19	half	14	dots. Saidov D	215B	\N	f	\N
+158	Morning	Saturday	couple 2	Laboratory	943-19	half	6	Ibragimov Muhiddin	314	\N	f	\N
+159	Morning	Saturday	couple 2	Laboratory	943-19	half	6	Jabborov D	315	\N	f	\N
+160	Morning	Saturday	couple 3	Practice	943-19		4	Adambayeva Feruza	219	\N	f	\N
+161	Morning	Monday	couple 1	Practice	931-19		7	Jumaniyazov N	118	\N	f	\N
+162	Morning	Monday	couple 2	Practice	931-19		4	Sapayeva Feruza	213	\N	f	\N
+163	Morning	Monday	couple 3	Practice	931-19		16	Matyazova N	325	\N	f	\N
+164	Morning	Tuesday	couple 1	Lecture	931-19		15	ass Axmedov G'	312	\N	f	\N
+165	Morning	Tuesday	couple 2	Laboratory	931-19	half	6	Eschanov U	310	\N	f	\N
+166	Morning	Tuesday	couple 2	Laboratory	931-19	half	6	Bazarboyev M	311	\N	f	\N
+167	Morning	Tuesday	couple 3	Practice	931-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+168	Morning	Wednesday	couple 1	Laboratory	931-19	half	14	ass. Rajabov A	215A	\N	f	\N
+169	Morning	Wednesday	couple 1	Laboratory	931-19	half	14	dots. Saidov D	215B	\N	f	\N
+170	Morning	Wednesday	couple 2	Practice	931-19		4	Sapayeva Feruza	201	\N	f	\N
+171	Morning	Wednesday	couple 3	Practice	931-19		10	dots. Saidov D	215A	\N	f	\N
+172	Morning	Thursday	couple 1	Lecture	931-19		2	Jumaniyazov N	212	\N	f	\N
+173	Morning	Thursday	couple 1	Lecture	932-19		2	Jumaniyazov N	212	\N	f	\N
+174	Morning	Thursday	couple 2	Lecture	931-19		9	Kazakov Otabek	313	\N	f	\N
+175	Morning	Thursday	couple 2	Lecture	932-19		9	Kazakov Otabek	313	\N	f	\N
+177	Morning	Thursday	couple 3	Lecture	932-19		8	dots. Saidov D	214	\N	f	\N
+176	Morning	Thursday	couple 3	Lecture	931-19		8	dots. Saidov D	214	\N	f	\N
+178	Morning	Friday	couple 1	Practice	931-19		7	Jumaniyazov N	213	\N	f	\N
+179	Morning	Friday	couple 3	Practice	931-19		5	Axmedov G'ulom	314	\N	f	\N
+180	Morning	Saturday	couple 1	Lecture	931-19		2	Jumaniyazov N	212	\N	f	\N
+181	Morning	Saturday	couple 2	Laboratory	931-19	half	6	Eschanov U	308	\N	f	\N
+182	Morning	Saturday	couple 2	Laboratory	931-19	half	6	Bazarboyev M	310	\N	f	\N
+183	Morning	Monday	couple 1	Practice	932-19		12	O'razmetova Sh	207	\N	f	\N
+184	Morning	Monday	couple 2	Practice	932-19		10	ass. Rajabov A	215A	\N	f	\N
+185	Morning	Monday	couple 2	Practice	932-19		10	kat. o'qt. Bobojonov K	215B	\N	f	\N
+186	Morning	Monday	couple 3	Practice	932-19		4	Sapayeva Feruza	201	\N	f	\N
+187	Morning	Tuesday	couple 1	Lecture	932-19		15	ass Axmedov G'	312	\N	f	\N
+188	Morning	Tuesday	couple 2	Practice	932-19		7	O'razmetova Sh	215	\N	f	\N
+189	Morning	Tuesday	couple 3	Practice	932-19		16	Matyazova N	207	\N	f	\N
+190	Morning	Wednesday	couple 1	Practice	932-19		4	Sapayeva Feruza	201	\N	f	\N
+191	Morning	Wednesday	couple 2	Laboratory	932-19	half	14	ass. Rajabov A	215A	\N	f	\N
+192	Morning	Friday	couple 1	Laboratory	932-19	half	6	Bazarboyev M	321	\N	f	\N
+193	Morning	Friday	couple 1	Laboratory	932-19	half	6	Eschanov U	325	\N	f	\N
+194	Morning	Friday	couple 3	Laboratory	932-19	half	6	Eschanov U	325	\N	f	\N
+195	Morning	Friday	couple 3	Laboratory	932-19	half	6	Bazarboyev M	321	\N	f	\N
+196	Morning	Saturday	couple 1	Lecture	932-19		2	Jumaniyazov N	212	\N	f	\N
+197	Morning	Saturday	couple 2	Practice	932-19		3	ass. To`liyeva Z.	sport maydoni	\N	f	\N
+198	Morning	Saturday	couple 3	Practice	932-19		5	Axmedov G'ulom	118	\N	f	\N
+199	Morning	Monday	couple 2	Practice	913-19		5	Jumaniyozov Fazliddin	102	\N	f	\N
+200	Afternoon	Monday	couple 1	Lecture	913-17		83	Yangibayeva Madina	212	\N	f	\N
+201	Afternoon	Monday	couple 1	Lecture	911-17		83	Yangibayeva Madina	212	\N	f	\N
+202	Afternoon	Monday	couple 1	Lecture	912-17		83	Yangibayeva Madina	212	\N	f	\N
+\.
+
+
+--
+-- TOC entry 2968 (class 0 OID 289181)
+-- Dependencies: 206
+-- Data for Name: play_evolutions; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.play_evolutions (id, hash, applied_at, apply_script, revert_script, state, last_problem) FROM stdin;
+1	39bfc747493f23e206b8cf678442064c46227a08	2019-10-03 08:54:02.381	CREATE TABLE "Subjects" (\n"id" SERIAL NOT NULL PRIMARY KEY,\n"name" VARCHAR NOT NULL\n);\n\nCREATE TABLE "Teachers" (\n"id" SERIAL NOT NULL PRIMARY KEY,\n"fullName" VARCHAR NOT NULL,\n"tSubject" VARCHAR NOT NULL,\n"department" VARCHAR NOT NULL\n);\n\nCREATE TABLE "Groups" (\n"id" SERIAL NOT NULL PRIMARY KEY,\n"name" VARCHAR NOT NULL,\n"direction" VARCHAR NOT NULL\n);\n\nCREATE TABLE "Timetables" (\n"id" SERIAL NOT NULL PRIMARY KEY,\n"studyShift" VARCHAR NOT NULL,\n"weekDay" VARCHAR NOT NULL,\n"couple" VARCHAR NOT NULL,\n"typeOfLesson" VARCHAR NOT NULL,\n"groups" VARCHAR NOT NULL,\n"divorce" VARCHAR NULL,\n"subjectId" INTEGER CONSTRAINT "timetablesFkSubjectId" REFERENCES "Subjects" ON UPDATE CASCADE ON DELETE CASCADE,\n"teachers" VARCHAR NOT NULL,\n"numberRoom" INT NOT NULL\n);	DROP TABLE "Timetables";\nDROP TABLE "Groups";\nDROP TABLE "Teachers";\nDROP TABLE "Subjects";	applied	
+2	1eea8bf2d0907df9630c4edcdfd0afa56205076d	2019-10-16 12:43:14.185	ALTER TABLE "Timetables" ADD COLUMN "specPart" VARCHAR NULL;	ALTER TABLE "Timetables" DROP "specPart";	applied	
+3	08ccabf46d6e1610bcb3c51b4fbc224e872a7db1	2019-10-16 12:43:14.216	CREATE TABLE "Suggestion" (\n"id" SERIAL NOT NULL PRIMARY KEY,\n"teacherName" VARCHAR NOT NULL,\n"suggestion" VARCHAR NOT NULL\n);	DROP TABLE "Suggestion";	applied	
+4	581ad922975919be415526b138d6692d5f64f3b3	2019-10-28 10:09:47.055	ALTER TABLE "Timetables" ALTER COLUMN "numberRoom" TYPE VARCHAR;	ALTER TABLE "Timetables" ALTER COLUMN "numberRoom" TYPE INT;	applied	
+5	4b699dcf5354b525a79456e585db3fa2784a7d44	2019-11-04 04:14:37.514	ALTER TABLE "Groups" ADD COLUMN "count" INT NULL;	ALTER TABLE "Groups" DROP COLUMN "count";	applied	
+6	132781e5bd1d56ecfb70e1d1216e2c7fe727a2af	2019-11-05 09:31:46.274	ALTER TABLE "Timetables" ADD COLUMN "flow" BOOLEAN NOT NULL DEFAULT FALSE;;	ALTER TABLE "Timetables" DROP COLUMN "flow";	applied	
+7	d7ec8363a4433d860039c0312585ced8f7af5aa1	2019-11-05 17:02:55.309	ALTER TABLE "Timetables" ADD COLUMN "alternation" varchar not null;	ALTER TABLE "Timetables" DROP COLUMN "alternation";	applying_up	ERROR: column "alternation" contains null values [ERROR:0, SQLSTATE:23502]
+\.
+
+
+--
+-- TOC entry 2979 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: Groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."Groups_id_seq"', 62, true);
+
+
+--
+-- TOC entry 2980 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: Subjects_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."Subjects_id_seq"', 188, true);
+
+
+--
+-- TOC entry 2981 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: Suggestion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."Suggestion_id_seq"', 1, false);
+
+
+--
+-- TOC entry 2982 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: Teachers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."Teachers_id_seq"', 358, true);
+
+
+--
+-- TOC entry 2983 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: Timetables_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."Timetables_id_seq"', 202, true);
+
+
+--
+-- TOC entry 2825 (class 2606 OID 289193)
+-- Name: Groups Groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Groups"
+    ADD CONSTRAINT "Groups_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2827 (class 2606 OID 289195)
+-- Name: Subjects Subjects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Subjects"
+    ADD CONSTRAINT "Subjects_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2829 (class 2606 OID 289197)
+-- Name: Suggestion Suggestion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Suggestion"
+    ADD CONSTRAINT "Suggestion_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2831 (class 2606 OID 289199)
+-- Name: Teachers Teachers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Teachers"
+    ADD CONSTRAINT "Teachers_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2833 (class 2606 OID 289201)
+-- Name: Timetables Timetables_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Timetables"
+    ADD CONSTRAINT "Timetables_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2835 (class 2606 OID 289203)
+-- Name: play_evolutions play_evolutions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.play_evolutions
+    ADD CONSTRAINT play_evolutions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2836 (class 2606 OID 289204)
+-- Name: Timetables timetablesFkSubjectId; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Timetables"
+    ADD CONSTRAINT "timetablesFkSubjectId" FOREIGN KEY ("subjectId") REFERENCES public."Subjects"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+-- Completed on 2019-11-06 09:12:41 +05
+
+--
+-- PostgreSQL database dump complete
+--
+
