@@ -61,12 +61,13 @@ class TimetableManager @Inject()(val environment: Environment,
 
   }
 
-  private def addTimetable(timetableData: Timetable): Future[io.Serializable] = {
+  private def addTimetable(timetableData: Timetable) = {
     (
       timetableData.alternation match {
         case None =>
           for {
-            response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+            response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+              timetableData.numberRoom, timetableData.studyShift)
           } yield response match {
             case Some(timetable) =>
               if (timetable.subjectId == timetableData.subjectId &&
@@ -75,29 +76,33 @@ class TimetableManager @Inject()(val environment: Environment,
                 timetableData.typeOfLesson == timetable.typeOfLesson
               ) {
                 timetableDao.addTimetable(timetableData)
-                Future.successful(timetableData.teachers)
+                Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               }
               else {
-                Future.successful(timetable.teachers)
+                Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers +
+                  " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
               }
             case None =>
               timetableDao.addTimetable(timetableData)
-              Future.successful(timetableData.teachers)
+              Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
           }
         case _ =>
           for {
-            response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+            response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+              timetableData.numberRoom, timetableData.studyShift)
           } yield response match {
             case Some(timetable) =>
               if (timetable.alternation.isEmpty) {
-                Future.successful(timetable.teachers)
+                Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers +
+                  " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
               } else {
-                log.warning(s"getT: $timetable")
-                Future.successful(timetable.alternation.toString)
+                Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni "+
+                  translateAlternation(timetable.alternation) +" haftada shu parada " +
+                  timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
               }
             case None =>
               timetableDao.addTimetable(timetableData)
-              Future.successful(timetableData.teachers)
+              Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
           }
       }
       ).flatten
@@ -142,7 +147,7 @@ class TimetableManager @Inject()(val environment: Environment,
 
   private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[String]] = {
     for {
-      presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple)
+      presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple, presentCouple.studyShift)
     } yield roomList.map(_.numberRoom).diff(presentLessons.map(_.numberRoom))
   }
 
@@ -151,30 +156,12 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTimetableByGroup(getText.weekDay, getText.group)
     } yield response.map { timetable =>
-      val trNameDay = timetable.weekDay match {
-        case "Monday" => "Dushanba"
-        case "Tuesday" => "Seshanba"
-        case "Wednesday" => "Chorshanba"
-        case "Thursday" => "Payshanba"
-        case "Friday" => "Juma"
-        case "Saturday" => "Shanba"
-      }
-      val trStudyShift = timetable.studyShift match {
-        case "Afternoon" => "2 - Smena"
-        case "Morning" => "1 - Smena"
-      }
-      val trCouple = timetable.couple match {
-        case "couple 1" => "1 - Juftlik"
-        case "couple 2" => "2 - Juftlik"
-        case "couple 3" => "3 - Juftlik"
-        case "couple 4" => "4 - Juftlik"
-      }
-      val trTypeLesson = timetable.typeOfLesson match {
-        case "Laboratory" => "Laboratoriya"
-        case "Practice" => "Amaliyot"
-        case "Lecture" => "Ma'ruza"
-      }
-      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(
+        weekDay = trWeekday(timetable.weekDay),
+        studyShift = trStudyShift(timetable.studyShift),
+        couple = trCouple(timetable.couple),
+        typeOfLesson = trTypeLesson(timetable.typeOfLesson)
+      )
       timetableMapped
     }
   }
@@ -183,30 +170,12 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTByTeacherAndWeekday(getText.weekDay, getText.group)
     } yield response.map { timetable =>
-      val trNameDay = timetable.weekDay match {
-        case "Monday" => "Dushanba"
-        case "Tuesday" => "Seshanba"
-        case "Wednesday" => "Chorshanba"
-        case "Thursday" => "Payshanba"
-        case "Friday" => "Juma"
-        case "Saturday" => "Shanba"
-      }
-      val trStudyShift = timetable.studyShift match {
-        case "Afternoon" => "2 - Smena"
-        case "Morning" => "1 - Smena"
-      }
-      val trCouple = timetable.couple match {
-        case "couple 1" => "1 - Juftlik"
-        case "couple 2" => "2 - Juftlik"
-        case "couple 3" => "3 - Juftlik"
-        case "couple 4" => "4 - Juftlik"
-      }
-      val trTypeLesson = timetable.typeOfLesson match {
-        case "Laboratory" => "Laboratoriya"
-        case "Practice" => "Amaliyot"
-        case "Lecture" => "Ma'ruza"
-      }
-      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(
+        weekDay = trWeekday(timetable.weekDay),
+        studyShift = trStudyShift(timetable.studyShift),
+        couple = trCouple(timetable.couple),
+        typeOfLesson = trTypeLesson(timetable.typeOfLesson)
+      )
       timetableMapped
 
     }
@@ -216,22 +185,11 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTimetableByGr(group)
     } yield response.map { timetable =>
-      val trStudyShift = timetable.studyShift match {
-        case "Afternoon" => "2 - Smena"
-        case "Morning" => "1 - Smena"
-      }
-      val trCouple = timetable.couple match {
-        case "couple 1" => "1 - Juftlik"
-        case "couple 2" => "2 - Juftlik"
-        case "couple 3" => "3 - Juftlik"
-        case "couple 4" => "4 - Juftlik"
-      }
-      val trTypeLesson = timetable.typeOfLesson match {
-        case "Laboratory" => "Laboratoriya"
-        case "Practice" => "Amaliyot"
-        case "Lecture" => "Ma'ruza"
-      }
-      val timetableMapped = timetable.copy(studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(
+        studyShift = trStudyShift(timetable.studyShift),
+        couple = trCouple(timetable.couple),
+        typeOfLesson = trTypeLesson(timetable.typeOfLesson)
+      )
       timetableMapped
 
     }
@@ -241,30 +199,12 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTimetablesByTeacher(teacher)
     } yield response.map { timetable =>
-      val trNameDay = timetable.weekDay match {
-        case "Monday" => "Dushanba"
-        case "Tuesday" => "Seshanba"
-        case "Wednesday" => "Chorshanba"
-        case "Thursday" => "Payshanba"
-        case "Friday" => "Juma"
-        case "Saturday" => "Shanba"
-      }
-      val trStudyShift = timetable.studyShift match {
-        case "Afternoon" => "2 - Smena"
-        case "Morning" => "1 - Smena"
-      }
-      val trCouple = timetable.couple match {
-        case "couple 1" => "1 - Juftlik"
-        case "couple 2" => "2 - Juftlik"
-        case "couple 3" => "3 - Juftlik"
-        case "couple 4" => "4 - Juftlik"
-      }
-      val trTypeLesson = timetable.typeOfLesson match {
-        case "Laboratory" => "Laboratoriya"
-        case "Practice" => "Amaliyot"
-        case "Lecture" => "Ma'ruza"
-      }
-      val timetableMapped = timetable.copy(weekDay = trNameDay, studyShift = trStudyShift, couple = trCouple, typeOfLesson = trTypeLesson)
+      val timetableMapped = timetable.copy(
+        weekDay = trWeekday(timetable.weekDay),
+        studyShift = trStudyShift(timetable.studyShift),
+        couple = trCouple(timetable.couple),
+        typeOfLesson = trTypeLesson(timetable.typeOfLesson)
+      )
       log.warning(s"timetable: $timetableMapped")
       timetableMapped
 
@@ -284,5 +224,47 @@ class TimetableManager @Inject()(val environment: Environment,
     for {
       response <- timetableDao.getTimetableByGr(group)
     } yield response
+  }
+
+  private def trWeekday(weekday: String) = {
+    weekday match {
+      case "Monday" => "Dushanba"
+      case "Tuesday" => "Seshanba"
+      case "Wednesday" => "Chorshanba"
+      case "Thursday" => "Payshanba"
+      case "Friday" => "Juma"
+      case "Saturday" => "Shanba"
+    }
+  }
+
+  private def translateAlternation(alternation: Option[String]) = {
+    alternation match {
+      case Some("even") => "juft"
+      case Some("odd") => "toq"
+    }
+  }
+
+  private def trStudyShift(studyShift: String) = {
+    studyShift match {
+      case "Afternoon" => "2 - Smena"
+      case "Morning" => "1 - Smena"
+    }
+  }
+
+  private def trTypeLesson(typeLesson: String) = {
+    typeLesson match {
+      case "Laboratory" => "Laboratoriya"
+      case "Practice" => "Amaliyot"
+      case "Lecture" => "Ma'ruza"
+    }
+  }
+
+  private def trCouple(couple: String) = {
+    couple match {
+      case "couple 1" => "1 - Juftlik"
+      case "couple 2" => "2 - Juftlik"
+      case "couple 3" => "3 - Juftlik"
+      case "couple 4" => "4 - Juftlik"
+    }
   }
 }

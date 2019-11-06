@@ -51,7 +51,7 @@ object TimetableProtocol {
 
   case class GetEmptyRoomByCouple(getCouple: GetEmptyRoom)
 
-  case class GetEmptyRoom(weekDay: String, couple: String)
+  case class GetEmptyRoom(weekDay: String, couple: String, studyShift: String)
 
   implicit val getBusyRoomFormat: OFormat[GetEmptyRoom] = Json.format[GetEmptyRoom]
 

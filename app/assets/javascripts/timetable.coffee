@@ -29,7 +29,6 @@ $ ->
     selectedTeacher: ''
     alternationType: []
     selectedAlternation:''
-    result: []
     multiValue: false
     alternationValue: false
 
@@ -45,7 +44,7 @@ $ ->
   get()
 
   handleError = (error) ->
-    if error.status is 500 or (error.status is 400 and error.responseText)
+    if error.status is 500 or (error.status is 400 and error.responseText) or error.status is 200
       toastr.error(error.responseText)
     else
       toastr.error('Something went wrong! Please try again.')
@@ -187,10 +186,6 @@ $ ->
       contentType: 'application/json'
     .fail handleError
     .done (response) ->
-      vm.result response.split(" ")
-      if vm.result().pop().toString() isnt "qo'shildi"
-        toastr.error(response)
-      else
-        toastr.success(response)
+      toastr.success(response)
 
   ko.applyBindings {vm}

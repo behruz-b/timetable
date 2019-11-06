@@ -65,7 +65,7 @@ trait TimetableDao {
 
   def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]]
 
-  def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]]
+  def getBusyRoom(weekDay: String, couple: String, studyShift: String): Future[Seq[Timetable]]
 
   def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]]
 
@@ -73,7 +73,7 @@ trait TimetableDao {
 
   def getTimetableByGr(group: String): Future[Seq[Timetable]]
 
-  def findConflicts(weekDay: String, couple: String, numberRoom: String): Future[Option[Timetable]]
+  def findConflicts(weekDay: String, couple: String, numberRoom: String, studyShift: String): Future[Option[Timetable]]
 }
 
 
@@ -150,14 +150,14 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     }
   }
 
-  override def findConflicts(weekDay: String, couple: String, numberRoom: String): Future[Option[Timetable]] = {
+  override def findConflicts(weekDay: String, couple: String, numberRoom: String, studyShift: String): Future[Option[Timetable]] = {
     db.run{
-      timetables.filter(data => data.weekDay === weekDay && data.couple=== couple && data.numberRoom=== numberRoom).result.headOption
+      timetables.filter(data => data.weekDay === weekDay && data.couple === couple && data.numberRoom === numberRoom && data.studyShift === studyShift).result.headOption
     }
   }
 
-  override def getBusyRoom(weekDay: String, couple: String): Future[Seq[Timetable]] = {
-    db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay).result)
+  override def getBusyRoom(weekDay: String, couple: String, studyShift: String): Future[Seq[Timetable]] = {
+    db.run(timetables.filter(data => data.couple === couple && data.weekDay === weekDay && data.studyShift === studyShift).result)
   }
 
   override def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]] = {

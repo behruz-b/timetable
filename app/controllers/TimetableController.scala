@@ -74,7 +74,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def realDashboard: Action[AnyContent] = Action { implicit request: RequestHeader => {
     Ok(realTemplate(!request.session.get(LoginSessionKey).isEmpty))
-  }}
+  }
+  }
 
   def addTimetable = Action.async(parse.json) { implicit request => {
     val studyShift = (request.body \ "studyShift").as[String]
@@ -88,20 +89,13 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val numberRoom = (request.body \ "numberRoom").as[String]
     val flow = (request.body \ "flow").as[Boolean]
     val alternation = (request.body \ "alternation").asOpt[String]
-    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, None,flow, alternation))).mapTo[String].map { pr =>
-      val p = pr.replace("Some(","").replace(")","")
-      if(teachers == pr){
-        Ok(Json.toJson(s"$pr ismli O'qituvchi darsi dars jadvaliga qo'shildi"))
-      }
-      else if (alternation == Option(p)){
-        Ok(Json.toJson(s"${translateWeekday(weekDay)} kuni shu parada ${translateAlternation(p)} haftasida $numberRoom xonada darsi bor"))
-      }
-      else {
-        Ok(Json.toJson(s"${translateWeekday(weekDay)} kuni shu parada $pr ismli o'qituvchini $numberRoom xonada darsi bor"))
-      }
+    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, None, flow, alternation))).mapTo[Either[String, String]].map {
+      case Right(str) =>
+        Ok(Json.toJson(str))
+      case Left(err) =>
+        Ok(err)
     }
-  }
-  }
+  }}
 
   def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val id = (request.body \ "id").as[String].toInt
@@ -125,7 +119,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val flow = (request.body \ "flow").as[Boolean]
     val alternation = (request.body \ "alternation").asOpt[String]
     (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation))).mapTo[Option[Int]].map { id =>
-      val pr = id.toString.replace("Some(","").replace(")","")
+      val pr = id.toString.replace("Some(", "").replace(")", "")
       Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
     }
   }
@@ -229,7 +223,6 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def test = Action(parse.json) { implicit request => {
     val test = (request.body \ "number").as[Int]
-    logger.info(s"number: $test")
     Ok(Json.obj("response" -> test))
   }
   }
@@ -275,7 +268,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def emptyRoom = Action.async {
-    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom(convertToStrDate(new Date), momentCouple(momentHourAndMinute(new Date))))).mapTo[Seq[String]].map {
+    (timetableManager ? GetEmptyRoomByCouple(GetEmptyRoom(convertToStrDate(new Date), momentCouple(momentHourAndMinute(new Date)), momentStudyShift(momentHourAndMinute(new Date))))).mapTo[Seq[String]].map {
       rooms =>
         Ok(Json.toJson(rooms))
     }
@@ -285,22 +278,39 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val hour = time.substring(0, 2).toInt
     val minute = time.substring(3, 5).toInt
     if ((hour == 8 && (minute >= 30 && minute <= 59)) || (hour == 9 && (minute >= 0 && minute <= 50))) {
-      "couple 2"
+      "couple 1"
     }
     else if ((hour == 10 && minute >= 0 && minute <= 59) || (hour == 11 && minute >= 0 && minute <= 20)) {
       "couple 2"
     }
     else if ((hour == 11 && minute >= 30 && minute <= 59) || (hour == 12 && minute >= 0 && minute <= 50)) {
-      "couple 2"
+      "couple 3"
     }
     else if ((hour == 13 && minute >= 30 && minute <= 59) || (hour == 14 && minute >= 0 && minute <= 50)) {
-      "couple 2"
+      "couple 1"
     }
     else if ((hour == 15 && minute >= 0 && minute <= 59) || (hour == 16 && minute >= 0 && minute <= 20)) {
       "couple 2"
     }
     else if ((hour == 16 && minute >= 30 && minute <= 59) || (hour == 17 && minute >= 0 && minute <= 50)) {
-      "couple 2"
+      "couple 3"
+    }
+    else if ((hour == 17 && minute >= 51 && minute <= 59) || (hour >= 18 && minute >= 0 && minute <= 59) || (hour == 8 && minute >= 0 && minute <= 29) || (hour < 8 && minute >= 0 && minute <= 59)) {
+      "Dars tugadi!"
+    }
+    else {
+      "Tanaffus"
+    }
+  }
+
+  def momentStudyShift(time: String) = {
+    val hour = time.substring(0, 2).toInt
+    val minute = time.substring(3, 5).toInt
+    if ((hour == 8 && (minute >= 30 && minute <= 59)) || (hour == 12 && minute >= 0 && minute <= 50)) {
+      "Morning"
+    }
+    else if ((hour == 13 && minute >= 30 && minute <= 59) || (hour == 17 && minute >= 0 && minute <= 50)) {
+      "Afternoon"
     }
     else if ((hour == 17 && minute >= 51 && minute <= 59) || (hour >= 18 && minute >= 0 && minute <= 59) || (hour == 8 && minute >= 0 && minute <= 29) || (hour < 8 && minute >= 0 && minute <= 59)) {
       "Dars tugadi!"
@@ -344,13 +354,6 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       case "Thursday" => "Payshanba"
       case "Friday" => "Juma"
       case "Saturday" => "Shanba"
-    }
-  }
-
-  private def translateAlternation(alternation: String) = {
-    alternation match {
-      case "even" => "juft"
-      case "odd" => "toq"
     }
   }
 
