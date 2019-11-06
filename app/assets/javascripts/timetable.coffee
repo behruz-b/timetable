@@ -103,10 +103,6 @@ $ ->
       vm.multiValue false
       vm.alternationValue true
 
-  vm.selectedAlternation.subscribe (type) ->
-    if type is undefined
-      vm.selectedAlternation("")
-
   vm.selectedSubject.subscribe (subjectId) ->
     if subjectId is undefined
       data =
@@ -164,7 +160,7 @@ $ ->
         subjectId: vm.selectedSubject()
         teachers: vm.selectedTeacher()
         numberRoom: vm.selectedRoom()
-        flow: vm.checkedValue()
+        flow: vm.multiValue()
         alternation: vm.selectedAlternation()
 
 
@@ -179,7 +175,7 @@ $ ->
         subjectId: vm.selectedSubject()
         teachers: vm.selectedTeacher()
         numberRoom: vm.selectedRoom()
-        flow: vm.checkedValue()
+        flow: vm.multiValue()
         alternation: vm.selectedAlternation()
 
     $.ajax

@@ -87,10 +87,16 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val teachers = (request.body \ "teachers").as[String]
     val numberRoom = (request.body \ "numberRoom").as[String]
     val flow = (request.body \ "flow").as[Boolean]
-    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, None,flow))).mapTo[String].map { pr =>
+    val alternation = (request.body \ "alternation").asOpt[String]
+    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, None,flow, alternation))).mapTo[String].map { pr =>
+      val p = pr.replace("Some(","").replace(")","")
       if(teachers == pr){
         Ok(Json.toJson(s"$pr ismli O'qituvchi darsi dars jadvaliga qo'shildi"))
-      } else {
+      }
+      else if (alternation == Option(p)){
+        Ok(Json.toJson(s"${translateWeekday(weekDay)} kuni shu parada ${translateAlternation(p)} haftasida $numberRoom xonada darsi bor"))
+      }
+      else {
         Ok(Json.toJson(s"${translateWeekday(weekDay)} kuni shu parada $pr ismli o'qituvchini $numberRoom xonada darsi bor"))
       }
     }
@@ -107,7 +113,6 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def update = Action.async(parse.json) { implicit request => {
     val id = (request.body \ "id").as[String].toInt
-    logger.warn(s"$id")
     val studyShift = (request.body \ "studyShift").as[String]
     val weekday = (request.body \ "weekday").as[String]
     val couple = (request.body \ "couple").as[String]
@@ -118,7 +123,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val teacher = (request.body \ "teacher").as[String]
     val numberRoom = (request.body \ "numberRoom").as[String]
     val flow = (request.body \ "flow").as[Boolean]
-    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow))).mapTo[Option[Int]].map { id =>
+    val alternation = (request.body \ "alternation").asOpt[String]
+    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation))).mapTo[Option[Int]].map { id =>
       val pr = id.toString.replace("Some(","").replace(")","")
       Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
     }
@@ -338,6 +344,13 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       case "Thursday" => "Payshanba"
       case "Friday" => "Juma"
       case "Saturday" => "Shanba"
+    }
+  }
+
+  private def translateAlternation(alternation: String) = {
+    alternation match {
+      case "even" => "juft"
+      case "odd" => "toq"
     }
   }
 

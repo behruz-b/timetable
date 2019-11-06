@@ -1,5 +1,7 @@
 package actors
 
+import java.io
+
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern.pipe
 import akka.util.Timeout
@@ -59,26 +61,44 @@ class TimetableManager @Inject()(val environment: Environment,
 
   }
 
-  private def addTimetable(timetableData: Timetable): Future[String] = {
+  private def addTimetable(timetableData: Timetable): Future[io.Serializable] = {
     (
-      for {
-        response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
-      } yield response match {
-        case Some(timetable) =>
-          if (timetable.subjectId == timetableData.subjectId &&
-            timetable.teachers == timetableData.teachers &&
-            timetableData.flow &&
-            timetableData.typeOfLesson == timetable.typeOfLesson
-          ) {
-            timetableDao.addTimetable(timetableData)
-            Future.successful(timetableData.teachers)
-          }
-          else {
-            Future.successful(timetable.teachers)
-          }
+      timetableData.alternation match {
         case None =>
-          timetableDao.addTimetable(timetableData)
-          Future.successful(timetableData.teachers)
+          for {
+            response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+          } yield response match {
+            case Some(timetable) =>
+              if (timetable.subjectId == timetableData.subjectId &&
+                timetable.teachers == timetableData.teachers &&
+                timetableData.flow &&
+                timetableData.typeOfLesson == timetable.typeOfLesson
+              ) {
+                timetableDao.addTimetable(timetableData)
+                Future.successful(timetableData.teachers)
+              }
+              else {
+                Future.successful(timetable.teachers)
+              }
+            case None =>
+              timetableDao.addTimetable(timetableData)
+              Future.successful(timetableData.teachers)
+          }
+        case _ =>
+          for {
+            response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple, timetableData.numberRoom)
+          } yield response match {
+            case Some(timetable) =>
+              if (timetable.alternation.isEmpty) {
+                Future.successful(timetable.teachers)
+              } else {
+                log.warning(s"getT: $timetable")
+                Future.successful(timetable.alternation.toString)
+              }
+            case None =>
+              timetableDao.addTimetable(timetableData)
+              Future.successful(timetableData.teachers)
+          }
       }
       ).flatten
   }
