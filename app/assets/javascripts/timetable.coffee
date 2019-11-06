@@ -188,12 +188,9 @@ $ ->
     .fail handleError
     .done (response) ->
       vm.result response.split(" ")
-      s = "qo'shildi"
-      console.log(vm.result().pop(), " #{s}")
-      if vm.result().pop().toString() is "qo'shildi"
-
-        toastr.success(response)
-      else
+      if vm.result().pop().toString() isnt "qo'shildi"
         toastr.error(response)
+      else
+        toastr.success(response)
 
   ko.applyBindings {vm}
