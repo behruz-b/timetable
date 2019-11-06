@@ -1,4 +1,4 @@
 # --- !Ups
-ALTER TABLE "Timetables" DROP COLUMN "alternation";
+DROP TABLE "play_evolutions";
 # --- !Downs
-ALTER TABLE "Timetables" ADD COLUMN "alternation" VARCHAR NULL;
+ADD TABLE "play_evolutions";
