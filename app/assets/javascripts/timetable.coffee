@@ -82,7 +82,6 @@ $ ->
   vm.selectedType.subscribe (type) ->
     vm.selectedType(type)
 
-
   $("#multi").change ->
     if (vm.alternationValue())
       $("#alternation").prop('checked', false);
@@ -99,6 +98,7 @@ $ ->
     if (vm.alternationValue())
       vm.multiValue false
       vm.alternationValue false
+      vm.selectedAlternation undefined
     else
       vm.multiValue false
       vm.alternationValue true
@@ -124,6 +124,7 @@ $ ->
 
   vm.onSubmit = ->
     toastr.clear()
+    console.log('alter: ', vm.selectedAlternation())
     if (!vm.selectedShift())
       toastr.error("Please select shift")
       return no
@@ -177,7 +178,16 @@ $ ->
         numberRoom: vm.selectedRoom()
         flow: vm.multiValue()
         alternation: vm.selectedAlternation()
-
+    vm.selectedShift undefined
+    vm.selectedDay undefined
+    vm.selectedCouple undefined
+    vm.selectedType undefined
+    vm.selectedGroup undefined
+    vm.selectedSubject undefined
+    vm.selectedTeacher undefined
+    vm.selectedRoom undefined
+    vm.multiValue undefined
+    vm.selectedAlternation undefined
     $.ajax
       url: apiUrl.send
       type: 'POST'
