@@ -47,8 +47,11 @@ class TeacherController @Inject()(val controllerComponents: ControllerComponents
     val fullName = (request.body \ "fullName").as[String]
     val tSubject = (request.body \ "tSubject").as[String]
     val department = (request.body \ "department").as[String]
-    (teacherManager ? AddTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Int].map { pr =>
-      Ok(Json.toJson(s"you successful added: $pr"))
+    (teacherManager ? AddTeacher(Teacher(None, fullName, tSubject, department))).mapTo[Either[String, String]].map {
+      case Right(str) =>
+        Ok(Json.toJson(str))
+      case Left(err) =>
+        Ok(err)
     }
   }
   }

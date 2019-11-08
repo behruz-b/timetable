@@ -44,6 +44,8 @@ trait TeacherDao {
 
   def getTeachersByTS(tSubject: String): Future[Seq[Teacher]]
 
+  def findTeacher(teacherName: String, department: String, tSubject: String): Future[Option[Teacher]]
+
   def getTeachers: Future[Seq[Teacher]]
 }
 
@@ -86,6 +88,12 @@ class TeacherDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   override def getTeachersByTS(subject: String): Future[Seq[Teacher]] = {
     db.run {
       teachers.filter(_.tSubject === subject).sortBy(_.id).result
+    }
+  }
+
+  override def findTeacher(teacherName: String, department: String, tSubject: String): Future[Option[Teacher]] = {
+    db.run {
+      teachers.filter(data => data.fullName === teacherName && data.department === department && data.tSubject === tSubject).result.headOption
     }
   }
 }

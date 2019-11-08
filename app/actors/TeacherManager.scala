@@ -39,8 +39,16 @@ class TeacherManager @Inject()(val environment: Environment,
 
   }
 
-  private def addTeacher(teacherData: Teacher) = {
-    teacherDao.addTeacher(teacherData)
+  private def addTeacher(teacherData: Teacher): Future[Either[String, String]] = {
+    (for {
+      response <- teacherDao.findTeacher(teacherData.fullName, teacherData.department, teacherData.tSubject)
+    } yield response match {
+      case Some(teacher) =>
+        Future.successful(Left(teacher.fullName + " ismli o'qituvchi avval kiritilgan!"))
+      case None =>
+        teacherDao.addTeacher(teacherData)
+        Future.successful(Right(teacherData.fullName + " ismli o'qituvchi muvoffaqiyatli qo'shildi!"))
+    }).flatten
   }
 
   private def updateTeacher(teacher: Teacher): Future[Option[Int]] = {
