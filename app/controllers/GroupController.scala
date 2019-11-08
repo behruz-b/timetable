@@ -45,9 +45,11 @@ class GroupController @Inject()(val controllerComponents: ControllerComponents,
   def addGroup = Action.async(parse.json) { implicit request =>
     val name = (request.body \ "name").as[String]
     val direction = (request.body \ "direction").as[String]
-    (groupManager ? AddGroup(Group(None, name, direction, Some(0)))).mapTo[Int].map {
-      id =>
-        Ok(Json.toJson(s"The Group number you entered is written by this  ID: $id"))
+    (groupManager ? AddGroup(Group(None, name, direction, Some(0)))).mapTo[Either[String,String]].map {
+      case Right(str) =>
+        Ok(Json.toJson(str))
+      case Left(err) =>
+        Ok(err)
     }
   }
 

@@ -35,8 +35,16 @@ class GroupManager @Inject()(val environment: Environment,
     case _ => log.info(s"received unknown message")
   }
 
-  private def addGroup(groupData: Group): Future[Int] = {
-    groupDao.addGroup(groupData)
+  private def addGroup(groupData: Group): Future[Either[String,String]] = {
+    (for {
+      response <- groupDao.findGroup(groupData.name, groupData.direction)
+    } yield response match {
+      case Some(group) =>
+        Future.successful(Left(group.name + " guruhi dars jadvalida mavjud!"))
+      case None =>
+        groupDao.addGroup(groupData)
+        Future.successful(Right(groupData.name + " guruhi dars jadvalida qo'shildi"))
+    }).flatten
   }
 
   private def updateGroup(group: Group): Future[Option[Int]] = {

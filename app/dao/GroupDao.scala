@@ -43,6 +43,8 @@ trait GroupDao {
 
   def getGroupByName(name: String): Future[Option[Group]]
 
+  def findGroup(name: String, diraction: String): Future[Option[Group]]
+
   def getGroupList: Future[Seq[Group]]
 }
 
@@ -81,6 +83,12 @@ class GroupDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
   override def getGroupByName(name: String): Future[Option[Group]] = {
     db.run{
       groups.filter(_.name === name).result.headOption
+    }
+  }
+
+  override def findGroup(name: String, diraction: String): Future[Option[Group]] = {
+    db.run{
+      groups.filter(data => data.name === name && data.direction === diraction).result.headOption
     }
   }
 
