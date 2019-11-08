@@ -35,6 +35,8 @@ trait SubjectDao {
 
   def getSubjectById(id: Option[Int]): Future[Option[Subject]]
 
+  def findSubject(name: String): Future[Option[Subject]]
+
   def getSubjectList: Future[Seq[Subject]]
 }
 
@@ -65,6 +67,12 @@ class SubjectDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
   override def getSubjectById(id: Option[Int]): Future[Option[Subject]] ={
     db.run(subjects.filter(_.id === id).result.headOption)
+  }
+
+  override def findSubject(name: String): Future[Option[Subject]] = {
+    db.run {
+      subjects.filter(data => data.name === name).result.headOption
+    }
   }
 
   override def getSubjectList: Future[Seq[Subject]] = {

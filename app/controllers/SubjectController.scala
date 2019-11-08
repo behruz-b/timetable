@@ -45,8 +45,11 @@ class SubjectController @Inject()(val controllerComponents: ControllerComponents
 
   def subjectPost: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val name = (request.body \ "name").as[String]
-    (subjectManager ? AddSubject(Subject(None, name))).mapTo[Int].map { pr =>
-      Ok(Json.toJson(s"you successful added: $pr"))
+    (subjectManager ? AddSubject(Subject(None, name))).mapTo[Either[String, String]].map {
+      case Right(value) =>
+        Ok(Json.toJson(value))
+      case Left(err) =>
+        Ok(err)
     }
   }
   }

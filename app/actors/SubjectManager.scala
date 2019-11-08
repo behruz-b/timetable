@@ -46,8 +46,17 @@ class SubjectManager @Inject()(val environment: Environment,
     } yield response
   }
 
-  private def addSubject(subjectData: Subject): Future[Int] = {
-    subjectDao.addSubject(subjectData)
+  private def addSubject(subjectData: Subject): Future[Either[String, String]] = {
+    (for {
+      response <- subjectDao.findSubject(subjectData.name)
+    } yield response match {
+      case Some(subject) =>
+        Future.successful(Left(subject.name + " fani ma'lumotlar bazasida muvjud"))
+      case None =>
+        subjectDao.addSubject(subjectData)
+        Future.successful(Left(subjectData.name + " fani ma'lumotlar bazasiga qo'shildi!"))
+    }
+      ).flatten
   }
 
   private def deleteSubject(id: Int): Future[Int] = {
