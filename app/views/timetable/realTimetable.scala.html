@@ -9,8 +9,8 @@
       <br><br><br><br><br>
       <h1>Timetable Dashboard</h1>
       <div class="table-responsive text-center text-nowrap">
-        <table id="" class="table real table-bordered width-table">
-          <thead>
+        <table id="" class="table real table-rounded table-bordered width-table">
+          <thead class="table-red">
             <tr data-bind="foreach: {data: vm.groups(), as: 'group'}">
                 <!-- ko if: $index() === 0 -->
               <th class="w-4" >Guruh</th>
@@ -19,23 +19,44 @@
             </tr>
           </thead>
             <!-- ko foreach: {data: vm.weekday(), as: 'week'} -->
-          <tbody>
+          <tbody class="table-red">
             <tr>
               <td rowspan="4" class="outer" data-bind="text: week"></td>
             </tr>
-            <tr data-bind="foreach: {data: $root.vm.groups(), as: 'group'}">
+            <tr data-bind="foreach: {data: $root.vm.groups(), as: 'group'}" class="table-red">
               <td data-bind="foreach: {data: $root.vm.getT(group, $parent), as: 'timetable'}">
                 <table class="table real table-bordered">
                   <tr data-bind="if: $parentContext.$index() === 0 ">
-                    <td rowspan="3" data-bind="text: timetable.couple"></td>
+                    <td rowspan="2" data-bind="text: timetable.couple"></td>
                   </tr>
+                    <!-- ko if: timetable.typeOfLesson == "Practice" -->
                   <tr>
-                    <td rowspan="2" data-bind="attr: { rowspan: 1}">
+                    <td rowspan="1">
                       <small data-bind="text: timetable.specPart"></small><br>
                       <small data-bind="text: timetable.teachers"></small><br>
                       <small data-bind="text: timetable.numberRoom"></small>
                     </td>
                   </tr>
+                    <!-- /ko -->
+                    <!-- ko if: timetable.typeOfLesson == "Lecture" -->
+                  <tr>
+                    <td rowspan="1">
+                      <small data-bind="text: timetable.specPart"></small><br>
+                      <small data-bind="text: timetable.teachers"></small><br>
+                      <small data-bind="text: timetable.numberRoom"></small>
+                    </td>
+                  </tr>
+                    <!-- /ko -->
+
+                    <!-- ko if: timetable.typeOfLesson == "Laboratory" -->
+                  <tr>
+                    <td rowspan="1">
+                      <small data-bind="text: timetable.specPart"></small><br>
+                      <small data-bind="text: timetable.teachers"></small><br>
+                      <small data-bind="text: timetable.numberRoom"></small>
+                    </td>
+                  </tr>
+                    <!-- /ko -->
                 </table>
               </td>
 
