@@ -95,7 +95,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
       case Left(err) =>
         Ok(err)
     }
-  }}
+  }
+  }
 
   def delete: Action[JsValue] = Action.async(parse.json) { implicit request => {
     val id = (request.body \ "id").as[String].toInt

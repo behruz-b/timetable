@@ -74,11 +74,19 @@ th, td {
   padding: 0;
 }
 
-table {
+.table-rounded {
   border-collapse: collapse;
   border-radius: 1em;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+.table {
+  margin-bottom: 0;
+}
+
+
+.table-red {
+  border: 5px solid #bd2130 !important;
 }
 
 .rotate {
