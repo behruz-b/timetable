@@ -178,16 +178,7 @@ $ ->
         numberRoom: vm.selectedRoom()
         flow: vm.multiValue()
         alternation: vm.selectedAlternation()
-    vm.selectedShift undefined
-    vm.selectedDay undefined
-    vm.selectedCouple undefined
-    vm.selectedType undefined
-    vm.selectedGroup undefined
-    vm.selectedSubject undefined
-    vm.selectedTeacher undefined
-    vm.selectedRoom undefined
-    vm.multiValue undefined
-    vm.selectedAlternation undefined
+
     $.ajax
       url: apiUrl.send
       type: 'POST'
@@ -197,5 +188,18 @@ $ ->
     .fail handleError
     .done (response) ->
       toastr.success(response)
+      vm.selectedShift undefined
+      vm.selectedDay undefined
+      vm.selectedCouple undefined
+      vm.selectedType undefined
+      vm.selectedGroup undefined
+      vm.selectedSubject undefined
+      vm.selectedTeacher undefined
+      vm.selectedRoom undefined
+      vm.multiValue false
+      vm.alternationValue false
+      $("#multi").prop('checked', false);
+      $("#alternation").prop('checked', false);
+      vm.selectedAlternation undefined
 
   ko.applyBindings {vm}

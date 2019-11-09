@@ -12,6 +12,10 @@ $ ->
     timetable: []
     weekday: []
 
+  Weekdat = ->
+    vm.weekday ["Monday", 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  Weekdat()
+
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
       toastr.error(error.responseText)
@@ -36,7 +40,6 @@ $ ->
       if t.weekDay is weekday && t.groups is group
         tt.push(t)
     tt
-
 
   vm.getTable()
 
