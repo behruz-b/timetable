@@ -1,4 +1,5 @@
 name := "timetable"
+maintainer := "timetable@ubtuit.uz"
 
 includeFilter in (Assets, LessKeys.less) := "*.less"
 excludeFilter in (Assets, LessKeys.less) := "_*.less"
