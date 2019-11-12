@@ -13,7 +13,7 @@ $ ->
     weekday: []
 
   Weekdat = ->
-    vm.weekday ["Monday", 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday ']
+    vm.weekday ["Monday", 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   Weekdat()
 
   handleError = (error) ->
