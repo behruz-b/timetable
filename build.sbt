@@ -1,4 +1,5 @@
 name := "timetable"
+maintainer := "timetable@ubtuit.uz"
 
 includeFilter in (Assets, LessKeys.less) := "*.less"
 excludeFilter in (Assets, LessKeys.less) := "_*.less"
@@ -24,7 +25,6 @@ val akkaLibs = Seq(
 
 val akkaHttp = Seq(
   "com.typesafe.akka" %% "akka-http" % "10.0.10",
-  "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.10"
 )
 
 val pgSqlDriver = "org.postgresql" % "postgresql" % "42.0.0"
@@ -60,7 +60,6 @@ libraryDependencies ++= akkaLibs ++ akkaHttp ++ commonDependencies ++ dbLibs ++ 
   "net.ruippeixotog" %% "scala-scraper" % "2.1.0",
   "org.webjars" % "bootstrap" % "4.3.1",
   "org.webjars" % "momentjs" % "2.8.1",
-  "org.telegram" % "telegrambots" % "4.4.0.1",
   "org.apache.logging.log4j" % "log4j-api" % "2.12.1",
   "org.scalaj" % "scalaj-http_2.12" % "2.3.0"
 )
