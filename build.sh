@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker pull postgres:latest
+docker pull postgres:11
 
 docker build -t timetable ./deploy/
 
