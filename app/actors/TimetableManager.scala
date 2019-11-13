@@ -95,6 +95,9 @@ class TimetableManager @Inject()(val environment: Environment,
               if (timetable.alternation.isEmpty) {
                 Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers +
                   " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+              } else if (timetable.alternation != timetableData.alternation) {
+                timetableDao.addTimetable(timetableData)
+                Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               } else {
                 Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
                   translateAlternation(timetable.alternation) + " haftada shu parada " +
