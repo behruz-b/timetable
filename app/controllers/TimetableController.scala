@@ -107,6 +107,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def update = Action.async(parse.json) { implicit request => {
+    logger.warn(s"request: ${request.body}")
     val id = (request.body \ "id").as[String].toInt
     val studyShift = (request.body \ "studyShift").as[String]
     val weekday = (request.body \ "weekday").as[String]

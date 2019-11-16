@@ -22,6 +22,8 @@ $(document).ready(function () {
   // Edit row on edit button click
   var subjects = [];
   var subjectId;
+  var flowB;
+  var alter;
 
   function getSubject() {
     $.ajax({
@@ -47,6 +49,8 @@ $(document).ready(function () {
     var subject = row[6].innerText;
     var teacher = row[7].innerText;
     var numberRoom = row[8].innerText;
+    var flow = row[9].innerText;
+    var alternation = row[10].innerText;
     row[1].innerHTML = '<input type="text" class="form-control" value="' + studyShift + '">';
     row[2].innerHTML = '<input type="text" class="form-control" value="' + weekday + '">';
     row[3].innerHTML = '<input type="text" class="form-control" value="' + couple + '">';
@@ -55,16 +59,29 @@ $(document).ready(function () {
     row[6].innerHTML = '<input type="text" class="form-control" value="' + subject + '">';
     row[7].innerHTML = '<input type="text" class="form-control" value="' + teacher + '">';
     row[8].innerHTML = '<input type="text" class="form-control" value="' + numberRoom + '">';
+    row[9].innerHTML = '<input type="text" class="form-control" value="' + flow + '">';
+    row[10].innerHTML = '<input type="text" class="form-control" value="' + alternation + '">';
     $(this).parents("tr").find(".add, .edit").toggle();
   });
   $(document).on("click", ".add", function () {
-    row = $(this).closest('tr').children('td');
-
+    var row = $(this).closest('tr').children('td');
     subjects.forEach(function (el) {
       if (row[6].innerText === el.name) {
         subjectId = el.id;
       }
     });
+    if (row[9].innerText === "false"){
+      console.log('s', row[9].innerText);
+     flowB = false;
+    } else {
+      flowB = true;
+    }
+    if (row[10].innerText === ""){
+      console.log(row[10].innerText);
+      alter = undefined;
+    } else {
+      alter = row[10].innerText;
+    }
 
     var data = {
       id: row[0].innerText,
@@ -75,8 +92,11 @@ $(document).ready(function () {
       group: row[5].innerText,
       subject: subjectId,
       teacher: row[7].innerText,
-      numberRoom: row[8].innerText
+      numberRoom: row[8].innerText,
+      flow: flowB,
+      alternation: alter
     };
+    console.log(data);
     var postData = JSON.stringify(data);
 
     $.ajax({
