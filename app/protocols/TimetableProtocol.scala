@@ -1,6 +1,6 @@
 package protocols
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsValue, Json, OFormat}
 
 object TimetableProtocol {
 
@@ -25,13 +25,17 @@ object TimetableProtocol {
 
   case class GetTimetableByGroup(getText: GetText) extends TimetableWithDateOwner
 
-  case class GetTimetableForTeacher(getText: GetText) extends TimetableWithDateOwner
+  case class GetTimetableForTeacher(getText: GetTeacher) extends TimetableWithDateOwner
 
   case class GetText(weekDay: String, group: String)
 
   implicit val getTextFormat: OFormat[GetText] = Json.format[GetText]
 
-  case class TeacherName(teacher: String)
+  case class GetTeacher(weekDay: String, teacher: JsValue)
+
+  implicit val getTeacherFormat: OFormat[GetTeacher] = Json.format[GetTeacher]
+
+  case class TeacherName(teacher: JsValue)
 
   implicit val TeacherNameFormat: OFormat[TeacherName] = Json.format[TeacherName]
 
@@ -41,7 +45,7 @@ object TimetableProtocol {
     }
   }
 
-  case class GetTTeacher(teacher: String) extends TimetableOwner
+  case class GetTTeacher(teacher: JsValue) extends TimetableOwner
 
   implicit val GetTTeacherFormat: OFormat[TeacherName] = Json.format[TeacherName]
 
@@ -63,8 +67,8 @@ object TimetableProtocol {
                        groups: String,
                        divorce: String,
                        subjectId: Int,
-                       teachers: String,
-                       numberRoom: String,
+                       teachers: JsValue,
+                       numberRoom: JsValue,
                        specPart: Option[String] = None,
                        flow: Boolean,
                        alternation: Option[String] = None
