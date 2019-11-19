@@ -59,7 +59,15 @@
                 <td data-bind="text: $data.teachers"></td>
                 <td data-bind="text: $data.numberRoom"></td>
                 <td data-bind="text: $data.flow"></td>
+                  <!-- ko ifnot: $data.alternation == "" -->
+                <td>NO</td>
+                  <!-- /ko -->
+                  <!-- ko if: $data.alternation == "even" -->
                 <td data-bind="text: $data.alternation"></td>
+                  <!-- /ko -->
+                  <!-- ko if: $data.alternation == "odd" -->
+                <td data-bind="text: $data.alternation"></td>
+                  <!-- /ko -->
                 <td>
                   <a class="add mr-3" title="Add" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
                   <a class="mr-3 edit" title="Edit" data-toggle="tooltip" ><i class="fas fa-pen-alt"></i></a>

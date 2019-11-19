@@ -60,28 +60,33 @@ $(document).ready(function () {
     row[7].innerHTML = '<input type="text" class="form-control" value="' + teacher + '">';
     row[8].innerHTML = '<input type="text" class="form-control" value="' + numberRoom + '">';
     row[9].innerHTML = '<input type="text" class="form-control" value="' + flow + '">';
-    row[10].innerHTML = '<input type="text" class="form-control" value="' + alternation + '">';
+    // if (alternation === "") {
+    //   row[10].innerHTML = '<input type="text" class="form-control" value="No">';
+    // } else {
+      row[10].innerHTML = '<input type="text" class="form-control" value="' + alternation + '">';
+    // }
     $(this).parents("tr").find(".add, .edit").toggle();
   });
   $(document).on("click", ".add", function () {
     var row = $(this).closest('tr').children('td');
+    if (row[10].innerText === "even"){
+      alter = row[10].innerText;
+    } else if (row[10].innerText === "odd") {
+      alter = row[10].innerText;
+    } else {
+      alter = undefined;
+    }
     subjects.forEach(function (el) {
       if (row[6].innerText === el.name) {
         subjectId = el.id;
       }
     });
     if (row[9].innerText === "false"){
-      console.log('s', row[9].innerText);
      flowB = false;
     } else {
       flowB = true;
     }
-    if (row[10].innerText === ""){
-      console.log(row[10].innerText);
-      alter = undefined;
-    } else {
-      alter = row[10].innerText;
-    }
+
 
     var data = {
       id: row[0].innerText,

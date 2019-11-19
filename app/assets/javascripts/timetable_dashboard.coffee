@@ -35,7 +35,6 @@ $ ->
 
   vm.teacherName.subscribe (name) ->
     vm.groups.removeAll()
-    console.log(vm.groups().length)
     data =
       teacherName: name
     $.ajax
@@ -53,7 +52,6 @@ $ ->
 
   vm.groupNumber.subscribe (number) ->
     vm.groups.removeAll()
-    console.log(vm.groups().length)
     data =
       groupNumber: number
     $.ajax
