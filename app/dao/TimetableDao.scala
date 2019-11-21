@@ -37,9 +37,9 @@ trait TimetableComponent extends SubjectComponent {
 
     def subjectId = column[Int]("subjectId")
 
-    def teachers = column[JsValue]("teachers")
+    def teachers = column[String]("teachers")
 
-    def numberRoom = column[JsValue]("numberRoom")
+    def numberRoom = column[String]("numberRoom")
 
     def specPart = column[String]("specPart")
 
@@ -47,7 +47,11 @@ trait TimetableComponent extends SubjectComponent {
 
     def alternation = column[String]("alternation")
 
-    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, specPart.?, flow, alternation.?) <> (Timetable.tupled, Timetable.unapply _)
+    def teachers2 = column[JsValue]("teachers2")
+
+    def numberRoom2 = column[JsValue]("numberRoom2")
+
+    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers.?, numberRoom.?, specPart.?, flow, alternation.?, teachers2, numberRoom2) <> (Timetable.tupled, Timetable.unapply _)
   }
 
 }
@@ -71,6 +75,8 @@ trait TimetableDao {
   def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]]
 
   def getTByTeacherAndWeekday(weekDay: String, teacher: JsValue): Future[Seq[Timetable]]
+
+  def getTT: Future[Seq[String]]
 
   def getTimetableByGr(group: String): Future[Seq[Timetable]]
 
@@ -114,7 +120,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def update(timetable: Timetable): Future[Int] = {
-    db.run{
+    db.run {
       timetables.filter(_.id === timetable.id).update(timetable)
     }
   }
@@ -129,7 +135,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   override def getTimetablesByTeacher(teacher: JsValue): Future[Seq[Timetable]] = {
     val query = timetables
-      .filter(data => data.teachers === teacher)
+      .filter(data => data.teachers2 === teacher)
       .joinLeft(subjects)
       .on(_.subjectId === _.id)
     db.run(query.result).map { r =>
@@ -154,25 +160,25 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def findConflicts(weekDay: String, couple: String, numberRoom: JsValue, studyShift: String): Future[Option[Timetable]] = {
-    db.run{
+    db.run {
       timetables.filter(data =>
         data.weekDay === weekDay &&
-        data.couple === couple &&
-        data.numberRoom === numberRoom &&
-        data.studyShift === studyShift
+          data.couple === couple &&
+          data.numberRoom2 === numberRoom &&
+          data.studyShift === studyShift
       ).result.headOption
     }
   }
 
-  override def findGroup(weekDay: String, couple: String, studyShift: String, group: String,  subjectId: Int, typeOfLesson: String): Future[Option[Timetable]] = {
-    db.run{
+  override def findGroup(weekDay: String, couple: String, studyShift: String, group: String, subjectId: Int, typeOfLesson: String): Future[Option[Timetable]] = {
+    db.run {
       timetables.filter(data =>
         data.weekDay === weekDay &&
-        data.couple === couple &&
-        data.studyShift === studyShift &&
-        data.groups === group &&
-        data.subjectId === subjectId &&
-        data.typeOfLesson === typeOfLesson
+          data.couple === couple &&
+          data.studyShift === studyShift &&
+          data.groups === group &&
+          data.subjectId === subjectId &&
+          data.typeOfLesson === typeOfLesson
       ).result.headOption
     }
   }
@@ -180,8 +186,8 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   override def getBusyRoom(weekDay: String, couple: String, studyShift: String): Future[Seq[Timetable]] = {
     db.run(timetables.filter(data =>
       data.couple === couple &&
-      data.weekDay === weekDay &&
-      data.studyShift === studyShift
+        data.weekDay === weekDay &&
+        data.studyShift === studyShift
     ).result)
   }
 
@@ -200,9 +206,9 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTByTeacherAndWeekday(weekDay: String, teacher: JsValue): Future[Seq[Timetable]] = {
-    db.run(timetables.filter(data => data.teachers === teacher && data.weekDay === weekDay).result)
+    db.run(timetables.filter(data => data.teachers2 === teacher && data.weekDay === weekDay).result)
     val query = timetables
-      .filter(data => data.teachers === teacher && data.weekDay === weekDay)
+      .filter(data => data.teachers2 === teacher && data.weekDay === weekDay)
       .joinLeft(subjects)
       .on(_.subjectId === _.id)
     db.run(query.result).map { r =>
@@ -213,4 +219,9 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     }
   }
 
+  override def getTT: Future[Seq[String]] = {
+    db.run {
+      timetables.map(_.teachers).result
+    }
+  }
 }
