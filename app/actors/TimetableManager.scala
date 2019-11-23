@@ -93,23 +93,24 @@ class TimetableManager @Inject()(val environment: Environment,
               }
             case "Laboratory" =>
               for {
-                response <- timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
-                  timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
                 conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
                   timetableData.numberRoom, timetableData.studyShift)
-                if conflicts.isEmpty
+                response <- if (conflicts.isEmpty)
+                  Future.successful(Option.empty)
+                else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
+                  timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
               } yield response match {
                 case Some(timetable) =>
-                  log.warning(s"megalka emas dars bor")
-                  if (timetable.alternation.isEmpty &&
+                  log.error(s"timetable: $timetable")
+                  if (
                     timetable.teachers != timetableData.teachers &&
-                    timetable.numberRoom != timetableData.numberRoom
+                      timetable.numberRoom != timetableData.numberRoom
                   ) {
                     for {
                       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
                       updatedTimetable = selectedTimetable.get.copy(
-                        specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetableData.teachers),
-                          Laboratory(timetable.numberRoom, timetableData.numberRoom)))
+                        specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetable.numberRoom),
+                          Laboratory(timetableData.teachers, timetableData.numberRoom)))
                       )
                       update <- timetableDao.update(updatedTimetable)
                     } yield update
@@ -168,23 +169,24 @@ class TimetableManager @Inject()(val environment: Environment,
               }
             case "Laboratory" =>
               for {
-                response <- timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
-                  timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
                 conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
                   timetableData.numberRoom, timetableData.studyShift)
-                if conflicts.isEmpty
+                response <- if (conflicts.isEmpty)
+                  Future.successful(Option.empty)
+                else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
+                  timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
               } yield response match {
                 case Some(timetable) =>
-                  log.warning(s"megalka dars bor")
-                  if (timetable.alternation != timetableData.alternation &&
+                  log.error(s"timetable: $timetable")
+                  if (
                     timetable.teachers != timetableData.teachers &&
-                    timetable.numberRoom != timetableData.numberRoom
+                      timetable.numberRoom != timetableData.numberRoom
                   ) {
                     for {
                       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
                       updatedTimetable = selectedTimetable.get.copy(
-                        specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetableData.teachers),
-                          Laboratory(timetable.numberRoom, timetableData.numberRoom)))
+                        specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetable.numberRoom),
+                          Laboratory(timetableData.teachers, timetableData.numberRoom)))
                       )
                       update <- timetableDao.update(updatedTimetable)
                     } yield update
