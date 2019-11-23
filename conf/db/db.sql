@@ -31,7 +31,8 @@ CREATE TABLE "Timetables" (
   "numberRoom" VARCHAR NOT NULL,
   "specPart" VARCHAR NULL,
   "flow" BOOLEAN NOT NULL DEFAULT FALSE,
-  "alternation" VARCHAR NULL
+  "alternation" VARCHAR NULL,
+  "specPartJson" JSONB NULL
 );
 
 CREATE TABLE "Suggestion" (
