@@ -143,18 +143,18 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   implicit val groupTWrites: OWrites[GroupT] = Json.writes[GroupT]
 
-  case class GT(groups: Set[String], timetables: Seq[Timetable])
+  case class GT(groups: Seq[String], timetables: Seq[Timetable])
 
   implicit val gtWrites = Json.writes[GT]
 
-  case class TT(teacher: Set[String], timetables: Seq[Timetable])
+  case class TT(teacher: Seq[String], timetables: Seq[Timetable])
 
   implicit val ttWrites = Json.writes[TT]
 
   def grouppedTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map { timetable =>
-        val grouped = timetable.map(_.groups).sorted.toSet
-        Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
+      val grouped = timetable.map(_.groups).sorted.distinct
+      Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
     }
   }
 
@@ -171,11 +171,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           Ok(s"No")
         } else {
           if (who == "student") {
-            val grouped = timetable.map(_.groups).sorted.toSet
+            val grouped = timetable.map(_.groups).sorted.distinct
             Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
           }
           else {
-            val grouped = timetable.map(_.teachers).sorted.toSet
+            val grouped = timetable.map(_.teachers).sorted.distinct
             Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
           }
         }
@@ -188,11 +188,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           Ok(s"No")
         } else {
           if (who == "student") {
-            val grouped = timetable.map(_.groups).sorted.toSet
+            val grouped = timetable.map(_.groups).sorted.distinct
             Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
           }
           else {
-            val grouped = timetable.map(_.teachers).sorted.toSet
+            val grouped = timetable.map(_.teachers).sorted.distinct
             Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
           }
         }
