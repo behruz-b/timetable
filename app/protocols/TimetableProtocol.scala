@@ -53,6 +53,10 @@ object TimetableProtocol {
 
   implicit val TimetableForGroupFormat: OFormat[TimetableForGroup] = Json.format[TimetableForGroup]
 
+  case class Laboratory(teacher: String, room: String)
+
+  implicit val LaboratoryFormat: OFormat[Laboratory] = Json.format[Laboratory]
+
   case class GetEmptyRoomByCouple(getCouple: GetEmptyRoom)
 
   case class GetEmptyRoom(weekDay: String, couple: String, studyShift: String)
