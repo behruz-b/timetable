@@ -85,11 +85,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val groups = (request.body \ "groups").as[String]
     val divorce = (request.body \ "divorce").as[String]
     val subjectId = (request.body \ "subjectId").as[Int]
-    val teachers2 = (request.body \ "teachers").as[String]
-    val numberRoom2 = (request.body \ "numberRoom").as[String]
+    val teachers = (request.body \ "teachers").as[String]
+    val numberRoom = (request.body \ "numberRoom").as[String]
     val flow = (request.body \ "flow").as[Boolean]
     val alternation = (request.body \ "alternation").asOpt[String]
-    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, None, None, None, flow, alternation, Json.toJson(teachers2), Json.toJson(numberRoom2)))).mapTo[Either[String, String]].map {
+    (timetableManager ? AddTimetable(Timetable(None, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, None, flow, alternation))).mapTo[Either[String, String]].map {
       case Right(str) =>
         Ok(Json.toJson(str))
       case Left(err) =>
@@ -120,7 +120,7 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val numberRoom = (request.body \ "numberRoom").as[String]
     val flow = (request.body \ "flow").as[Boolean]
     val alternation = (request.body \ "alternation").asOpt[String]
-    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, None, None, None, flow, alternation, Json.toJson(teacher), Json.toJson(numberRoom)))).mapTo[Option[Int]].map { id =>
+    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation))).mapTo[Option[Int]].map { id =>
       val pr = id.toString.replace("Some(", "").replace(")", "")
       Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
     }
@@ -143,19 +143,18 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   implicit val groupTWrites: OWrites[GroupT] = Json.writes[GroupT]
 
-  case class GT(groups: Set[String], timetables: Seq[Timetable])
+  case class GT(groups: Seq[String], timetables: Seq[Timetable])
 
   implicit val gtWrites = Json.writes[GT]
 
-  case class TT(teacher: Set[String], timetables: Seq[Timetable])
+  case class TT(teacher: Seq[String], timetables: Seq[Timetable])
 
   implicit val ttWrites = Json.writes[TT]
 
   def grouppedTimetable = Action.async {
-    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map {
-      timetable =>
-        val grouped = timetable.map(_.groups).sorted.toSet
-        Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
+    (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map { timetable =>
+      val grouped = timetable.map(_.groups).sorted.distinct
+      Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
     }
   }
 
@@ -172,11 +171,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           Ok(s"No")
         } else {
           if (who == "student") {
-            val grouped = timetable.map(_.groups).sorted.toSet
+            val grouped = timetable.map(_.groups).sorted.distinct
             Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
           }
           else {
-            val grouped = timetable.map(_.teachers2.as[String]).sorted.toSet
+            val grouped = timetable.map(_.teachers).sorted.distinct
             Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
           }
         }
@@ -189,11 +188,11 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
           Ok(s"No")
         } else {
           if (who == "student") {
-            val grouped = timetable.map(_.groups).sorted.toSet
+            val grouped = timetable.map(_.groups).sorted.distinct
             Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
           }
           else {
-            val grouped = timetable.map(_.teachers2.as[String]).sorted.toSet
+            val grouped = timetable.map(_.teachers).sorted.distinct
             Ok(Json.toJson(TT(grouped, timetable.sortBy(_.couple))))
           }
         }
@@ -204,10 +203,10 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     whoIsClient match {
       case "teacher" =>
         if (when == "today") {
-          getTimetableWithDate(GetTimetableForTeacher(GetTeacher(convertToStrDate(new Date), Json.toJson(name))), s"teacher")
+          getTimetableWithDate(GetTimetableForTeacher(GetTeacher(convertToStrDate(new Date), name)), s"teacher")
         }
         else {
-          getTimetable(GetTTeacher(Json.toJson(name)), s"teacher")
+          getTimetable(GetTTeacher(name),s"teacher")
         }
       case _ =>
         if (when == "today") {
@@ -231,9 +230,8 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def getTeacherTimetable = Action.async(parse.json) { implicit request => {
     val name = (request.body \ "teacherName").as[String]
-    logger.warn(s"name: $name")
     if (name != "") {
-      (timetableManager ? TeacherName(Json.toJson(name))).mapTo[Seq[Timetable]].map {
+      (timetableManager ? TeacherName(name)).mapTo[Seq[Timetable]].map {
         timetable =>
           val grouped = timetable.groupBy(_.groups)
           Ok(Json.toJson(grouped))

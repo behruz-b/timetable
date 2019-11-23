@@ -6,7 +6,7 @@ import akka.util.Timeout
 import dao.{GroupDao, TimetableDao}
 import javax.inject.Inject
 import play.api.Environment
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import protocols.SubjectProtocol._
 import protocols.TimetableProtocol._
 
@@ -60,6 +60,7 @@ class TimetableManager @Inject()(val environment: Environment,
 
   }
 
+
   private def addTimetable(timetableData: Timetable) = {
     (
       timetableData.alternation match {
@@ -68,72 +69,72 @@ class TimetableManager @Inject()(val environment: Environment,
             case "Lecture" =>
               for {
                 response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom2, timetableData.studyShift)
+                  timetableData.numberRoom, timetableData.studyShift)
               } yield response match {
                 case Some(timetable) =>
                   // agar potochni bo`lsa
                   if (timetable.subjectId == timetableData.subjectId &&
-                    timetable.teachers2== timetableData.teachers2&&
+                    timetable.teachers == timetableData.teachers &&
                     timetableData.flow == timetable.flow &&
                     timetableData.flow &&
                     timetableData.typeOfLesson == "Lecture"
                   ) {
                     timetableDao.addTimetable(timetableData)
-                    Future.successful(Right(timetableData.teachers2+ "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
                   }
                   else {
-                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers2.head +
+                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers +
                       " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
                   }
 
                 case None =>
                   timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               }
             case "Laboratory" =>
               for {
-                conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom2, timetableData.studyShift)
-                response <- if (conflicts.isEmpty)
-                  Future.successful(Option.empty)
-                else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
+                response <- timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
                   timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
+                conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+                  timetableData.numberRoom, timetableData.studyShift)
+                if conflicts.isEmpty
               } yield response match {
                 case Some(timetable) =>
                   log.warning(s"megalka emas dars bor")
                   if (timetable.alternation.isEmpty &&
-                    timetable.teachers2 != timetableData.teachers2 &&
-                    timetable.numberRoom2 != timetableData.numberRoom2
+                    timetable.teachers != timetableData.teachers &&
+                    timetable.numberRoom != timetableData.numberRoom
                   ) {
                     for {
                       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
                       updatedTimetable = selectedTimetable.get.copy(
-                        teachers2 = Json.toJson(timetable.teachers2, timetableData.teachers2),
-                        numberRoom2 = Json.toJson(timetable.numberRoom2, timetableData.numberRoom2)
+                        specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetableData.teachers),
+                          Laboratory(timetable.numberRoom, timetableData.numberRoom)))
                       )
                       update <- timetableDao.update(updatedTimetable)
                     } yield update
-                    Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
                   } else {
-                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers2. head +
-                      " ismli o'qituvchini " + timetableData.numberRoom2 + " honada darsi bor!"))
+                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                      translateAlternation(timetable.alternation) + " haftada shu parada " +
+                      timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
                   }
                 case None =>
                   log.warning(s"megalka emas dars yo`q")
                   timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               }
             case _ =>
               for {
                 response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom2, timetableData.studyShift)
+                  timetableData.numberRoom, timetableData.studyShift)
               } yield response match {
                 case Some(timetable) =>
-                  Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers2.head +
+                  Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers +
                     " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
                 case None =>
                   timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               }
           }
 
@@ -142,80 +143,80 @@ class TimetableManager @Inject()(val environment: Environment,
             case "Lecture" =>
               for {
                 response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom2, timetableData.studyShift)
+                  timetableData.numberRoom, timetableData.studyShift)
               } yield response match {
                 case Some(timetable) =>
                   // agar potochni bo`lsa
                   if (timetable.subjectId == timetableData.subjectId &&
-                    timetable.teachers2 == timetableData.teachers2 &&
+                    timetable.teachers == timetableData.teachers &&
                     timetableData.flow == timetable.flow &&
                     timetableData.flow &&
                     timetableData.typeOfLesson == "Lecture" &&
                     timetableData.alternation != timetable.alternation
                   ) {
                     timetableDao.addTimetable(timetableData)
-                    Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
                   }
                   else {
                     Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
                       translateAlternation(timetable.alternation) + " haftada shu parada " +
-                      timetable.teachers2 + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                      timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
                   }
                 case None =>
                   timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               }
             case "Laboratory" =>
               for {
-                conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom2, timetableData.studyShift)
-                response <- if (conflicts.isEmpty)
-                  Future.successful(Option.empty)
-                else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
+                response <- timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
                   timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
+                conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+                  timetableData.numberRoom, timetableData.studyShift)
+                if conflicts.isEmpty
               } yield response match {
                 case Some(timetable) =>
                   log.warning(s"megalka dars bor")
                   if (timetable.alternation != timetableData.alternation &&
-                    timetable.teachers2 != timetableData.teachers2 &&
+                    timetable.teachers != timetableData.teachers &&
                     timetable.numberRoom != timetableData.numberRoom
                   ) {
                     for {
                       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
                       updatedTimetable = selectedTimetable.get.copy(
-                        teachers2 = Json.toJson(timetable.teachers2, timetableData.teachers2),
-                        numberRoom2 = Json.toJson(timetable.numberRoom2, timetableData.numberRoom2)
+                        specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetableData.teachers),
+                          Laboratory(timetable.numberRoom, timetableData.numberRoom)))
                       )
                       update <- timetableDao.update(updatedTimetable)
                     } yield update
-                    Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
                   } else {
-                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni shu parada " + timetable.teachers2 +
-                      " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                      translateAlternation(timetable.alternation) + " haftada shu parada " +
+                      timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
                   }
                 case None =>
                   log.warning(s"megalka dars yo`q")
                   timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               }
             case _ =>
               for {
                 response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom2, timetableData.studyShift)
+                  timetableData.numberRoom, timetableData.studyShift)
               } yield response match {
                 case Some(timetable) =>
                   if (timetable.alternation != timetableData.alternation) {
                     timetableDao.addTimetable(timetableData)
-                    Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
                   }
                   else {
                     Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
                       translateAlternation(timetable.alternation) + " haftada shu parada " +
-                      timetable.teachers2 + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                      timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
                   }
                 case None =>
                   timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers2 + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
               }
           }
 
@@ -240,8 +241,8 @@ class TimetableManager @Inject()(val environment: Environment,
         groups = timetable.groups,
         divorce = timetable.divorce,
         subjectId = timetable.subjectId,
-        teachers2 = timetable.teachers2,
-        numberRoom2 = timetable.numberRoom2
+        teachers = timetable.teachers,
+        numberRoom = timetable.numberRoom
       )
       update <- timetableDao.update(updatedTimetable)
       response = selectedTimetable.get.id
@@ -255,7 +256,7 @@ class TimetableManager @Inject()(val environment: Environment,
     timetableDao.getTimetables
   }
 
-  private def teacherName(teacherName: JsValue): Future[Seq[Timetable]] = {
+  private def teacherName(teacherName: String): Future[Seq[Timetable]] = {
     timetableDao.getTimetablesByTeacher(teacherName)
   }
 
@@ -309,7 +310,7 @@ class TimetableManager @Inject()(val environment: Environment,
     }
   }
 
-  private def getTTeacher(teacher: JsValue): Future[Seq[Timetable]] = {
+  private def getTTeacher(teacher: String): Future[Seq[Timetable]] = {
     for {
       response <- timetableDao.getTimetablesByTeacher(teacher)
     } yield response.map { timetable =>
@@ -355,7 +356,6 @@ class TimetableManager @Inject()(val environment: Environment,
     alternation match {
       case Some("even") => "juft"
       case Some("odd") => "toq"
-      case _ => sys.error("received unknown message")
     }
   }
 

@@ -31,11 +31,11 @@ object TimetableProtocol {
 
   implicit val getTextFormat: OFormat[GetText] = Json.format[GetText]
 
-  case class GetTeacher(weekDay: String, teacher: JsValue)
+  case class GetTeacher(weekDay: String, teacher: String)
 
   implicit val getTeacherFormat: OFormat[GetTeacher] = Json.format[GetTeacher]
 
-  case class TeacherName(teacher: JsValue)
+  case class TeacherName(teacher: String)
 
   implicit val TeacherNameFormat: OFormat[TeacherName] = Json.format[TeacherName]
 
@@ -45,13 +45,17 @@ object TimetableProtocol {
     }
   }
 
-  case class GetTTeacher(teacher: JsValue) extends TimetableOwner
+  case class GetTTeacher(teacher: String) extends TimetableOwner
 
   implicit val GetTTeacherFormat: OFormat[TeacherName] = Json.format[TeacherName]
 
   case class TimetableForGroup(group: String) extends TimetableOwner
 
   implicit val TimetableForGroupFormat: OFormat[TimetableForGroup] = Json.format[TimetableForGroup]
+
+  case class Laboratory(teacher: String, room: String)
+
+  implicit val LaboratoryFormat: OFormat[Laboratory] = Json.format[Laboratory]
 
   case class GetEmptyRoomByCouple(getCouple: GetEmptyRoom)
 
@@ -67,13 +71,12 @@ object TimetableProtocol {
                        groups: String,
                        divorce: String,
                        subjectId: Int,
-                       teachers: Option[String],
-                       numberRoom: Option[String],
+                       teachers: String,
+                       numberRoom: String,
                        specPart: Option[String] = None,
                        flow: Boolean,
-                       alternation: Option[String] = None ,
-                       teachers2: JsValue,
-                       numberRoom2: JsValue
+                       alternation: Option[String] = None,
+                       specPartJson: Option[JsValue] = None
                       )
 
   implicit val timetableFormat: OFormat[Timetable] = Json.format[Timetable]
