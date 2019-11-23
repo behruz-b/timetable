@@ -107,9 +107,7 @@ class TimetableManager @Inject()(val environment: Environment,
                     for {
                       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
                       updatedTimetable = selectedTimetable.get.copy(
-                        teachers = Json.toJson(timetable.teachers,timetableData.teachers),
-                        numberRoom = Json.toJson(timetable.numberRoom,timetableData.numberRoom)
-                      )
+                        specPartJson = Some(Json.toJson(timetable.teachers,timetableData.teachers, timetable.numberRoom,timetableData.numberRoom)))
                       update <- timetableDao.update(updatedTimetable)
                     } yield update
                     Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
@@ -182,9 +180,8 @@ class TimetableManager @Inject()(val environment: Environment,
                     for {
                       selectedTimetable <- timetableDao.getTimetableById(timetable.id)
                       updatedTimetable = selectedTimetable.get.copy(
-                        teachers = Json.toJson(timetable.teachers,timetableData.teachers),
-                        numberRoom = Json.toJson(timetable.numberRoom,timetableData.numberRoom)
-                      )
+                        specPartJson = Some(Json.toJson(timetable.teachers,timetableData.teachers, (timetable.numberRoom,timetableData.numberRoom))
+                      ))
                       update <- timetableDao.update(updatedTimetable)
                     } yield update
                     Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
@@ -255,7 +252,7 @@ class TimetableManager @Inject()(val environment: Environment,
     timetableDao.getTimetables
   }
 
-  private def teacherName(teacherName: JsValue): Future[Seq[Timetable]] = {
+  private def teacherName(teacherName: String): Future[Seq[Timetable]] = {
     timetableDao.getTimetablesByTeacher(teacherName)
   }
 
@@ -309,7 +306,7 @@ class TimetableManager @Inject()(val environment: Environment,
     }
   }
 
-  private def getTTeacher(teacher: JsValue): Future[Seq[Timetable]] = {
+  private def getTTeacher(teacher: String): Future[Seq[Timetable]] = {
     for {
       response <- timetableDao.getTimetablesByTeacher(teacher)
     } yield response.map { timetable =>

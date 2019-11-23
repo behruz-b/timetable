@@ -37,9 +37,9 @@ trait TimetableComponent extends SubjectComponent {
 
     def subjectId = column[Int]("subjectId")
 
-    def teachers = column[JsValue]("teachers")
+    def teachers = column[String]("teachers")
 
-    def numberRoom = column[JsValue]("numberRoom")
+    def numberRoom = column[String]("numberRoom")
 
     def specPart = column[String]("specPart")
 
@@ -47,7 +47,9 @@ trait TimetableComponent extends SubjectComponent {
 
     def alternation = column[String]("alternation")
 
-    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, specPart.?, flow, alternation.?) <> (Timetable.tupled, Timetable.unapply _)
+    def specPartJson = column[JsValue]("specPartJson")
+
+    def * = (id.?, studyShift, weekDay, couple, typeOfLesson, groups, divorce, subjectId, teachers, numberRoom, specPart.?, flow, alternation.?, specPartJson.?) <> (Timetable.tupled, Timetable.unapply _)
   }
 
 }
@@ -64,17 +66,17 @@ trait TimetableDao {
 
   def getTimetableById(id: Option[Int]): Future[Option[Timetable]]
 
-  def getTimetablesByTeacher(teacher: JsValue): Future[Seq[Timetable]]
+  def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]]
 
   def getBusyRoom(weekDay: String, couple: String, studyShift: String): Future[Seq[Timetable]]
 
   def getTimetableByGroup(weekDay: String, group: String): Future[Seq[Timetable]]
 
-  def getTByTeacherAndWeekday(weekDay: String, teacher: JsValue): Future[Seq[Timetable]]
+  def getTByTeacherAndWeekday(weekDay: String, teacher: String): Future[Seq[Timetable]]
 
   def getTimetableByGr(group: String): Future[Seq[Timetable]]
 
-  def findConflicts(weekDay: String, couple: String, numberRoom: JsValue, studyShift: String): Future[Option[Timetable]]
+  def findConflicts(weekDay: String, couple: String, numberRoom: String, studyShift: String): Future[Option[Timetable]]
 
   def findGroup(weekDay: String, couple: String, studyShift: String, group: String, subjectId: Int, typeOfLesson: String): Future[Option[Timetable]]
 }
@@ -102,9 +104,8 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   }
 
   override def getTimetables: Future[Seq[Timetable]] = {
-    val query = timetables
-      .joinLeft(subjects)
-      .on(_.subjectId === _.id)
+
+    val query = timetables.joinLeft(subjects).on(_.subjectId === _.id)
     db.run(query.result).map { r =>
       r.groupBy(_._1.id).map { case (_, tuples) =>
         val (t, s) = tuples.head
@@ -127,7 +128,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     db.run(timetables.filter(_.id === id).result.headOption)
   }
 
-  override def getTimetablesByTeacher(teacher: JsValue): Future[Seq[Timetable]] = {
+  override def getTimetablesByTeacher(teacher: String): Future[Seq[Timetable]] = {
     val query = timetables
       .filter(data => data.teachers === teacher)
       .joinLeft(subjects)
@@ -153,7 +154,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     }
   }
 
-  override def findConflicts(weekDay: String, couple: String, numberRoom: JsValue, studyShift: String): Future[Option[Timetable]] = {
+  override def findConflicts(weekDay: String, couple: String, numberRoom: String, studyShift: String): Future[Option[Timetable]] = {
     db.run{
       timetables.filter(data =>
         data.weekDay === weekDay &&
@@ -199,7 +200,7 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     }
   }
 
-  override def getTByTeacherAndWeekday(weekDay: String, teacher: JsValue): Future[Seq[Timetable]] = {
+  override def getTByTeacherAndWeekday(weekDay: String, teacher: String): Future[Seq[Timetable]] = {
     db.run(timetables.filter(data => data.teachers === teacher && data.weekDay === weekDay).result)
     val query = timetables
       .filter(data => data.teachers === teacher && data.weekDay === weekDay)

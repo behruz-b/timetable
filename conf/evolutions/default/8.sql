@@ -1,6 +1,8 @@
 # --- !Ups
-ALTER TABLE "Timetables" ALTER COLUMN "teachers" TYPE JSONB NULL;
-ALTER TABLE "Timetables" ALTER COLUMN "numberRoom" TYPE JSONB NULL;
+ALTER TABLE "Timetables" ADD COLUMN "teachers2"  JSONB NULL;
+ALTER TABLE "Timetables" ADD COLUMN "numberRoom2"  JSONB NULL;
+ALTER TABLE "Timetables" ADD COLUMN "teachers" VARCHAR NULL;
 # --- !Downs
-ALTER TABLE "Timetables" ALTER COLUMN "numberRoom" TYPE VARCHAR;
-ALTER TABLE "Timetables" ALTER COLUMN "numberRoom" TYPE VARCHAR;
+ALTER TABLE "Timetables" DROP COLUMN "teachers2";
+ALTER TABLE "Timetables" DROP COLUMN "numberRoom2";
+ALTER TABLE "Timetables" DROP COLUMN "teachers";
