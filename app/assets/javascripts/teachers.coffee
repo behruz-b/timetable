@@ -29,7 +29,7 @@ $ ->
     if (!vm.fullName())
       toastr.error("Please enter teacher's full name")
       return no
-    else if (vm.fullName().length < 6)
+    else if (vm.fullName().length < 6 and vm.fullName().indexOf('-') isnt 0)
       toastr.error("The teacher's full name must consist of 6 letters")
       return no
     else if (!vm.selectedSubject())

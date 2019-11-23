@@ -24,6 +24,7 @@ object GroupProtocol {
     Direction(4, "AT-Servise"),
     Direction(5, "Telekommunikatsiya"),
     Direction(6, "Kasb-Ta`limi"),
+    Direction(7, "-")
   )
 
   case class Group(id: Option[Int] = None,

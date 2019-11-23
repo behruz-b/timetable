@@ -38,7 +38,7 @@ $ ->
       {id: 5, day: "Friday"}, {id: 6, day: "Saturday"}])
     vm.lCouple([{id: 1, couple: "couple 1"}, {id: 2, couple: "couple 2"}, {id: 3, couple: "couple 3"},
       {id: 4, couple: "couple 4"}])
-    vm.typeLesson([{id: 1, type: "Laboratory"}, {id: 2, type: "Practice"}, {id: 3, type: "Lecture"}])
+    vm.typeLesson([{id: 1, type: "Laboratory"}, {id: 2, type: "Practice"}, {id: 3, type: "Lecture"}, {id: 4, type: "-"}])
     vm.alternationType([{id: 1, type: "even"}, {id: 2, type: "odd"}])
 
   get()
