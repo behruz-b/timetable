@@ -358,6 +358,7 @@ class TimetableManager @Inject()(val environment: Environment,
     alternation match {
       case Some("even") => "juft"
       case Some("odd") => "toq"
+      case _ => sys.error("unknown message")
     }
   }
 

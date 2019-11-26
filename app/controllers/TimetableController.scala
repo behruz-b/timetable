@@ -153,9 +153,9 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
 
   def grouppedTimetable = Action.async {
     (timetableManager ? GetTimetableList).mapTo[Seq[Timetable]].map { timetable =>
-      val grouped = timetable.map(_.groups).sorted.distinct
+      val grouped = timetable.map(_.groups).sortBy(num => (num.split("-").map(_.toInt).last, num.split("-").map(_.toInt).head)).distinct
       Ok(Json.toJson(GT(grouped, timetable.sortBy(_.couple))))
-    }
+    } 
   }
 
   def hasGroup = Action.async(parse.json) { implicit request => {
