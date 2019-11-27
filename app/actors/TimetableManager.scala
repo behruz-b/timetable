@@ -277,7 +277,6 @@ class TimetableManager @Inject()(val environment: Environment,
                 }
               }
           }
-
         case _ =>
           timetableData.typeOfLesson match {
             case "Lecture" =>
@@ -371,55 +370,177 @@ class TimetableManager @Inject()(val environment: Environment,
                 }
               }
             case "Laboratory" =>
-              for {
-                conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom, timetableData.studyShift)
-                response <- if (conflicts.isEmpty)
-                  Future.successful(Option.empty)
-                else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
-                  timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
-              } yield response match {
-                case Some(timetable) =>
-                  if (
-                    timetable.teachers != timetableData.teachers &&
-                      timetable.numberRoom != timetableData.numberRoom
-                  ) {
-                    for {
-                      selectedTimetable <- timetableDao.getTimetableById(timetable.id)
-                      updatedTimetable = selectedTimetable.get.copy(
-                        specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetable.numberRoom),
-                          Laboratory(timetableData.teachers, timetableData.numberRoom)))
-                      )
-                      update <- timetableDao.update(updatedTimetable)
-                    } yield update
-                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
-                  } else {
-                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
-                      translateAlternation(timetable.alternation) + " haftada shu parada " +
-                      timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
-                  }
-                case None =>
-                  timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
-              }
-            case _ =>
-              for {
-                response <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
-                  timetableData.numberRoom, timetableData.studyShift)
-              } yield response match {
-                case Some(timetable) =>
-                  if (timetable.alternation != timetableData.alternation) {
+              if (timetableData.studyShift == "Afternoon" && timetableData.couple == "couple 1") {
+                for {
+                  conflicts <- timetableDao.findConflicts(timetableData.weekDay, "couple 4",
+                    timetableData.numberRoom, "Morning")
+                  response <- if (conflicts.isEmpty)
+                    Future.successful(Option.empty)
+                  else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
+                    timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
+                } yield response match {
+                  case Some(timetable) =>
+                    if (
+                      timetable.teachers != timetableData.teachers &&
+                        timetable.numberRoom != timetableData.numberRoom
+                    ) {
+                      for {
+                        selectedTimetable <- timetableDao.getTimetableById(timetable.id)
+                        updatedTimetable = selectedTimetable.get.copy(
+                          specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetable.numberRoom),
+                            Laboratory(timetableData.teachers, timetableData.numberRoom)))
+                        )
+                        update <- timetableDao.update(updatedTimetable)
+                      } yield update
+                      Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    } else {
+                      Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                        translateAlternation(timetable.alternation) + " haftada shu parada " +
+                        timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                    }
+                  case None =>
                     timetableDao.addTimetable(timetableData)
                     Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
-                  }
-                  else {
-                    Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
-                      translateAlternation(timetable.alternation) + " haftada shu parada " +
-                      timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
-                  }
-                case None =>
-                  timetableDao.addTimetable(timetableData)
-                  Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                }
+              }
+              else if (timetableData.studyShift == "Morning" && timetableData.couple == "couple 4") {
+                for {
+                  conflicts <- timetableDao.findConflicts(timetableData.weekDay, "couple 1",
+                    timetableData.numberRoom, "Afternoon")
+                  response <- if (conflicts.isEmpty)
+                    Future.successful(Option.empty)
+                  else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
+                    timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
+                } yield response match {
+                  case Some(timetable) =>
+                    if (
+                      timetable.teachers != timetableData.teachers &&
+                        timetable.numberRoom != timetableData.numberRoom
+                    ) {
+                      for {
+                        selectedTimetable <- timetableDao.getTimetableById(timetable.id)
+                        updatedTimetable = selectedTimetable.get.copy(
+                          specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetable.numberRoom),
+                            Laboratory(timetableData.teachers, timetableData.numberRoom)))
+                        )
+                        update <- timetableDao.update(updatedTimetable)
+                      } yield update
+                      Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    } else {
+                      Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                        translateAlternation(timetable.alternation) + " haftada shu parada " +
+                        timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                    }
+                  case None =>
+                    timetableDao.addTimetable(timetableData)
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                }
+              }
+              else {
+                for {
+                  conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+                    timetableData.numberRoom, timetableData.studyShift)
+                  response <- if (conflicts.isEmpty)
+                    Future.successful(Option.empty)
+                  else timetableDao.findGroup(timetableData.weekDay, timetableData.couple,
+                    timetableData.studyShift, timetableData.groups, timetableData.subjectId, timetableData.typeOfLesson)
+                } yield response match {
+                  case Some(timetable) =>
+                    if (
+                      timetable.teachers != timetableData.teachers &&
+                        timetable.numberRoom != timetableData.numberRoom
+                    ) {
+                      for {
+                        selectedTimetable <- timetableDao.getTimetableById(timetable.id)
+                        updatedTimetable = selectedTimetable.get.copy(
+                          specPartJson = Some(Json.toJson(Laboratory(timetable.teachers, timetable.numberRoom),
+                            Laboratory(timetableData.teachers, timetableData.numberRoom)))
+                        )
+                        update <- timetableDao.update(updatedTimetable)
+                      } yield update
+                      Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    } else {
+                      Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                        translateAlternation(timetable.alternation) + " haftada shu parada " +
+                        timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                    }
+                  case None =>
+                    timetableDao.addTimetable(timetableData)
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                }
+              }
+            case _ =>
+              if (timetableData.studyShift == "Afternoon" && timetableData.couple == "couple 1") {
+                for {
+                  conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+                    timetableData.numberRoom, timetableData.studyShift)
+                  response <- if (conflicts.isEmpty)
+                    Future.successful(Option.empty)
+                  else timetableDao.findConflicts(timetableData.weekDay, "couple 4",
+                    timetableData.numberRoom, "Morning")
+                } yield response match {
+                  case Some(timetable) =>
+                    if (timetable.alternation != timetableData.alternation) {
+                      timetableDao.addTimetable(timetableData)
+                      Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    }
+                    else {
+                      Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                        translateAlternation(timetable.alternation) + " haftada shu parada " +
+                        timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                    }
+                  case None =>
+                    timetableDao.addTimetable(timetableData)
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                }
+              }
+              else if (timetableData.studyShift == "Morning" && timetableData.couple == "couple 4") {
+                for {
+                  conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+                    timetableData.numberRoom, timetableData.studyShift)
+                  response <- if (conflicts.isEmpty)
+                    Future.successful(Option.empty)
+                  else timetableDao.findConflicts(timetableData.weekDay, "couple 1",
+                    timetableData.numberRoom, "Afternoon")
+                } yield response match {
+                  case Some(timetable) =>
+                    if (timetable.alternation != timetableData.alternation) {
+                      timetableDao.addTimetable(timetableData)
+                      Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    }
+                    else {
+                      Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                        translateAlternation(timetable.alternation) + " haftada shu parada " +
+                        timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                    }
+                  case None =>
+                    timetableDao.addTimetable(timetableData)
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                }
+              }
+              else {
+                for {
+                  conflicts <- timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+                    timetableData.numberRoom, timetableData.studyShift)
+                  response <- if (conflicts.isEmpty)
+                    Future.successful(Option.empty)
+                  else timetableDao.findConflicts(timetableData.weekDay, timetableData.couple,
+                    timetableData.numberRoom, timetableData.studyShift)
+                } yield response match {
+                  case Some(timetable) =>
+                    if (timetable.alternation != timetableData.alternation) {
+                      timetableDao.addTimetable(timetableData)
+                      Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                    }
+                    else {
+                      Future.successful(Left(trWeekday(timetableData.weekDay) + " kuni " +
+                        translateAlternation(timetable.alternation) + " haftada shu parada " +
+                        timetable.teachers + " ismli o'qituvchini " + timetableData.numberRoom + " honada darsi bor!"))
+                    }
+                  case None =>
+                    timetableDao.addTimetable(timetableData)
+                    Future.successful(Right(timetableData.teachers + "ismli o'qituvchi darsi dars jadvaliga qo'shildi"))
+                }
               }
           }
 
