@@ -6,8 +6,7 @@
     @navbar(logged)
     <div class="container-fluid" style="padding-right: 0px">
       <div class="text-center">
-        <br><br><br><br><br>
-        <h1>Timetable Dashboard</h1>
+        <br><br>
         <div class="table-responsive text-center text-nowrap">
           <table id="" class="table real table-rounded table-bordered width-table">
             <thead class="table-red">
@@ -27,7 +26,7 @@
                 <td data-bind="foreach: {data: $root.vm.getT(group, $parent), as: 'timetable'}">
                   <table class="table real table-bordered">
                     <tr data-bind="if: $parentContext.$index() === 0 ">
-                      <td rowspan="2" data-bind="text: timetable.couple"></td>
+                      <td rowspan="2" width="30" data-bind="text: timetable.couple"></td>
                     </tr>
                       <!-- ko if: timetable.typeOfLesson == "Practice" -->
                     <tr>

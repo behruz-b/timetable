@@ -142,7 +142,11 @@ th, td {
   }
 
   .outer {
-    position: relative;
+    /*position: relative;*/
+    writing-mode: vertical-rl;
+    transform: rotate(-90deg);
+    vertical-align: middle !important;
+    background-color: transparent;
   }
 
 
