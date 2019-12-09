@@ -18,6 +18,8 @@
       toastr.error('Something went wrong! Please try again.')
 
   getSubjectList = ->
+    $('#wait').show();
+    $('#hide').hide();
     data =
       key: ""
     $.ajax
@@ -28,11 +30,15 @@
       contentType: 'application/json'
     .fail handleError
     .done (response) ->
+      $('#wait').hide();
+      $('#hide').show();
       vm.subjectList(response)
 
   getSubjectList()
 
   vm.sortById = ->
+    $('#wait').show();
+    $('#hide').hide();
     data =
       key: "id"
     $.ajax
@@ -43,9 +49,13 @@
       contentType: 'application/json'
     .fail handleError
     .done (response) ->
+      $('#wait').hide();
+      $('#hide').show();
       vm.subjectList(response)
 
   vm.sortByName = ->
+    $('#wait').show();
+    $('#hide').hide();
     data =
       key: "name"
     $.ajax
@@ -56,6 +66,8 @@
       contentType: 'application/json'
     .fail handleError
     .done (response) ->
+      $('#wait').hide();
+      $('#hide').show();
       vm.subjectList(response)
 
   ko.applyBindings {vm}

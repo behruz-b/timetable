@@ -47,21 +47,25 @@ $ ->
       toastr.success(response)
 
   getDirectionList = ->
+    $('#wait').show();
     $.ajax
       url:apiUrl.getDirections
       type: 'GET'
     .fail handleError
     .done (response) ->
+      $('#wait').show();
       vm.listDirections(response)
 
   getDirectionList()
 
   getGroupList = ->
+    $('#wait').show();
     $.ajax
       url:apiUrl.getGroups
       type: 'GET'
     .fail handleError
     .done (response) ->
+      $('#wait').hide();
       vm.listGroups(response)
 
   getGroupList()

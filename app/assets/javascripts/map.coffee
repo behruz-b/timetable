@@ -17,6 +17,8 @@ $ ->
       toastr.error('Something went wrong! Please try again.')
 
   getRoomsList = ->
+    $('#wait').show();
+    $('#capture-border').hide();
     $.ajax
       url: apiUrl.getRooms
       type: 'GET'
@@ -27,6 +29,8 @@ $ ->
       for room in response
         r = "#"+room
         $(r).removeClass("bg-danger").addClass("bg-success")
+        $('#wait').hide();
+        $('#capture-border').show();
 
   getRoomsList()
 
