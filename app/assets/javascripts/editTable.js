@@ -1,4 +1,34 @@
 $(document).ready(function () {
+  document.getElementById("errorText").style.visibility = "hidden";
+    $('#search').on('keyup', function () {
+      var result = [];
+      var value;
+      value = $(this).val().toLowerCase();
+      $('#mydiv h1').filter(function () {
+        var gr = $(this);
+        if (value.length > 0) {
+          gr.hide();
+        } else {
+          gr.hide();
+        }
+        $('#table tr').filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+          if ($(this).text().toLowerCase().indexOf(value) > -1) {
+            document.getElementById("errorText").style.visibility = "hidden";
+            var row = $(this).closest('tr').children('td');
+            if (row[5] !== undefined && row[5].innerText === gr.text()){
+              gr.show();
+              result.push(gr.text())
+            }
+          }
+        });
+      });
+      if (result.length === 0) {
+        document.getElementById("errorText").style.visibility = "visible";
+      }
+    });
+
+
   // Add row on add button click
   $(document).on("click", ".add", function () {
     var empty = false;

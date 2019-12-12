@@ -77,6 +77,15 @@ $ ->
         $('#wait').hide();
         $('#hide').show();
         vm.groups.push k
+#
+#  $(document).ready ->
+#  $('#search').on 'keyup', ->
+#    value = $(this).val().toLowerCase()
+#    $('#mydiv tr').filter ->
+#      $(this).toggle $(this).text().toLowerCase().indexOf(value) > -1
+#      if ($(this).text().toLowerCase().indexOf(value) > -1)
+#        $(this).closest('tr').children('td');
+#        console.log($(this).)
 
 
   ko.applyBindings {vm}
