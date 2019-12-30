@@ -1,15 +1,13 @@
-.table-title .add-new {
-  float: right;
-  height: 30px;
-  font-weight: bold;
-  font-size: 12px;
-  text-shadow: none;
-  min-width: 100px;
-  border-radius: 50px;
-  line-height: 13px;
+
+body {
+  color: #566787;
+  background: #f7f5f2;
+  font-family: 'Roboto', sans-serif;
 }
-.table-title .add-new i {
-  margin-right: 4px;
+
+table.table {
+  table-layout: fixed;
+  margin-top: 15px;
 }
 table.table tr th, table.table tr td {
   border-color: #e9e9e9;
@@ -19,14 +17,16 @@ table.table th i {
   margin: 0 5px;
   cursor: pointer;
 }
+table.table th:first-child {
+  width: 60px;
+}
 table.table th:last-child {
-  width: 100px;
+  width: 120px;
 }
 table.table td a {
-  cursor: pointer;
+  color: #a0a5b1;
   display: inline-block;
   margin: 0 5px;
-  min-width: 24px;
 }
 table.table td a.add {
   color: #27C46B;
@@ -57,4 +57,7 @@ table.table .form-control.error {
 }
 table.table td .add {
   display: none;
+}
+table.table td i {
+  font-size: 19px;
 }
