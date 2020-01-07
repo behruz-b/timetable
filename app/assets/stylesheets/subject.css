@@ -26,16 +26,20 @@ body {
 
 }
 
+.box-shadow {
+  box-shadow: 0 0 25px 3px #40b2cd !important;
+}
+
+.btn-outline-success:hover, .btn-outline-success:focus, .btn-outline-success:active {
+  background: #40b2cd;
+  color: #fff;
+}
 .hide {
   display: none;
 }
 
 .show {
   display: block;
-}
-
-.form-control::placeholder {
-  color: white;
 }
 
 .border-2 {
@@ -87,6 +91,10 @@ body {
   margin: -20px -25px 10px;
   border-radius: 3px 3px 0 0;
   font-weight: bold;
+}
+.bg-blue {
+  background: #40b2cd;
+  color: #fff;
 }
 
 .table-title h2 {
@@ -220,6 +228,10 @@ body {
     width: 100%;
   }
 
+}
+
+.table-responsive {
+  height: 725px;
 }
 
 .cssload-loader {

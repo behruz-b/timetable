@@ -28,7 +28,7 @@ $ ->
       vm.listEmptyRooms(response)
       for room in response
         r = "#"+room
-        $(r).removeClass("bg-danger").addClass("bg-success")
+        $(r).removeClass("bg-danger").addClass("bg-blue")
         $('#wait').hide();
         $('#capture-border').show();
 
