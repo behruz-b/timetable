@@ -2,11 +2,11 @@
 @(logged: Boolean)
   @import views.html.main
 @main("TimeTable - Map", webJarsUtil) {
-  <script src="@routes.Assets.versioned("javascripts/map.js")" type="text/javascript"></script>
   @navbar(logged)
+  <script src="@routes.Assets.versioned("javascripts/map.js")" type="text/javascript"></script>
   <div class="cssload-loader" id="wait"></div>
-  <div class="container p-3" id="capture-border">
-    <div class="row">
+  <div class="container table-wrapper border-dark box-shadow pr-4 rounded" id="capture-border">
+    <div class="row table-title">
       <div class="col-md-12 text-center"><h1 id="floor">2-qavat</h1></div>
     </div>
     <div class="row p-3">
@@ -135,10 +135,12 @@
           <div id="215" class="col-md-4 border-2 bg-danger border-left-0 pt-3 border-dark" style="height: 100px;">
             <div class="m-1 text-center">Ma'ruza xonasi <b>215</b></div>
           </div>
-          <div id="215A" class="col-md-2 border-2 bg-danger border-right-0 border-left-0 p-1 border-dark" style="height: 100px; font-size: 12px">
+          <div id="215A" class="col-md-2 border-2 bg-danger border-right-0 border-left-0 p-1 border-dark" style="height: 100px;
+            font-size: 12px">
             <div class="m-1 text-center">Kopyuter sinfi <b>215A</b></div>
           </div>
-          <div id="215B" class="col-md-2 border-2 border-right-0 bg-danger p-1 border-dark" style="height: 100px; font-size: 12px;">
+          <div id="215B" class="col-md-2 border-2 border-right-0 bg-danger p-1 border-dark" style="height: 100px;
+            font-size: 12px;">
             <div class="m-1 text-center">Kompyuter sinfi <b>215B</b></div>
           </div>
         </div>

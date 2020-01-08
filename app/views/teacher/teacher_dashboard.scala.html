@@ -10,9 +10,24 @@
   <div class="cssload-loader" id="wait"></div>
   <div class="container-fluid text-center" id="hide">
     <div class="col-md-10 text-center offset-md-1">
-      <br><br><br><br><br>
-      <h1>Teacher Dashboard</h1>
-      <div class="table-responsive text-nowrap">
+      <div class="table-wrapper mt-5" style="padding-bottom: 0px;">
+        <div id="mydiv" class="table-title">
+          <div class="row">
+            <div class="col-sm-4 offset-sm-4">
+              <h1 class="text-center">TEACHER DASHBOARD</h1>
+            </div>
+            <div class="col-sm-4">
+              <div class="search-box">
+                <div class="input-group">
+                  <input type="text" id="search" class="form-control" placeholder="Search...">
+                  <span class="input-group-addon"><i class="fas fa-search"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrapper table-responsive text-nowrap">
         <table class="table table-hover table-condensed table-bordered">
           <thead style="background: linen;">
             <tr>
@@ -28,7 +43,7 @@
               <td data-bind="text: $data.id"></td>
               <td data-bind="text: $data.fullName"></td>
               <td data-bind="text: $data.department"></td>
-              <td data-bind="text: $data.tSubject"></td>
+              <td class="text-wrap" data-bind="text: $data.tSubject"></td>
               <td>
                 <a class="add mr-3" title="Add" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
                 <a class="mr-3 edit" title="Edit" data-toggle="tooltip" ><i class="fas fa-pen-alt"></i></a>
