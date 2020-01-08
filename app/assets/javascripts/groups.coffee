@@ -48,24 +48,28 @@ $ ->
 
   getDirectionList = ->
     $('#wait').show();
+    $('#hide').hide();
     $.ajax
       url:apiUrl.getDirections
       type: 'GET'
     .fail handleError
     .done (response) ->
-      $('#wait').show();
+      $('#wait').hide();
+      $('#hide').show();
       vm.listDirections(response)
 
   getDirectionList()
 
   getGroupList = ->
     $('#wait').show();
+    $('#hide').hide();
     $.ajax
       url:apiUrl.getGroups
       type: 'GET'
     .fail handleError
     .done (response) ->
       $('#wait').hide();
+      $('#hide').show();
       vm.listGroups(response)
 
   getGroupList()
