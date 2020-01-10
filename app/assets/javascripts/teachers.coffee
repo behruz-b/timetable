@@ -55,31 +55,43 @@ $ ->
       toastr.success(response)
 
   getTeachers = ->
+    $('#wait').show();
+    $('#hide').hide();
     $.ajax
       url: apiUrl.getTeacher
       type: 'GET'
     .fail handleError
     .done (response) ->
+      $('#wait').hide();
+      $('#hide').show();
       vm.listTeachers(response)
 
   getTeachers()
 
   getDepartment = ->
+    $('#wait').show();
+    $('#hide').hide();
     $.ajax
       url: apiUrl.getDepartment
       type: 'GET'
     .fail handleError
     .done (response) ->
+      $('#wait').hide();
+      $('#hide').show();
       vm.listDepartment(response)
 
   getDepartment()
 
   getSubjectList = ->
+    $('#wait').show();
+    $('#hide').hide();
     $.ajax
       url: apiUrl.getSubject
       type: 'GET'
     .fail handleError
     .done (response) ->
+      $('#wait').hide();
+      $('#hide').show();
       vm.subjectList(response)
 
   getSubjectList()

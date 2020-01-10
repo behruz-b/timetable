@@ -1,15 +1,24 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
 @(logged: Boolean)
   @import views.html.main
-  @main("TimeTable - Dashboard", webJarsUtil) {
+  @main("TIMETABLE | REAL TIMETABLE Dashboard", webJarsUtil) {
     <script src="@routes.Assets.versioned("javascripts/real_timetable.js")" type="text/javascript"></script>
     @navbar(logged)
-    <div class="container-fluid" style="padding-right: 0px">
+  <div class="cssload-loader" id="wait"></div>
+  <div class="container-fluid" style="padding-right: 0px" id="hide">
       <div class="text-center">
-        <br><br>
+        <div class="table-wrapper mt-5" style="padding-bottom: 0px;">
+          <div id="mydiv" class="table-title">
+            <div class="row">
+              <div class="col-sm-4 offset-sm-4">
+                <h1 class="text-center">REAL TIMETABLE DASHBOARD</h1>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="table-responsive text-center text-nowrap">
-          <table id="" class="table real table-rounded table-bordered width-table">
-            <thead class="table-red">
+          <table id="" class="table table-bordered width-table">
+            <thead class="table-title">
               <tr data-bind="foreach: {data: vm.groups(), as: 'group'}">
                   <!-- ko if: $index() === 0 -->
                 <th class="w-4" >Guruh</th>
@@ -18,13 +27,13 @@
               </tr>
             </thead>
               <!-- ko foreach: {data: vm.weekday(), as: 'week'} -->
-            <tbody class="table-red">
+            <tbody>
               <tr>
-                <td rowspan="4" class="outer" data-bind="text: week"></td>
+                <td rowspan="4" class="outer table-title vertical-align-table"> <div class="rotate inner" data-bind="text: week"></div></td>
               </tr>
               <tr data-bind="foreach: {data: $root.vm.groups(), as: 'group'}" class="table-red">
                 <td data-bind="foreach: {data: $root.vm.getT(group, $parent), as: 'timetable'}">
-                  <table class="table real table-bordered">
+                  <table class="table real table-bordered bg-f">
                     <tr data-bind="if: $parentContext.$index() === 0 ">
                       <td rowspan="2" width="30" data-bind="text: timetable.couple"></td>
                     </tr>
@@ -37,8 +46,17 @@
                       </td>
                     </tr>
                       <!-- /ko -->
+                      <!-- ko if: timetable.typeOfLesson == "Lecture" && timetable.flow -->
+                    <tr style="background-color: lightgray;">
+                      <td rowspan="1">
+                        <small data-bind="text: timetable.specPart"></small><br>
+                        <small data-bind="text: timetable.teachers"></small><br>
+                        <small data-bind="text: timetable.numberRoom"></small>
+                      </td>
+                    </tr>
+                      <!-- /ko -->
                       <!-- ko if: timetable.typeOfLesson == "Lecture" -->
-                    <tr style="background-color: lightgray  ">
+                    <tr>
                       <td rowspan="1">
                         <small data-bind="text: timetable.specPart"></small><br>
                         <small data-bind="text: timetable.teachers"></small><br>

@@ -22,6 +22,8 @@ $ ->
 
 
   vm.getTable = ->
+    $('#wait').show();
+    $('#hide').hide();
     $.ajax
       url: apiUrl.getTimetable
       type: 'GET'
@@ -29,11 +31,15 @@ $ ->
     .done (response) ->
       vm.timetableList response
       for k,v of vm.timetableList()
+        $('#wait').hide();
+        $('#hide').show();
         vm.groups.push k
 
   vm.getTable()
 
   vm.teacherName.subscribe (name) ->
+    $('#wait').show();
+    $('#hide').hide();
     vm.groups.removeAll()
     data =
       teacherName: name
@@ -47,10 +53,14 @@ $ ->
     .done (result) ->
       vm.timetableList result
       for k,v of vm.timetableList()
+        $('#wait').hide();
+        $('#hide').show();
         vm.groups.push k
 
 
   vm.groupNumber.subscribe (number) ->
+    $('#wait').show();
+    $('#hide').hide();
     vm.groups.removeAll()
     data =
       groupNumber: number
@@ -64,7 +74,18 @@ $ ->
     .done (result) ->
       vm.timetableList result
       for k,v of vm.timetableList()
+        $('#wait').hide();
+        $('#hide').show();
         vm.groups.push k
+#
+#  $(document).ready ->
+#  $('#search').on 'keyup', ->
+#    value = $(this).val().toLowerCase()
+#    $('#mydiv tr').filter ->
+#      $(this).toggle $(this).text().toLowerCase().indexOf(value) > -1
+#      if ($(this).text().toLowerCase().indexOf(value) > -1)
+#        $(this).closest('tr').children('td');
+#        console.log($(this).)
 
 
   ko.applyBindings {vm}

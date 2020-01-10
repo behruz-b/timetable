@@ -23,6 +23,9 @@ $ ->
       toastr.error('Something went wrong! Please try again.')
 
   vm.getTable = ->
+    $('.table-responsive').css('max-height', $(window).height());
+    $('#wait').show();
+    $('#hide').hide();
     $.ajax
       url: apiUrl.getGroupedTimetable
       type: 'GET'
@@ -39,7 +42,10 @@ $ ->
     for t in vm.timetableList()
       if t.weekDay is weekday && t.groups is group
         tt.push(t)
+    $('#wait').hide();
+    $('#hide').show();
     tt
+
 
   vm.getTable()
 

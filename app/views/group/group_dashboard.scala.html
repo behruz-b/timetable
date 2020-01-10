@@ -1,16 +1,32 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
 @(logged: Boolean)
   @import views.html.main
-@main("TimeTable - Dashboard Groups", webJarsUtil) {
+@main("TIMETABLE - GROUP DASHBOARD", webJarsUtil) {
   <link href="@routes.Assets.versioned("stylesheets/editTable.css")" rel="stylesheet">
   <script src="@routes.Assets.versioned("javascripts/groups.js")" type="text/javascript"></script>
   <script src="@routes.Assets.versioned("javascripts/editGroup.js")" type="text/javascript"></script>
   @navbar(logged)
   <div class="container-fluid">
-    <div class="col-md-10 text-center offset-md-1">
-      <br><br><br><br><br>
-      <h1>Group Dashboard</h1>
-      <div class="table-responsive text-nowrap">
+    <div class="cssload-loader" id="wait"></div>
+    <div class="col-md-10 text-center offset-md-1" id="hide">
+      <div class="table-wrapper mt-5" style="padding-bottom: 0px;">
+        <div id="mydiv" class="table-title">
+          <div class="row">
+            <div class="col-sm-4 offset-sm-4">
+              <h1 class="text-center">GROUP DASHBOARD</h1>
+            </div>
+            <div class="col-sm-4">
+              <div class="search-box">
+                <div class="input-group">
+                  <input type="text" id="search" class="form-control" placeholder="Search...">
+                  <span class="input-group-addon"><i class="fas fa-search"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrapper table-responsive text-nowrap response">
         <table class="table table-hover table-condensed table-bordered">
           <thead style="background: linen;">
             <tr>

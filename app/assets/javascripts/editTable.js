@@ -60,16 +60,14 @@ $(document).ready(function () {
     row[7].innerHTML = '<input type="text" class="form-control" value="' + teacher + '">';
     row[8].innerHTML = '<input type="text" class="form-control" value="' + numberRoom + '">';
     row[9].innerHTML = '<input type="text" class="form-control" value="' + flow + '">';
-    // if (alternation === "") {
-    //   row[10].innerHTML = '<input type="text" class="form-control" value="No">';
-    // } else {
-      row[10].innerHTML = '<input type="text" class="form-control" value="' + alternation + '">';
-    // }
+    row[10].innerHTML = '<input type="text" class="form-control" value="' + alternation + '">';
+    console.log('subject',subject);
+
     $(this).parents("tr").find(".add, .edit").toggle();
   });
   $(document).on("click", ".add", function () {
     var row = $(this).closest('tr').children('td');
-    if (row[10].innerText === "even"){
+    if (row[10].innerText === "even") {
       alter = row[10].innerText;
     } else if (row[10].innerText === "odd") {
       alter = row[10].innerText;
@@ -82,7 +80,7 @@ $(document).ready(function () {
       }
     });
     if (row[9].innerText === "false"){
-     flowB = false;
+      flowB = false;
     } else {
       flowB = true;
     }
@@ -137,5 +135,48 @@ $(document).ready(function () {
       }
     });
     $(this).parents("tr").remove();
+  });
+
+  $("#search").on("keyup", function () {
+    var input, filter, table, tr, td, i, j, txtValue, div, cnt;
+    input = document.getElementById("search");
+    filter = input.value.toUpperCase();
+    div = document.getElementsByClassName("response");
+    table = document.getElementsByClassName("table");
+    for (j = 0; j < table.length; j++) {
+      cnt = 0;
+      tr = table[j].getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        tr[i].style.display = "";
+        div[j].style.display = "";
+        if (input.value.charAt(0) >= '0' && input.value.charAt(0) <= '9') {
+          td = tr[i].getElementsByTagName("td")[5];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              div[j].style.display = "";
+            } else {
+              div[j].style.display = "none";
+            }
+          }
+        } else {
+          td = tr[i].getElementsByTagName("td")[7];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              div[j].style.display = "";
+              cnt = cnt + 1;
+            }
+            else if (cnt !== 0) {
+              tr[i].style.display = "none";
+            }
+            else {
+              tr[i].style.display = "none";
+              div[j].style.display = "none";
+            }
+          }
+        }
+      }
+    }
   });
 });

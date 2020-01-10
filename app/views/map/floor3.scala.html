@@ -1,12 +1,12 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
 @(logged: Boolean)
   @import views.html.main
-@main("TimeTable - Map", webJarsUtil) {
+@main("TIMETABLE | MAP FLOOR-3", webJarsUtil) {
   @navbar(logged)
   <script src="@routes.Assets.versioned("javascripts/map.js")" type="text/javascript"></script>
-
-  <div class="container" id="capture-border">
-    <div class="row">
+  <div class="cssload-loader" id="wait"></div>
+  <div class="container table-wrapper border-dark box-shadow pr-4 rounded" id="capture-border">
+    <div class="row table-title">
       <div class="col-md-12 text-center"><h1 id="floor">3-qavat</h1></div>
     </div>
     <div class="row p-3">
@@ -14,76 +14,76 @@
         <div class="row">
           <div class="col-md-5">
             <div class="row">
-              <div class="col-md-12 border-2 border-bottom-0  " style="height: 60px;
+              <div class="col-md-12 border-2 border-bottom-0 border-dark" style="height: 60px;
                 padding-top: 10px; border-top-left-radius: 10px">
                 <div class="m-1 text-center">Auditoriya <b>301</b></div>
               </div>
             </div>
             <div class="row">
-              <div id="303" class="col-md-12 border-2  bg-danger border-bottom-0" style="height: 140px;
+              <div id="303" class="col-md-12 border-2  bg-danger border-bottom-0 border-dark" style="height: 140px;
                 padding-top: 40px">
                 <div class="m-1 text-center">Ma'ruza xonasi <br> <b>303</b></div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 border-2 border-bottom-0" style="height: 100px;
+              <div class="col-md-12 border-2 border-bottom-0 border-dark" style="height: 100px;
                 padding-top: 30px">
                 <div class="m-1 text-center">Kafedra <br> <b>305</b></div>
               </div>
             </div>
           </div>
-          <div class="col-md-2 border-top-dark"></div>
+          <div class="col-md-2 border-top-dark border-dark"></div>
           <div class="col-md-5">
             <div class="row">
-              <div id="302" class="col-md-12 border-2 bg-danger border-bottom-0 " style="height: 140px;
+              <div id="302" class="col-md-12 border-2 bg-danger border-bottom-0 border-dark" style="height: 140px;
                 padding-top: 40px; border-top-right-radius: 10px">
                 <div class="m-1 text-center">Maruza xonasi<br> <b>302</b></div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 border-2 border-bottom-0 " style="height: 60px;">
+              <div class="col-md-12 border-2 border-bottom-0 border-dark" style="height: 60px;">
                 <div class="m-1 text-center">Kafedra mudiri<br> <b>304</b></div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 border-2 " style="height: 100px; border-bottom-left-radius: 10px"></div>
+              <div class="col-md-12 border-2 border-dark" style="height: 100px; border-bottom-left-radius: 10px"></div>
             </div>
           </div>
         </div>
         <div class="row">
-          <div id="307" class="col-md-5 bg-danger border-2" style="height:100px; padding-top: 30px;  border-bottom-right-radius: 10px">
+          <div id="307" class="col-md-5 bg-danger border-2 border-dark" style="height:100px; padding-top: 30px;  border-bottom-right-radius: 10px">
             <div class="text-center">Auditoriya <br> <b>307</b></div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-5">
             <div class="row">
-              <div class="col-md-12 border-left-dark" style="height: 60px;">
+              <div class="col-md-12 border-left-dark border-dark" style="height: 60px;">
                 <div class="m-1 text-center "><img src="@routes.Assets.versioned("images/stairs-512.png")" alt="" style="width: 45%" ></div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 border-2 border-bottom-0 " style="height: 90px;
+              <div class="col-md-12 border-2 border-bottom-0 border-dark" style="height: 90px;
                 padding-top: 20px;  border-top-right-radius: 10px">
                 <div class="m-1 text-center">Kafedra Mudiri <br> <b>309</b></div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 border-2 " style="height: 100px;
+              <div class="col-md-12 border-2 border-dark" style="height: 100px;
                 padding-top: 30px; border-bottom-left-radius: 10px">
                 <div class="m-1 text-center">Kafedra <br> <b>310</b></div>
               </div>
             </div>
           </div>
-          <div class="col-md-2 border-bottom-dark"></div>
+          <div class="col-md-2 border-bottom-dark border-dark"></div>
           <div class="col-md-5" style="margin-top: -50px">
             <div class="row">
-              <div class="col-md-12 border-2 " style="height: 50px; padding-top: 5px; border-top-left-radius: 10px">
+              <div class="col-md-12 border-2 border-dark" style="height: 50px; padding-top: 5px; border-top-left-radius: 10px">
                 <div class="m-1 text-center"><b>306</b></div>
               </div>
             </div>
             <div class="row">
-              <div id="308" class="col-md-12 border-2 border-top-0 bg-danger " style="height: 250px;
+              <div id="308" class="col-md-12 border-2 border-top-0 bg-danger border-dark" style="height: 250px;
                 padding-top: 80px; border-bottom-right-radius: 10px">
                 <div class="m-1 text-center">Maruza xonasi <br> <b>308</b></div>
               </div>
@@ -93,29 +93,29 @@
       </div>
       <div class="col-md-4">
         <div class="row" style="margin-top: 200px;">
-          <div id="312" class="col-md-5 border-2 border-left-0  bg-danger" style="height: 100px;
+          <div id="312" class="col-md-5 border-2 border-left-0 border-dark bg-danger" style="height: 100px;
             padding-top: 30px; border-bottom-right-radius: 10px">
             <div class="m-1 text-center">Maruza xonasi <br> <b>312</b></div>
           </div>
-          <div class="col-md-2 border-top-dark" style="padding-top: 20px"><img src="@routes.Assets.versioned("images/stairs-512.png")" alt="" style="width: 120%" ></div>
-          <div id="314" class="col-md-5 border-2 bg-danger border-right-0 " style="height: 100px;
+          <div class="col-md-2 border-top-dark border-dark" style="padding-top: 20px"><img src="@routes.Assets.versioned("images/stairs-512.png")" alt="" style="width: 120%" ></div>
+          <div id="314" class="col-md-5 border-2 bg-danger border-right-0 border-dark" style="height: 100px;
             padding-top: 30px; border-bottom-left-radius: 10px">
             <div class="m-1 text-center">Maruza xonasi <br> <b>314</b></div>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12" style="height: 50px"></div>
+          <div class="col-md-12 border-dark" style="height: 50px"></div>
         </div>
         <div class="row">
-          <div id="311" class="col-md-4 border-2 border-left-0 bg-danger " style="height: 100px;
+          <div id="311" class="col-md-4 border-2 border-left-0 bg-danger border-dark" style="height: 100px;
             padding-top: 10px">
             <div class="m-1 text-center">Ma'ruza xonasi <br> <b>311</b></div>
           </div>
-          <div id="313" class="col-md-4 border-2 border-right-0 border-left-0 bg-danger" style="height: 100px;
+          <div id="313" class="col-md-4 border-2 border-right-0 border-left-0 bg-danger border-dark" style="height: 100px;
             padding-top: 10px">
             <div class="m-1 text-center">Ma'ruza xonasi <br> <b>313</b></div>
           </div>
-          <div id="315" class="col-md-4 border-2 border-right-0  bg-danger" style="height: 100px;
+          <div id="315" class="col-md-4 border-2 border-right-0 border-dark bg-danger" style="height: 100px;
             padding-top: 10px">
             <div class="m-1 text-center">Ma'ruza xonasi <br> <b>315</b></div>
           </div>
@@ -125,41 +125,41 @@
         <div class="row">
           <div class="col-md-5">
             <div class="row">
-              <div class="col-md-12 border-2 border-bottom-0  text-center" style="height: 60px; border-top-left-radius: 10px">
+              <div class="col-md-12 border-2 border-bottom-0 border-dark text-center" style="height: 60px; border-top-left-radius: 10px">
                 <div class="m-1 text-center">Auditoriya <br> <b>324</b></div>
               </div>
             </div>
             <div class="row">
-              <div id="322" class="col-md-12 border-2  text-center" style="height: 140px;
+              <div id="322" class="col-md-12 border-2 border-dark text-center" style="height: 140px;
                 padding-top: 30px">
                 <div class="m-1 text-center">Virtual laboratoriya <br> <b>322</b></div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 border-2 border-top-0 " style="height: 50px;
+              <div class="col-md-12 border-2 border-top-0 border-dark" style="height: 50px;
                 padding-top: 5px">
                 <div class="m-1 text-center">Arxiv <b>320</b></div>
               </div>
-              <div class="col-md-12 border-2 border-top-0 " style="height: 50px; border-bottom-right-radius: 10px">
+              <div class="col-md-12 border-2 border-top-0 border-dark" style="height: 50px; border-bottom-right-radius: 10px">
               </div>
             </div>
           </div>
-          <div class="col-md-2 border-top-dark"></div>
+          <div class="col-md-2 border-top-dark border-dark"></div>
           <div class="col-md-5">
             <div class="row">
-              <div id="325" class="col-md-12 bg-danger border-2 border-bottom-0 " style="height: 140px;
+              <div id="325" class="col-md-12 bg-danger border-2 border-bottom-0 border-dark" style="height: 140px;
                 padding-top: 50px; border-top-right-radius: 10px">
                 <div class="m-1 text-center">Auditoriya <br> <b>325</b></div>
               </div>
             </div>
             <div class="row">
-              <div id="323" class="col-md-12 border-2 border-bottom-0 " style="height: 60px;
+              <div id="323" class="col-md-12 border-2 border-bottom-0 border-dark" style="height: 60px;
                 padding-top: 2px">
                 <div class="m-1 text-center">Auditoriya <br> <b>323</b></div>
               </div>
             </div>
             <div class="row">
-              <div id="321" class="col-md-12 bg-danger border-2 " style="height: 100px;
+              <div id="321" class="col-md-12 bg-danger border-2 border-dark" style="height: 100px;
                 padding-top: 20px">
                 <div class="m-1 text-center">Kompyuter sinfi <br> <b>321</b></div>
               </div>
@@ -167,42 +167,42 @@
           </div>
         </div>
         <div class="row">
-          <div id="319" class="offset-md-7 col-md-5 border-2 border-top-0" style="height: 75px; padding-top: 5px;  border-bottom-left-radius: 10px">
+          <div id="319" class="offset-md-7 col-md-5 border-2 border-top-0 border-dark" style="height: 75px; padding-top: 5px;  border-bottom-left-radius: 10px">
             <div class="m-1 text-center"> Auditoriya <br> <b>319</b></div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-5" style="margin-top: -25px">
             <div class="row">
-              <div class="col-md-12 border-2  text-center" style="height: 80px;
+              <div class="col-md-12 border-2 border-dark text-center" style="height: 80px;
                 padding-top: 10px; border-top-right-radius: 10px">
                 <div class="m-1 text-center">Metodist <br> <b>318</b></div>
               </div>
             </div>
             <div class="row">
-              <div id="316" class="col-md-12 border-2 border-top-0 bg-danger  text-center" style="height: 220px;
+              <div id="316" class="col-md-12 border-2 border-top-0 bg-danger border-dark text-center" style="height: 220px;
                 padding-top: 70px; border-bottom-left-radius: 10px">
                 <div class="m-1 text-center">Ma'ruza xonasi <br> <b>316</b></div>
               </div>
             </div>
           </div>
-          <div class="col-md-2 border-bottom-dark"></div>
+          <div class="col-md-2 border-bottom-dark border-dark"></div>
           <div class="col-md-5">
             <div class="row">
-              <div class="col-md-12 border-right-dark " style="height: 60px;" >
+              <div class="col-md-12 border-right-dark border-dark" style="height: 60px;" >
                 <div class="m-1 text-center ">
                   <img src="@routes.Assets.versioned("images/stairs-512.png")" alt="" style="width: 45%" >
                 </div>
               </div>
             </div>
             <div class="row">
-              <div id="317" class="col-md-12 border-2 text-center" style="height: 90px;
+              <div id="317" class="col-md-12 border-2 text-center border-dark" style="height: 90px;
                 padding-top: 20px; border-top-left-radius: 10px">
                 <div class="m-1 text-center"><b>317</b></div>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 border-2 border-top-0  text-center" style="height: 125px;
+              <div class="col-md-12 border-2 border-top-0 border-dark text-center" style="height: 125px;
                 padding-top: 25px; border-bottom-right-radius: 10px">
                 <div class="m-1 text-center">Dekanat <br></div>
               </div>

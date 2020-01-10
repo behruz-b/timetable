@@ -1,11 +1,12 @@
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
 @(logged: Boolean)
 @import views.html.main
-@main("TimeTable - Map", webJarsUtil) {
+@main("TIMETABLE - MAP FLOOR-1", webJarsUtil) {
     <script src="@routes.Assets.versioned("javascripts/map.js")" type="text/javascript"></script>
     @navbar(logged)
-    <div class="container" id="capture-border">
-        <div class="row">
+  <div class="cssload-loader" id="wait"></div>
+  <div class="container table-wrapper border-dark box-shadow pr-4 rounded" id="capture-border">
+        <div class="row table-title">
             <div class="col-md-12 text-center"><h1 id="floor">1-qavat</h1></div>
         </div>
         <div class="row p-3">
@@ -13,70 +14,70 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 border-2 " style="height: 300px;
+                            <div class="col-md-12 border-2 border-dark" style="height: 300px;
                                 padding-top: 110px;
                                 border-bottom-right-radius: 10px;
                                 border-top-left-radius: 10px">
-                                <div class="m-1 text-center">Kutibxona va o'quv zali <br> <b>101</b></div>
+                                <div class="m-1 text-center ">Kutibxona va o'quv zali <br> <b>101</b></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 border-top-dark"></div>
+                    <div class="col-md-2 border-top-dark border-dark"></div>
                     <div class="col-md-5">
                         <div class="row">
-                            <div id="102" class="col-md-12 border-2 border-bottom-0  bg-danger" style="height: 200px;
+                            <div id="102" class="col-md-12 border-2 border-bottom-0  bg-danger border-dark" style="height: 200px;
                                 padding-top: 60px;
                                 border-top-right-radius: 10px">
                                 <div class="m-1 text-center">Video kanferensiya zali <br> <b>102</b></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 " style="height: 100px;
+                            <div class="col-md-12 border-2 border-dark" style="height: 100px;
                                 border-bottom-left-radius: 10px"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 p-4 border-left-dark"></div>
+                    <div class="col-md-12 p-4 border-left-dark border-dark"></div>
                 </div>
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 border-left-dark" style="height: 60px;">
+                            <div class="col-md-12 border-left-dark border-dark" style="height: 60px;">
                                 <div class="m-1 text-center "><img src="@routes.Assets.versioned("images/stairs-512.png")" alt="" style="width: 45%;
                                     margin-top: -25px" ></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 border-bottom-0 " style="height: 90px;
+                            <div class="col-md-12 border-2 border-bottom-0 border-dark" style="height: 90px;
                                 padding-top: 20px;
                                 border-top-right-radius: 10px">
                                 <div class="m-1 text-center">ARM direktori <br> <b>103</b></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 " style="height: 150px;
+                            <div class="col-md-12 border-2 border-dark" style="height: 150px;
                                 padding-top: 30px;
                                 border-bottom-left-radius: 10px">
                                 <div class="m-1 text-center">Axborot-resurs markazi <br> <b>105</b></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 border-bottom-dark"></div>
+                    <div class="col-md-2 border-bottom-dark border-dark"></div>
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-6 border-2 border-right-0 " style="height: 150px;
+                            <div class="col-md-6 border-2 border-right-0 border-dark" style="height: 150px;
                                 padding-top: 30px;
                                 border-top-left-radius: 10px">
                                 <div class="m-1 text-center" style="writing-mode: vertical-rl;">Garderob</div>
                             </div>
-                            <div class="col-md-6 border-2 " style="height: 150px;
+                            <div class="col-md-6 border-2 border-dark" style="height: 150px;
                                 padding-top: 30px">
                                 <div class="m-1 text-center" style="writing-mode: vertical-rl;">Radiouzel</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 border-top-0 " style="height: 150px;
+                            <div class="col-md-12 border-2 border-top-0 border-dark" style="height: 150px;
                                 padding-top: 30px;
                                 border-bottom-right-radius: 10px">
                                 <div class="m-1 text-center">Ma'naviyat xonasi <br> <b>104</b></div>
@@ -87,16 +88,16 @@
             </div>
             <div class="col-md-4">
                 <div class="row" style="margin-top: 200px;">
-                    <div id="106" class="col-md-4 border-2 border-left-0  bg-danger" style="height: 100px;
+                    <div id="106" class="col-md-4 border-2 border-left-0  bg-danger border-dark" style="height: 100px;
                         padding-top: 10px;
                         border-bottom-right-radius: 10px">
                         <div class="m-1 text-center">Dasturchilar markazi <br> <b>106</b></div>
                     </div>
-                    <div class="col-md-4 border-top-dark">
+                    <div class="col-md-4 border-top-dark border-dark">
                         <div class="m-1 text-center "><img src="@routes.Assets.versioned("images/stairs-512.png")" alt="" style="width: 70%;
                             padding-top: 10px" ></div>
                     </div>
-                    <div id="108" class="col-md-4 border-2 bg-danger border-right-0 " style="height: 100px;
+                    <div id="108" class="col-md-4 border-2 bg-danger border-right-0 border-dark" style="height: 100px;
                         padding-top: 10px;
                         border-bottom-left-radius: 10px">
                         <div class="m-1 text-center">Elektron ta'lim xonasi <b>108</b></div>
@@ -106,13 +107,13 @@
                     <div class="col-md-12 p-4"></div>
                 </div>
                 <div class="row">
-                    <div id="107" class="col-md-4 bg-danger border-2 border-left-0 " style="height: 100px;
+                    <div id="107" class="col-md-4 bg-danger border-2 border-left-0 border-dark" style="height: 100px;
                         padding-top: 10px;
                         border-top-right-radius: 10px">
                         <div class="m-1 text-center">Dasturchilar markazi <br> <b>107</b></div>
                     </div>
-                    <div class="col-md-4 border-bottom-dark"></div>
-                    <div id="109" class="col-md-4 border-2 border-right-0 bg-danger " style="height: 100px;
+                    <div class="col-md-4 border-bottom-dark border-dark"></div>
+                    <div id="109" class="col-md-4 border-2 border-right-0 bg-danger border-dark" style="height: 100px;
                         padding-top: 10px;
                         border-top-left-radius: 10px">
                         <div class="m-1 text-center">Kompyuter sinfi <br> <b>109</b></div>
@@ -123,26 +124,26 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 border-2 border-bottom-0  text-center" style="height: 75px;
+                            <div class="col-md-12 border-2 border-bottom-0  text-center border-dark" style="height: 75px;
                                 border-top-left-radius: 10px">
                                 <div class="m-1 text-center">Xotin qizlar qo'mitasi <br> <b>116</b></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div id="114" class="col-md-12 bg-danger border-2  text-center" style="height: 150px;
+                            <div id="114" class="col-md-12 bg-danger border-2 border-dark text-center" style="height: 150px;
                                 padding-top: 30px;">
                                 <div class="m-1 text-center">Elektronika laboratoriyasi <br> <b>114</b></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 border-top-0 " style="height: 75px;
+                            <div class="col-md-12 border-2 border-top-0 border-dark" style="height: 75px;
                                 border-bottom-right-radius: 10px"></div>
                         </div>
                     </div>
-                    <div class="col-md-2 border-top-dark"></div>
+                    <div class="col-md-2 border-top-dark border-dark"></div>
                     <div class="col-md-5">
                         <div class="row">
-                            <div id="118" class="col-md-12 bg-danger border-2 border-bottom-0 " style="height: 150px;
+                            <div id="118" class="col-md-12 bg-danger border-2 border-bottom-0 border-dark" style="height: 150px;
                                 padding-top: 30px;
                                 border-top-right-radius: 10px">
                                 <div class="m-1 text-center">O'lchash va standartlashtirish laboratoriyasi <br> <b>
@@ -150,13 +151,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 border-bottom-0 " style="height: 60px;
+                            <div class="col-md-12 border-2 border-bottom-0 border-dark" style="height: 60px;
                                 padding-top: 2px">
                                 <div class="m-1 text-center">Ilmiy kotib <br> <b>117</b></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 " style="height: 90px;
+                            <div class="col-md-12 border-2 border-dark" style="height: 90px;
                                 padding-top: 3px;
                                 border-bottom-left-radius: 10px">
                                 <div class="m-1 text-center">O'quv-uslubiy bo'lim <br> <b>115</b></div>
@@ -165,48 +166,48 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 p-4 border-right-dark"></div>
+                    <div class="col-md-12 p-4 border-right-dark border-dark"></div>
                 </div>
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 border-2 border-bottom-0  text-center" style="height: 80px;
+                            <div class="col-md-12 border-2 border-bottom-0 border-dark text-center" style="height: 80px;
                                 padding-top: 20px;
                                 border-top-right-radius: 10px">
                                 <div class="m-1 text-center">G'azna</div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2  text-center" style="height: 120px;
+                            <div class="col-md-12 border-2  text-center border-dark" style="height: 120px;
                                 padding-top: 30px">
                                 <div class="m-1 text-center">Buxgalteriya <br> <b>112</b></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 border-top-0  text-center" style="height: 100px;
+                            <div class="col-md-12 border-2 border-top-0 border-dark text-center" style="height: 100px;
                                 padding-top: 20px;
                                 border-bottom-left-radius: 10px">
                                 <div class="m-1 text-center">Kadrlar bo'limi <br> <b>110</b></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 border-bottom-dark"></div>
+                    <div class="col-md-2 border-bottom-dark border-dark"></div>
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 border-right-dark" style="height: 60px;" >
+                            <div class="col-md-12 border-right-dark border-dark" style="height: 60px;" >
                                 <div class="m-1 text-center "><img src="@routes.Assets.versioned("images/stairs-512.png")" alt="" style="width: 45%;
                                     margin-top: -30px" ></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2  text-center" style="height: 120px;
+                            <div class="col-md-12 border-2 border-dark text-center" style="height: 120px;
                                 padding-top: 30px;
                                 border-top-left-radius: 10px">
                                 <div class="m-1 text-center">Devonxona <br> <b>113</b></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 border-2 border-top-0  text-center" style="height: 120px;
+                            <div class="col-md-12 border-2 border-top-0 border-dark text-center" style="height: 120px;
                                 padding-top: 25px;
                                 border-bottom-right-radius: 10px">
                                 <div class="m-1 text-center">Direktor o'rinbosari <br> <b>111</b></div>
