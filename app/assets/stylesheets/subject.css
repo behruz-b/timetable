@@ -369,3 +369,25 @@ body {
 .bg-f {
   background: floralwhite;
 }
+.line {
+  background-image: linear-gradient(
+      to top right,
+      #40b2cd calc(50% - 1px),
+      white,
+      #40b2cd calc(50% + 1px)
+  );
+}
+
+.text-group {
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  margin-top: -10px;
+  margin-left: 10px;
+  position: absolute;
+}
+
+.text-weekday {
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  margin: 7px;
+  margin-left: -7px;
+}
