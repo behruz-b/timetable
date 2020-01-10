@@ -35,7 +35,7 @@
                 <td data-bind="foreach: {data: $root.vm.getT(group, $parent), as: 'timetable'}">
                   <table class="table real table-bordered bg-f">
                     <tr data-bind="if: $parentContext.$index() === 0 ">
-                      <td rowspan="2" data-bind="text: timetable.couple"></td>
+                      <td rowspan="2" width="30" data-bind="text: timetable.couple"></td>
                     </tr>
                       <!-- ko if: timetable.typeOfLesson == "Practice" -->
                     <tr>
