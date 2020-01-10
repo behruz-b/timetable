@@ -10,7 +10,7 @@
         <div class="table-wrapper mt-5" style="padding-bottom: 0px;">
           <div id="mydiv" class="table-title">
             <div class="row">
-              <div class="col-sm-4 offset-sm-4">
+              <div class="col-sm-6 offset-sm-3">
                 <h1 class="text-center">REAL TIMETABLE DASHBOARD</h1>
               </div>
             </div>
@@ -55,7 +55,7 @@
                       </td>
                     </tr>
                       <!-- /ko -->
-                      <!-- ko if: timetable.typeOfLesson == "Lecture" -->
+                      <!-- ko if: timetable.typeOfLesson == "Lecture" && !timetable.flow -->
                     <tr>
                       <td rowspan="1">
                         <small data-bind="text: timetable.specPart"></small><br>
