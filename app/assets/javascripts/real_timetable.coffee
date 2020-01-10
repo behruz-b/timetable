@@ -23,6 +23,7 @@ $ ->
       toastr.error('Something went wrong! Please try again.')
 
   vm.getTable = ->
+    $('.table-responsive').css('max-height', $(window).height());
     $('#wait').show();
     $('#hide').hide();
     $.ajax
