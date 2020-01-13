@@ -10,7 +10,7 @@ $ ->
     timetableList: []
     teachers: []
     timetable: []
-    weekday: []
+    weekday: ["Dushanba", 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba']
     requiredData: Glob.requiredData
 
   handleError = (error) ->
@@ -37,6 +37,7 @@ $ ->
           vm.timetableList(v)
 
   vm.getT = (teacher, weekday) ->
+    console.log(teacher, weekday)
     tt = ko.observableArray([])
     for t in vm.timetableList()
       if t.weekDay is weekday && t.teachers is teacher
