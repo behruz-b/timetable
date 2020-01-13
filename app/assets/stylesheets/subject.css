@@ -34,6 +34,7 @@ body {
   background: #40b2cd;
   color: #fff;
 }
+
 .hide {
   display: none;
 }
@@ -92,6 +93,7 @@ body {
   border-radius: 3px 3px 0 0;
   font-weight: bold;
 }
+
 .bg-blue {
   background: #40b2cd;
   color: #fff;
@@ -372,4 +374,35 @@ body {
 
 .bg-f {
   background: floralwhite;
+}
+
+.line {
+  background-image: linear-gradient(
+      to top right,
+      #40b2cd calc(50% - 1px),
+      white,
+      #40b2cd calc(50% + 1px)
+  );
+}
+
+.text-group {
+  transform: translateX(-50%) translateY(-50%) rotate(35deg);
+  margin-top: 5px;
+  margin-left: 30px;
+  margin-right: -19px;
+  margin-bottom: -31px;
+}
+
+.text-weekday {
+  transform: translateX(-50%) translateY(-50%) rotate(35deg);
+  margin-top: 24px;
+  margin-bottom: -10px;
+  margin-left: 18px;
+  margin-right: -25px;
+}
+.gr {
+  margin-top: 11px;
+  margin-left: 39px;
+  margin-right: -42px;
+  margin-bottom: -34px;
 }

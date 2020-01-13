@@ -10,7 +10,7 @@ $ ->
     timetableList: []
     groups: []
     timetable: []
-    weekday: []
+    weekday: ["Monday", 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     requiredData: Glob.requiredData
 
   handleError = (error) ->

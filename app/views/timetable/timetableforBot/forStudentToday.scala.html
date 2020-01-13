@@ -11,37 +11,49 @@
   </script>
   <div class="container-fluid">
     <div class="text-center">
-      <br><br><br><br><br>
-      <h1>Timetable Dashboard</h1>
+      <div class="table-wrapper mt-5" style="padding-bottom: 0px;">
+        <div id="mydiv" class="table-title">
+          <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+              <h1 class="text-center">TIMETABLE DASHBOARD</h1>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="table-responsive text-center row">
-        <table id="capture-border" class="table table-bordered col-md-3 offset-md-5 bg-dark text-white real">
-          <thead>
+        <table id="capture-border" class="table table-bordered width-table col-md-4 offset-md-4">
+          <thead class="table-title">
             <tr>
-              <th class="">Guruh</th>
-              <th class="" data-bind="text: vm.thisDay()"></th>
+              <th class="line" width="20">
+                <div class="text-group gr">GURUH</div>
+                <div class="text-weekday" style="">KUN</div>
+              </th>
+                <!-- ko foreach: {data: vm.groups(), as: 'group'} -->
+              <th class="" data-bind="text: group"></th>
+                <!-- /ko -->
             </tr>
           </thead>
             <!-- ko foreach: {data: vm.groups(), as: 'group'} -->
           <tbody>
             <tr>
-              <td rowspan="2" class="outer" ><div class="rotate inner"  data-bind="text: group"></div></td>
+              <td rowspan="2" class="outer table-title" ><div class="rotate inner" data-bind="text: $root.vm.thisDay()"></div></td>
             </tr>
             <tr>
-              <td>
-                <div class="row ml-0 mr-0" data-bind="foreach: {data: $root.vm.getT(group, $root.vm.thisDay()), as: 'timetable'}" >
-                  <div class="col-md-12 border-bottom-gray">
-                    <div class="row">
-                      <div class="col-md-2 pt-4">
-                        <small class="inner rotate" data-bind="text: timetable.couple"></small>
-                      </div>
-                      <div class="col-md-10 h-120p border-left-gray">
-                        <small data-bind="text: timetable.specPart"></small> &nbsp;
-                        <small data-bind="text: timetable.teachers"></small> &nbsp;<br>
-                        <small data-bind="text: timetable.numberRoom"></small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <td data-bind="foreach: {data: $root.vm.getT(group, $root.vm.thisDay()), as: 'timetable'}">
+                <table class="table real table-bordered bg-f">
+                  <tr data-bind="if: $parentContext.$index() === 0 ">
+                    <td rowspan="2" class="outer" width="50">
+                      <b class="inner rotate" data-bind="text: timetable.couple"></b>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td rowspan="1">
+                      <b data-bind="text: timetable.specPart"></b><br>
+                      <b data-bind="text: timetable.teachers"></b><br>
+                      <b data-bind="text: timetable.numberRoom"></b>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </tbody>

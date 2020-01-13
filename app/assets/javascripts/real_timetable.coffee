@@ -10,11 +10,7 @@ $ ->
     timetableList: []
     groups: []
     timetable: []
-    weekday: []
-
-  Weekdat = ->
-    vm.weekday ["Monday", 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  Weekdat()
+    weekday: ["Monday", 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
