@@ -38,7 +38,9 @@
               <td data-bind="foreach: {data: $root.vm.getT(group, $parent), as: 'timetable'}">
                 <table class="table real table-bordered bg-f">
                   <tr data-bind="if: $parentContext.$index() === 0 ">
-                    <td rowspan="2" width="30" data-bind="text: timetable.couple"></td>
+                    <td rowspan="2" class="outer" width="50" style="padding: 24px;">
+                      <b class="inner rotate" data-bind="text: timetable.couple"></b>
+                    </td>
                   </tr>
                     <!-- ko if: timetable.typeOfLesson == "Practice" -->
                   <tr>
@@ -72,11 +74,13 @@
                   <tr>
                     <td rowspan="1">
                       <small data-bind="text: timetable.specPart"></small><br>
-                        <!-- ko foreach: {data: timetable.specPartJson, as: 'json'} -->
-                      <small data-bind="text: json.teacher"></small> &nbsp;
-                      <small data-bind="text: json.room"></small><br>
-                        <!-- /ko -->
-                      @*<small data-bind="text: timetable.numberRoom"></small>*@
+                      <span data-bind="foreach: timetable.specPartJson">
+                        <small data-bind="text: $data.teacher"></small> &nbsp;
+                        <small data-bind="text: $data.room"></small>
+                          <!-- ko if: $index() == 0 -->
+                          / <br>
+                          <!-- /ko -->
+                      </span>
                     </td>
                   </tr>
                     <!-- /ko -->

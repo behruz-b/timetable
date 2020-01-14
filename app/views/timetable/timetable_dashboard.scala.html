@@ -61,8 +61,24 @@
               <td data-bind="text: $data.typeOfLesson"></td>
               <td data-bind="text: $data.groups"></td>
               <td data-bind="text: $data.specPart"></td>
+                <!-- ko if: $data.typeOfLesson == 'Laboratory' -->
+
+              <td data-bind="foreach: $data.specPartJson">
+                  <!-- ko text: $data.teacher -->
+                  <!-- /ko -->
+
+              </td>
+              <td data-bind="foreach: $data.specPartJson">
+                  <!-- ko text: $data.room -->
+                  <!-- /ko --> <br>
+              </td>
+                <!-- /ko -->
+                <!-- ko ifnot: $data.typeOfLesson == 'Laboratory' -->
               <td data-bind="text: $data.teachers"></td>
               <td data-bind="text: $data.numberRoom"></td>
+                <!-- /ko -->
+
+
               <td data-bind="text: $data.flow"></td>
                 <!-- ko ifnot: $data.alternation -->
               <td>NO</td>

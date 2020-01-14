@@ -120,9 +120,16 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val numberRoom = (request.body \ "numberRoom").as[String]
     val flow = (request.body \ "flow").as[Boolean]
     val alternation = (request.body \ "alternation").asOpt[String]
-    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation))).mapTo[Option[Int]].map { id =>
-      val pr = id.toString.replace("Some(", "").replace(")", "")
-      Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
+    if (typeOfLesson == "Laboratory") {
+      (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation, Some(Json.toJson(numberRoom, teacher))))).mapTo[Option[Int]].map { id =>
+        val pr = id.toString.replace("Some(", "").replace(")", "")
+        Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
+      }
+    }else {
+      (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation))).mapTo[Option[Int]].map { id =>
+        val pr = id.toString.replace("Some(", "").replace(")", "")
+        Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
+      }
     }
   }
   }
@@ -308,17 +315,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def momentStudyShift(time: String) = {
     val hour = time.substring(0, 2).toInt
     val minute = time.substring(3, 5).toInt
-    if ((hour == 8 && (minute >= 30 && minute <= 59)) || (hour == 12 && minute >= 0 && minute <= 50)) {
+    if ((hour >= 9 && hour <= 11) || (hour == 8 && (minute >= 30 && minute <= 59)) || (hour == 12 && (minute >= 0 && minute <= 50))) {
       "Morning"
     }
-    else if ((hour == 13 && minute >= 30 && minute <= 59) || (hour == 17 && minute >= 0 && minute <= 50)) {
+    else if ((hour >= 14 && hour <= 16) || (hour == 13 && (minute >= 30 && minute <= 59)) || (hour == 17 && (minute >= 0 && minute <= 50))) {
       "Afternoon"
     }
-    else if ((hour == 17 && minute >= 51 && minute <= 59) || (hour >= 18 && minute >= 0 && minute <= 59) || (hour == 8 && minute >= 0 && minute <= 29) || (hour < 8 && minute >= 0 && minute <= 59)) {
-      "Dars tugadi!"
-    }
     else {
-      "Tanaffus"
+      "Dars tugadi!"
     }
   }
 
