@@ -315,17 +315,14 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
   def momentStudyShift(time: String) = {
     val hour = time.substring(0, 2).toInt
     val minute = time.substring(3, 5).toInt
-    if ((hour == 8 && (minute >= 30 && minute <= 59)) || (hour == 12 && minute >= 0 && minute <= 50)) {
+    if ((hour >= 9 && hour <= 11) || (hour == 8 && (minute >= 30 && minute <= 59)) || (hour == 12 && (minute >= 0 && minute <= 50))) {
       "Morning"
     }
-    else if ((hour == 13 && minute >= 30 && minute <= 59) || (hour == 17 && minute >= 0 && minute <= 50)) {
+    else if ((hour >= 14 && hour <= 16) || (hour == 13 && (minute >= 30 && minute <= 59)) || (hour == 17 && (minute >= 0 && minute <= 50))) {
       "Afternoon"
     }
-    else if ((hour == 17 && minute >= 51 && minute <= 59) || (hour >= 18 && minute >= 0 && minute <= 59) || (hour == 8 && minute >= 0 && minute <= 29) || (hour < 8 && minute >= 0 && minute <= 59)) {
-      "Dars tugadi!"
-    }
     else {
-      "Tanaffus"
+      "Dars tugadi!"
     }
   }
 
