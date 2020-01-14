@@ -120,9 +120,16 @@ class TimetableController @Inject()(val controllerComponents: ControllerComponen
     val numberRoom = (request.body \ "numberRoom").as[String]
     val flow = (request.body \ "flow").as[Boolean]
     val alternation = (request.body \ "alternation").asOpt[String]
-    (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation))).mapTo[Option[Int]].map { id =>
-      val pr = id.toString.replace("Some(", "").replace(")", "")
-      Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
+    if (typeOfLesson == "Laboratory") {
+      (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation, Some(Json.toJson(numberRoom, teacher))))).mapTo[Option[Int]].map { id =>
+        val pr = id.toString.replace("Some(", "").replace(")", "")
+        Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
+      }
+    }else {
+      (timetableManager ? UpdateTimetable(Timetable(Option(id), studyShift, weekday, couple, typeOfLesson, groups, divorce, subject, teacher, numberRoom, None, flow, alternation))).mapTo[Option[Int]].map { id =>
+        val pr = id.toString.replace("Some(", "").replace(")", "")
+        Ok(Json.toJson(s"$pr raqamli dars jadvali muvoffaqiyatli yangilandi!"))
+      }
     }
   }
   }
