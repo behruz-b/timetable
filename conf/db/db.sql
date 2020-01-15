@@ -15,7 +15,8 @@ CREATE TABLE "Groups" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "name" VARCHAR NOT NULL,
   "direction" VARCHAR NOT NULL,
-  "count" INT NULL
+  "count" INT NULL,
+  "totalStudent" INT NULL;
 );
 
 CREATE TABLE "Timetables" (
@@ -40,6 +41,11 @@ CREATE TABLE "Suggestion" (
   "teacherName" VARCHAR NOT NULL,
   "suggestion" VARCHAR NOT NULL
 );
+CREATE TABLE "Room" (
+  "id" SERIAL NOT NULL PRIMARY KEY,
+  "number" VARCHAR NOT NULL,
+  "place" INT NOT NULL
+);
 
 # --- !Downs
 DROP TABLE "Timetables";
@@ -47,3 +53,5 @@ DROP TABLE "Groups";
 DROP TABLE "Teachers";
 DROP TABLE "Subjects";
 DROP TABLE "Suggestion";
+DROP TABLE "Room";
+

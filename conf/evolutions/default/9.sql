@@ -1,4 +1,11 @@
 # --- !Ups
-ALTER TABLE "Timetables" ADD COLUMN "specPartJson"  JSONB NULL;
+CREATE TABLE "Room" (
+  "id" SERIAL NOT NULL PRIMARY KEY,
+  "number" VARCHAR NOT NULL,
+  "place" INT NOT NULL
+);
+
+ALTER TABLE "Groups" ADD COLUMN "totalStudent" INT NULL;
 # --- !Downs
-ALTER TABLE "Timetables" DROP COLUMN "specPartJson";
+DROP TABLE "Room";
+ALTER TABLE "Groups" DROP COLUMN "totalStudent";
