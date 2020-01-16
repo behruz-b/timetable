@@ -2,7 +2,7 @@
 CREATE TABLE "Room" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "number" VARCHAR NOT NULL,
-  "place" INT NOT NULL
+  "place" INT NULL
 );
 
 ALTER TABLE "Groups" ADD COLUMN "totalStudent" INT NULL;

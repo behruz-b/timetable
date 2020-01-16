@@ -44,7 +44,7 @@ CREATE TABLE "Suggestion" (
 CREATE TABLE "Room" (
   "id" SERIAL NOT NULL PRIMARY KEY,
   "number" VARCHAR NOT NULL,
-  "place" INT NOT NULL
+  "place" INT NULL
 );
 
 # --- !Downs
