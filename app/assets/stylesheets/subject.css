@@ -214,11 +214,7 @@ body {
   }
 
   .outer {
-    /*position: relative;*/
-    writing-mode: vertical-rl;
-    transform: rotate(-90deg);
-    vertical-align: middle !important;
-    background-color: transparent;
+    position: relative;
   }
 
 
