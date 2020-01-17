@@ -20,7 +20,7 @@
         <table id="" class="table table-bordered width-table">
           <thead class="table-title">
             <tr data-bind="foreach: {data: vm.groups(), as: 'group'}">
-                <!-- ko if: $index() === 0 -->
+                <!-- ko if: $index() == 0 -->
               <th class="line">
                 <div class = "text-group">Group</div>
                 <div class="text-weekday">Weekday</div>
