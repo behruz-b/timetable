@@ -38,7 +38,7 @@ object GroupProtocol {
 
   case class Room(id: Option[Int] = None,
                   number: String,
-                  place: Int,
+                  place: Option[Int] = None,
                   )
 
   implicit val roomFormat: OFormat[Room] = Json.format[Room]
