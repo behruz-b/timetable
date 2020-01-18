@@ -33,13 +33,10 @@ class Updater @Inject()(val environment: Environment,
   val isUpdateRoom = configuration.get[Boolean]("update-rooms")
 
   override def preStart() {
-    log.warning(s"preStart")
     if (isLaboratory) {
-      log.warning(s"preStartLab: $isLaboratory")
       self ! RunUpdaterSpecPartForLaboratory
     }
     if (isUpdateRoom) {
-      log.warning(s"preStartRoom: $isUpdateRoom")
       self ! RunUpdaterRooms
     }
   }

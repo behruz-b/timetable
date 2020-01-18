@@ -3,7 +3,7 @@ package actors
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern.pipe
 import akka.util.Timeout
-import dao.{GroupDao, TimetableDao}
+import dao.{GroupDao, RoomDao, TimetableDao}
 import javax.inject.Inject
 import play.api.Environment
 import play.api.libs.json.Json
@@ -15,7 +15,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TimetableManager @Inject()(val environment: Environment,
                                  timetableDao: TimetableDao,
-                                 groupDao: GroupDao
+                                 groupDao: GroupDao,
+                                 roomDao: RoomDao
                                 )
                                 (implicit val ec: ExecutionContext)
   extends Actor with ActorLogging {
@@ -587,7 +588,8 @@ class TimetableManager @Inject()(val environment: Environment,
   private def GetEmptyRoomByCouple(presentCouple: GetEmptyRoom): Future[Seq[String]] = {
     for {
       presentLessons <- timetableDao.getBusyRoom(presentCouple.weekDay, presentCouple.couple, presentCouple.studyShift)
-    } yield roomList.map(_.numberRoom).diff(presentLessons.map(_.numberRoom))
+      roomList <- roomDao.getRoomList
+    } yield roomList.map(_.number).diff(presentLessons.map(_.numberRoom))
   }
 
   private def getTimetableByGroup(getText: GetText) = {
