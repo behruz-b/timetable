@@ -78,6 +78,10 @@ trait TimetableDao {
 
   def findConflicts(weekDay: String, couple: String, numberRoom: String, studyShift: String): Future[Option[Timetable]]
 
+  def findAlternation(group: String, weekday: String, studyShift: String, couple: String, alternation: Option[String] = None): Future[Option[Timetable]]
+
+  def findConflictsAlternation( weekday: String, couple: String, studyShift: String, group: String): Future[Option[Timetable]]
+
   def findGroup(weekDay: String, couple: String, studyShift: String, group: String, subjectId: Int, typeOfLesson: String): Future[Option[Timetable]]
 }
 
@@ -161,6 +165,29 @@ class TimetableDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
         data.couple === couple &&
         data.numberRoom === numberRoom &&
         data.studyShift === studyShift
+      ).result.headOption
+    }
+  }
+
+  override def findAlternation(group: String, weekday: String, studyShift: String, couple: String, alternation: Option[String]): Future[Option[Timetable]] = {
+    db.run{
+      timetables.filter(data =>
+        data.weekDay === weekday &&
+          data.couple === couple &&
+          data.groups === group &&
+          data.alternation === alternation &&
+          data.studyShift === studyShift
+      ).result.headOption
+    }
+  }
+
+  override def findConflictsAlternation(weekday: String, couple: String, studyShift: String, group: String): Future[Option[Timetable]] = {
+    db.run{
+      timetables.filter(data =>
+        data.weekDay === weekday &&
+          data.couple === couple &&
+          data.groups === group &&
+          data.studyShift === studyShift
       ).result.headOption
     }
   }
