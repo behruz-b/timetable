@@ -54,7 +54,7 @@ class SubjectManager @Inject()(val environment: Environment,
         Future.successful(Left(subject.name + " fani ma'lumotlar bazasida muvjud"))
       case None =>
         subjectDao.addSubject(subjectData)
-        Future.successful(Left(subjectData.name + " fani ma'lumotlar bazasiga qo'shildi!"))
+        Future.successful(Right(subjectData.name + " fani ma'lumotlar bazasiga qo'shildi!"))
     }
       ).flatten
   }
