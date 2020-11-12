@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:11
 
 RUN apt-get update -y
 RUN apt-get install zip -y
@@ -9,7 +9,7 @@ RUN apt-get install sbt -y
 
 #VOLUME "zipFile" ["../target/universal/food-order-free-0.1.zip"]
 
-EXPOSE 8080
+#EXPOSE 8080
 
 COPY run.sh /run.sh
 
